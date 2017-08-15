@@ -35,7 +35,7 @@ c.experiment_name = os.path.split(
                     os.path.realpath(__file__)))[1]
 
 # experiment parameters for a single run
-c.L = 4                                          # sequence size
+c.L = 10                                         # sequence size
 
 c.steps_plastic = 50000                          # sorn training time steps
 c.steps_readouttrain = np.maximum(5000, 3*c.L)   # readout training time steps

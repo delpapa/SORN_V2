@@ -99,10 +99,16 @@ class Experiment(object):
         output_weights = readout.fit(X_train.T, y_train)
         performance = output_weights.score(X_test.T, y_test)
 
+        # Performance per letter, if necessary
+        performance_letter = np.zeros(sorn.source.N_a)
+        for i in xrange(sorn.source.N_a):
+            letter = np.where(y_test == i)
+            performance_letter[i] = output_weights.score(X_test.T[letter],
+                                                         y_test[letter])
+
         # normalize according to max possible performance (see Lazar et al 2009)
         max_performance = 1 - 1./(2*(sorn.params.L + 2))
         stats.LG_performance = performance/max_performance
-        import ipdb; ipdb.set_trace()
 
         if self.params.display:
             print 'done'
