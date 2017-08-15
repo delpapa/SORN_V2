@@ -40,7 +40,11 @@ class CountingSource(object):
             self.overlap = True
 
         # choose random input neuron pools
+<<<<<<< HEAD
+        W = np.zeros((N_e,self.N_a))
+=======
         W = zeros((N_e,self.N_a))
+>>>>>>> 64b5dd0232069891589670f11a0140e0b7077601
         available = set(range(N_e))
         for a in range(self.N_a):
             temp = random.sample(available,self.N_u_e)
@@ -81,7 +85,11 @@ class CountingSource(object):
         self.ind = 0
         w = self.word_index
         p = self.probs[w,:]
+<<<<<<< HEAD
+        self.word_index = np.where(np.random.random() <= np.cumsum(p))[0][0]
+=======
         self.word_index = find(rand()<=cumsum(p))[0]
+>>>>>>> 64b5dd0232069891589670f11a0140e0b7077601
 
     def next(self):
         """
@@ -93,6 +101,111 @@ class CountingSource(object):
         string = self.words[self.word_index]
         if self.ind >= len(string):
             self.next_word()
+<<<<<<< HEAD
+        ans = np.zeros(self.N_a)
+        ans[self.index()] = 1
+        return ans
+
+class RandomSequenceSource():
+    """
+    Source for the counting task.
+    Different of words are presented with individual probabilities.
+    """
+    def __init__(self, sequence, N_u_e, overlap = True):
+        """
+        Initializes variables.
+
+        Parameters:
+            words: list
+                The words to present
+            probs: matrix
+                The probabilities of transitioning between word i and j
+                It is assumed that they are summing to 1
+            N_u_e: int
+                Number of units to receit input for each letter
+        """
+        self.sequence_index = 0                  # index for sequences
+        self.ind = 0                             # index within sequence
+        self.glob_ind = 0
+        self.sequence = sequence                 # sequence
+        self.N_u_e = int(N_u_e)
+        self.overlap = overlap
+
+        self.alphabet = "".join(set(self.sequence))
+        self.N_a = len(self.alphabet)
+        self.lookup = dict(zip(self.alphabet,range(self.N_a)))
+
+        self.reset()
+
+    def generate_connection_e(self,N_e):
+
+        W = zeros((N_e,self.N_a))
+        available = set(range(N_e))
+        for a in range(self.N_a):
+            temp = random.sample(available,self.N_u_e)
+            W[temp,a] = 1
+
+            # remove already used neurons, in case of no overlap
+            if not self.overlap:
+                available -= set(temp)
+
+        ans = synapses.FullSynapticMatrix((N_e,self.N_a))
+        ans.W = W
+
+        return ans
+
+    def char(self):
+        return self.sequence[self.ind]
+
+    def sequence_ind(self):
+        return self.ind
+
+    def index(self):
+        character = self.char()
+        ind = self.lookup[character]
+        return ind
+
+    def next(self):
+        self.ind += 1
+        self.glob_ind += 1
+        if self.ind >= len(self.sequence):
+            self.ind = 0
+        ans = zeros(self.N_a)
+        ans[self.index()] = 1
+        return ans
+
+    def reset(self):
+        self.ind = 0
+        self.glob_ind = 0
+
+class NoSource():
+    """
+    No input for the spontaneous conditions
+
+    Parameters:
+        N_i: int
+            Number of input units
+    """
+    def __init__(self,N_i=1):
+        self.N_i = N_i
+    def next(self):
+        return np.zeros((self.N_i))
+
+    def global_range(self):
+        return 1
+
+    def global_index(self):
+        return -1
+
+    def generate_connection_e(self,N_e):
+        c = utils.Bunch(use_sparse=False,
+                        lamb=np.inf,
+                        avoid_self_connections=False)
+        tmpsyn = synapses.create_matrix((N_e,self.N_i),c)
+        tmpsyn.set_synapses(tmpsyn.get_synapses()*0)
+        return tmpsyn
+=======
+>>>>>>> 64b5dd0232069891589670f11a0140e0b7077601
         ans = zeros(self.N_a)
         ans[self.index()] = 1
         return ans
