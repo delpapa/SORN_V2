@@ -3,9 +3,26 @@
 *.pkl
 *.py~
 *.pyo
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+# ignore output files #
+*.out
+
+# Ignore Backup #
+backup/
+
+=======
 # ignore output files #
 *.out
 # Ignore Backup #
 backup/
+>>>>>>> 64b5dd0232069891589670f11a0140e0b7077601
+=======
+# ignore output files #
+*.out
+# Ignore Backup #
+backup/
+>>>>>>> 64b5dd0232069891589670f11a0140e0b7077601
 # Ignore plots #
 plots/

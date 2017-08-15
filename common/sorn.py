@@ -1,4 +1,3 @@
-
 import sys
 
 import numpy as np
@@ -131,6 +130,6 @@ class Sorn(object):
 
             # Command line progress message
             if self.params.display:
-                if  (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
-                    sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1)*100)))
+                if (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
+                    sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))
                 sys.stdout.flush()
