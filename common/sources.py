@@ -43,13 +43,14 @@ class CountingSource(object):
         W = np.zeros((N_e,self.N_a))
         available = set(range(N_e))
         for a in range(self.N_a):
-            temp = random.sample(available,self.N_u_e)
+            temp = random.sample(available, self.N_u_e)
             W[temp,a] = 1
             if not self.overlap:
                 available -= set(temp)
 
         # always use a full synaptic matrix
-        ans = synapses.FullSynapticMatrix((N_e,self.N_a))
+        ans = synapses.FullSynapticMatrix((N_e, self.N_a))
+        ans.W = W
 
         return ans
 

@@ -90,20 +90,19 @@ class Experiment(object):
 
         X_train = stats.internal_state[:t_train].T
         y_train = stats.letters[:t_train].T
-        y_train_ind = stats.sequence_ind[:t_train].T
 
         X_test = stats.internal_state[t_train:t_train+t_test].T
         y_test = stats.letters[t_train:t_train+t_test].T
-        y_test_ind = stats.sequence_ind[t_train:t_train+t_test].T
 
         # Logistic Regression
         readout =  linear_model.LogisticRegression()
-        output_weights = readout.fit(X_train.T, y_train_ind)
-        performance = output_weights.score(X_test.T, y_test_ind)
+        output_weights = readout.fit(X_train.T, y_train)
+        performance = output_weights.score(X_test.T, y_test)
 
         # normalize according to max possible performance (see Lazar et al 2009)
         max_performance = 1 - 1./(2*(sorn.params.L + 2))
         stats.LG_performance = performance/max_performance
+        import ipdb; ipdb.set_trace()
 
         if self.params.display:
             print 'done'
