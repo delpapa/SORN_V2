@@ -93,6 +93,7 @@ class CountingSource(object):
         string = self.words[self.word_index]
         if self.ind >= len(string):
             self.next_word()
+
         ans = np.zeros(self.N_a)
         ans[self.index()] = 1
         return ans
@@ -195,6 +196,7 @@ class NoSource():
         tmpsyn = synapses.create_matrix((N_e,self.N_i),c)
         tmpsyn.set_synapses(tmpsyn.get_synapses()*0)
         return tmpsyn
+
         ans = zeros(self.N_a)
         ans[self.index()] = 1
         return ans

@@ -130,11 +130,6 @@ class Sorn(object):
 
             # Command line progress message
             if self.params.display:
-<<<<<<< HEAD
                 if (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
                     sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))
-=======
-                if  (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
-                    sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1)*100)))
->>>>>>> 64b5dd0232069891589670f11a0140e0b7077601
                 sys.stdout.flush()
