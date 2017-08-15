@@ -1,135 +1,202 @@
-import sys
-
 import numpy as np
-import scipy.sparse as sp
+import random
 
-from synapses import FullSynapticMatrix, SparseSynapticMatrix
+import utils
+import synapses
 
-class Sorn(object):
+class CountingSource(object):
     """
-    The famous Self-Organizing Recurrent Neural Network (SORN)
+    Counting source (Lazar et. al 2009)
+        This source is composed of randomly alternating sequences of size L+2
+        of the form 'abb...bbc' and 'dee...eef'.
     """
-    def __init__(self, c, source):
+    def __init__(self, words, probs, N_u_e, overlap = False):
+
+        self.word_index = 0                      # index for word
+        self.ind = 0                             # index within word
+        self.glob_ind = 0                        # global index
+        self.words = words                       # different words
+        self.probs = probs                       # transition probabilities
+        self.N_u_e = int(N_u_e)                  # active per step
+
+        # alphabet: lookup is a dictionary with letters and indices
+        self.alphabet = ''.join(sorted(''.join(set(''.join(self.words)))))
+        self.N_a = len(self.alphabet)
+        self.lookup = dict(zip(self.alphabet,range(self.N_a)))
+
+        # overlap for input neuron pools
+        self.overlap = overlap
+
+    def generate_connection_e(self, N_e):
         """
-        Initializes the SORN variables
+        Generate the W_eu connection matrix
 
         Parameters:
-            c: bunch
-                The bunch of sorn parameters from param.py
-            source: Source
-                The input source
+            N_e: number of excitatory neurons
         """
-        self.params = c
-        self.source = source
 
-        # Initialize weight matrices
-        # W_to_from (W_ie = from excitatory to inhibitory)
-        self.W_ee = SparseSynapticMatrix((c.N_e,c.N_e), c.lamb, c.eta_stdp)
-        self.W_ie = FullSynapticMatrix((c.N_i,c.N_e))
-        self.W_ei = FullSynapticMatrix((c.N_e,c.N_i))
-        self.W_eu = self.source.generate_connection_e(c.N_e)
+        # always overlap if there is not enough neuron pools for the alphabet
+        if self.N_u_e * self.N_a > N_e:
+            self.overlap = True
 
-        # Initialize the activation of neurons randomly
-        self.x = (np.random.random(c.N_e)<0.5) + 0
-        self.y = (np.random.random(c.N_i)<0.5) + 0
-        self.u = source.next()
+        # choose random input neuron pools
+        W = np.zeros((N_e,self.N_a))
+        available = set(range(N_e))
+        for a in range(self.N_a):
+            temp = random.sample(available,self.N_u_e)
+            W[temp,a] = 1
+            if not self.overlap:
+                available -= set(temp)
 
-        # Initialize the pre-threshold variables
-        self.R_x = np.zeros(c.N_e)
-        self.R_y = np.zeros(c.N_i)
+        # always use a full synaptic matrix
+        ans = synapses.FullSynapticMatrix((N_e,self.N_a))
 
-        # Initialize thresholds
-        self.T_i = c.T_i_min + np.random.random(c.N_i)*(c.T_i_max-c.T_i_min)
-        self.T_e = c.T_e_min + np.random.random(c.N_e)*(c.T_e_max-c.T_e_min)
+        return ans
 
-    def step(self, u_new):
+    def char(self):
         """
-        Performs a one-step update of the SORN
+        Return the current alphabet character
+        """
+        word = self.words[self.word_index]
+        return word[self.ind]
+
+    def sequence_ind(self):
+        """
+        Return current intra-word index
+        """
+        return self.ind
+
+    def index(self):
+        """
+        Return character index
+        """
+        character = self.char()
+        ind = self.lookup[character]
+        return ind
+
+    def next_word(self):
+        """
+        Start a new word, with transition probability from probs
+        """
+        self.ind = 0
+        w = self.word_index
+        p = self.probs[w,:]
+        self.word_index = np.where(np.random.random() <= np.cumsum(p))[0][0]
+
+    def next(self):
+        """
+        Return next word character or first character of next word
+        """
+        self.ind += 1
+        self.glob_ind += 1
+
+        string = self.words[self.word_index]
+        if self.ind >= len(string):
+            self.next_word()
+
+        ans = np.zeros(self.N_a)
+        ans[self.index()] = 1
+        return ans
+
+class RandomSequenceSource():
+    """
+    Source for the counting task.
+    Different of words are presented with individual probabilities.
+    """
+    def __init__(self, sequence, N_u_e, overlap = True):
+        """
+        Initializes variables.
 
         Parameters:
-            u_new: array
-                The input for this step. 1 for the current input, 0 otherwise
+            words: list
+                The words to present
+            probs: matrix
+                The probabilities of transitioning between word i and j
+                It is assumed that they are summing to 1
+            N_u_e: int
+                Number of units to receit input for each letter
         """
-        params = self.params
+        self.sequence_index = 0                  # index for sequences
+        self.ind = 0                             # index within sequence
+        self.glob_ind = 0
+        self.sequence = sequence                 # sequence
+        self.N_u_e = int(N_u_e)
+        self.overlap = overlap
 
-        # Compute new state
-        self.R_x = self.W_ee*self.x - self.W_ei*self.y - self.T_e
-        x_temp = self.R_x + params.input_gain*(self.W_eu*u_new)
-        self.x_int = (self.R_x >= 0.0)+0
-        x_new = (x_temp >= 0.0)+0
+        self.alphabet = "".join(set(self.sequence))
+        self.N_a = len(self.alphabet)
+        self.lookup = dict(zip(self.alphabet,range(self.N_a)))
 
-        self.R_y = self.W_ie*x_new - self.T_i
-        y_new = (self.R_y >= 0.0)+0
+        self.reset()
 
-        # Apply IP, STDP, SN
-        self.ip(x_new)
-        self.W_ee.stdp(self.x, x_new)
-        self.W_ee.sn()
+    def generate_connection_e(self,N_e):
 
-        self.x = x_new
-        self.y = y_new
-        self.u = u_new
+        W = zeros((N_e,self.N_a))
+        available = set(range(N_e))
+        for a in range(self.N_a):
+            temp = random.sample(available,self.N_u_e)
+            W[temp,a] = 1
 
-        # Update statistics
-        return self.x, self.x_int, self.W_ee
+            # remove already used neurons, in case of no overlap
+            if not self.overlap:
+                available -= set(temp)
 
-    def ip(self, x):
-        """
-        Performs intrinsic plasticity
+        ans = synapses.FullSynapticMatrix((N_e,self.N_a))
+        ans.W = W
 
-        Parameters:
-            x: array
-                The current activity array
-        """
-        if not self.params.eta_ip == 'off':
-            self.T_e += self.params.eta_ip*(x - self.params.h_ip)
+        return ans
 
-    def simulation(self, N, stats, phase='plastic'):
-        """
-        Simulates SORN for a defined number of steps
+    def char(self):
+        return self.sequence[self.ind]
 
-        Parameters:
-            N: int
-                Total simulation steps
+    def sequence_ind(self):
+        return self.ind
 
-            stats: bunch
-                Bunch of stats to save
+    def index(self):
+        character = self.char()
+        ind = self.lookup[character]
+        return ind
 
-            phase: string
-                Phase the current simulation is in
-                Possible phases: 'plastic', 'train', or 'test'
-        """
-        source = self.source
+    def next(self):
+        self.ind += 1
+        self.glob_ind += 1
+        if self.ind >= len(self.sequence):
+            self.ind = 0
+        ans = zeros(self.N_a)
+        ans[self.index()] = 1
+        return ans
 
-        # Simulation loop
-        for n in range(N):
+    def reset(self):
+        self.ind = 0
+        self.glob_ind = 0
 
-            # Simulation step
-            u = source.next()
-            (x, x_int, W_ee) = self.step(u)
+class NoSource():
+    """
+    No input for the spontaneous conditions
 
-            # update stats. TODO: this should be done by a stats method instead
-            #               TODO: some stats have to be saved for the whole sim
-            if phase in ['train', 'test']:
-                if phase == 'train':
-                    step = n
-                if phase == 'test':
-                    step = n + self.params.steps_readouttrain
+    Parameters:
+        N_i: int
+            Number of input units
+    """
+    def __init__(self,N_i=1):
+        self.N_i = N_i
+    def next(self):
+        return np.zeros((self.N_i))
 
-                if hasattr(stats, 'total_activity'):
-                    stats.total_activity[step] = x.sum()
-                if hasattr(stats, 'connec_frac'):
-                    stats.connec_frac[step] = W_ee.W.sum()
-                if hasattr(stats, 'activity'):
-                    stats.activity[step] = x
-                if hasattr(stats, 'letters'):
-                    stats.sequence_ind[step] = int(source.sequence_ind())
-                    stats.letters[step] = int(np.argmax(u))
-                if hasattr(stats, 'internal_state'):
-                    stats.internal_state[step] = x_int
+    def global_range(self):
+        return 1
 
-            # Command line progress message
-            if self.params.display:
-                if (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
-                    sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))
-                sys.stdout.flush()
+    def global_index(self):
+        return -1
+
+    def generate_connection_e(self,N_e):
+        c = utils.Bunch(use_sparse=False,
+                        lamb=np.inf,
+                        avoid_self_connections=False)
+        tmpsyn = synapses.create_matrix((N_e,self.N_i),c)
+        tmpsyn.set_synapses(tmpsyn.get_synapses()*0)
+        return tmpsyn
+
+        ans = zeros(self.N_a)
+        ans[self.index()] = 1
+        return ans
