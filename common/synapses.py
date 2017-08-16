@@ -1,6 +1,13 @@
 import numpy as np
 import scipy.sparse as sp
 
+################################################################################
+# Synapses: this file contains all the functions to create and update the      #
+# weight matrices, including the plasticity rules. STDP can be much more       #
+# efficiently implemented using sparse matrices, therefore W_EE is sparse and  #
+# the other matrices are dense.                                                #
+################################################################################
+
 class FullSynapticMatrix(object):
     """
     Dense connection matrix class for SORN I-E and E-I synapses
