@@ -10,7 +10,7 @@ from common.sorn import Sorn
 from common.stats import Stats
 from utils import backup_pickle
 
-import CountingTask as exp_dir                 # experiment directory
+import RandomSequenceTask as exp_dir                 # experiment directory
 
 ################################################################################
 #                              SORN simulation                                 #

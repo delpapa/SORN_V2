@@ -71,6 +71,19 @@ class Experiment(object):
         if sorn.params.display:
             print '\nCalculating performance using LG...',
 
+        # # Readout training using PI matrix
+        # X_train_pinv = np.linalg.pinv(X_train) # MP pseudo-inverse
+        # W_trained = np.dot(y_train, X_train_pinv) # least squares
+        #
+        # # Network prediction with trained weights
+        # y_predicted = np.dot(W_trained, X_test)
+        #
+        # # Performance by Pseudo-Inverse
+        # prediction = np.argmax(y_predicted, axis=0)
+        # target = np.argmax(y_test, axis=0)
+        # performance = (prediction == target).sum()/float(len(target))
+
+
         # load stats to calculate the performance
         t_train = sorn.params.steps_readouttrain
         t_test = sorn.params.steps_readouttest
