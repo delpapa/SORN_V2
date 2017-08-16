@@ -32,7 +32,7 @@ c.T_i_min = 0                                    # min initial threshold for I
 # the experiment_name should be the same name of the directory containing it
 c.experiment_name = os.path.split(
                         os.path.dirname(
-                            os.path.realpath(__file__)))[1]
+                        os.path.realpath(__file__)))[1]
 
 # experiment parameters for a single run
 c.L = 10                                         # sequence size
