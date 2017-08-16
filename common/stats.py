@@ -1,13 +1,17 @@
 import numpy as np
 
-import utils
-stats = utils.Bunch()
+################################################################################
+# Stats tracker: this file initializes all the possible trackers for every     #
+#                experiment. Different experiments can use the same stats      #
+#                                                                              #
+#   'ActivityStat': stores the total activity (number of active neurons)       #
+#   'CountingLetterStat': for the CountingTask                                 #
+################################################################################
 
 class Stats(object):
     """
     Stats to be saved at the end of the simulation
     """
-
     def __init__(self, stats_tosave, params):
 
         if 'ActivityStat' in stats_tosave:

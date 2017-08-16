@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-import utils
 import synapses
 
 class CountingSource(object):
@@ -99,7 +98,7 @@ class CountingSource(object):
         ans[self.index()] = 1
         return ans
 
-class RandomSequenceSource():
+class RandomSequenceSource(object):
     """
     Source for the counting task.
     Different of words are presented with individual probabilities.
@@ -171,7 +170,7 @@ class RandomSequenceSource():
         self.ind = 0
         self.glob_ind = 0
 
-class NoSource():
+class NoSource(object):
     """
     No input for the spontaneous conditions
 
