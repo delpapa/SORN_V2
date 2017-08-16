@@ -17,6 +17,10 @@ A SORN repository for general purposes. This repository is based on the original
 
 Each different project has it's own project folder (for example, 'CountingTask'), which contain it's parameters, experiment instructions, sources and plot files.
 
+### CountingTask
+
+This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
