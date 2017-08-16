@@ -13,30 +13,14 @@ class Experiment(object):
     """
     def __init__(self, params):
 
-            self.params = params
             # keep track of the original learning rates
             self.init_eta_stdp = params.eta_stdp
             self.init_eta_ip = params.eta_ip
 
-    def start(self):
+    def start(self, params):
         """
         Start the experiment
         """
-        # alphabet sequence parameters (always size L+2)
-        alphabet = 'ABCDEF'
-        word1 = 'A'
-        word2 = 'D'
-        for i in xrange(self.params.L):
-            word1 += 'B'
-            word2 += 'E'
-        word1 += 'C'
-        word2 += 'F'
-        probs = np.ones((2,2))*0.5
-
-        # create source
-        self.inputsource = CountingSource([word1, word2], probs, \
-                                                              self.params.N_u_e)
-
         # stats to save at the end of the simulation
         # see common/stats.py for a description of each of them
         stats_tosave = [
@@ -47,7 +31,10 @@ class Experiment(object):
                         'InternalStateStat'
                         ]
 
-        return (self.inputsource, stats_tosave)
+        inputsource = CountingSource(params)
+
+
+        return inputsource, stats_tosave
 
     def run(self, sorn, stats):
         """
@@ -61,13 +48,13 @@ class Experiment(object):
 
         """
         # 1. input with plasticity
-        if self.params.display:
+        if sorn.params.display:
             print '\nPlasticity phase:'
 
         sorn.simulation(sorn.params.steps_plastic, stats, phase='plastic')
 
         # 2. input without plasticity - train (STDP and IP off)
-        if self.params.display:
+        if sorn.params.display:
             print '\nReadout training phase:'
 
         sorn.params.eta_stdp = 'off'
@@ -75,7 +62,7 @@ class Experiment(object):
         sorn.simulation(sorn.params.steps_readouttrain, stats, phase='train')
 
         # 3. input without plasticity - test performance (STDP and IP off)
-        if self.params.display:
+        if sorn.params.display:
             print '\nReadout testing phase:'
 
         sorn.simulation(sorn.params.steps_readouttest, stats, phase='test')
@@ -110,7 +97,9 @@ class Experiment(object):
         max_performance = 1 - 1./(2*(sorn.params.L + 2))
         stats.LG_performance = performance/max_performance
 
-        if self.params.display:
+        import ipdb; ipdb.set_trace()
+
+        if sorn.params.display:
             print 'done'
 
         # 5. reset parameters to save

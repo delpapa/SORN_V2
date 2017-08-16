@@ -11,7 +11,8 @@ c = utils.Bunch()
 c.N_e = 200                                      # excitatory neurons
 c.N_i = int(np.floor(0.2*c.N_e))                 # inhibitory neurons
 c.N = c.N_e + c.N_i                              # total number of neurons
-c.N_u_e = 10                                     # neurons in each input pool
+c.N_u = 10                                       # neurons in each input pool
+c.overlap = False                                # overlapping input pools
 
 c.eta_stdp = 0.001                               # STDP learning rate
 c.eta_ip = 0.001                                 # IP learning rate

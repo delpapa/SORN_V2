@@ -17,18 +17,18 @@ import CountingTask as exp_dir                 # experiment directory
 ################################################################################
 
 # 1. load param and experiment files
-param_file = exp_dir.param
+params = exp_dir.param
 experiment_file = exp_dir.experiment
 
 # 2. add experiment specific parameters
-param_file.c.display = True                      # display progress
-param_file.c.experimentmark = ''                 # to mark different experiments
+params.c.display = True                      # display progress
+params.c.experimentmark = ''                 # to mark different experiments
 
 # 3. initialize sorn, source, and stats objects
-experiment = experiment_file.Experiment(param_file.c)
-(source, stats_tosave) = experiment.start()
-sorn = Sorn(param_file.c,source)
-stats = Stats(stats_tosave, sorn.params)
+experiment = experiment_file.Experiment(params.c)
+(source, stats_tosave) = experiment.start(params.c)
+sorn = Sorn(params.c, source)
+stats = Stats(stats_tosave, params.c)
 
 # 4. run one experiment once and calculate performance
 experiment.run(sorn, stats)
