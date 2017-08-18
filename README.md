@@ -21,6 +21,10 @@ Each different project has it's own project folder (for example, 'CountingTask')
 
 This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full).
 
+### RandomSequenceTask
+
+### NeuronalAvalanches
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
