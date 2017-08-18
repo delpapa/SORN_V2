@@ -35,7 +35,4 @@ stats = Stats(experiment.stats_tosave, sorn.params)
 experiment.run(sorn, stats)
 
 # 5. save initial sorn parameters and stats objects
-backup_pickle(experiment.init_params,
-              experiment.results_dir,
-              experiment.files_tosave,
-              stats)
+backup_pickle(experiment, stats)

@@ -7,7 +7,7 @@ from shutil import ignore_patterns
 
 import numpy as np
 
-def backup_pickle(params, results_dir, files_tosave, stats):
+def backup_pickle(experiment, stats):
     ''''
     Back up handling function
 
@@ -24,6 +24,9 @@ def backup_pickle(params, results_dir, files_tosave, stats):
 
         save_dirs: if True, backup every file used in the simulation
     '''
+    params = experiment.init_params
+    results_dir = experiment.results_dir
+    files_tosave = experiment.files_tosave
     directory = ('backup/' + results_dir)
 
     # creates a new directory for storing the results
