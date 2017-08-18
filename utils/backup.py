@@ -7,7 +7,7 @@ from shutil import ignore_patterns
 
 import numpy as np
 
-def backup_pickle(params, stats,
+def backup_pickle(params, results_dir, stats,
                   save_params = True,
                   save_stats = True,
                   save_performance_only = True,
@@ -16,7 +16,7 @@ def backup_pickle(params, stats,
     Back up handling function
 
     Parameters:
-        params: bunch of simulation parameters
+        par: bunch of simulation parameters
 
         stats: bunch of stats saved during the simulation
 
@@ -28,19 +28,10 @@ def backup_pickle(params, stats,
 
         save_dirs: if True, backup every file used in the simulation
     '''
-    if params.display:
-        sys.stdout.write('Saving sorn and stats...')
-
-    if params.experiment_name == 'CountingTask':
-        directory = ('backup/' + params.experiment_name + params.experimentmark
-                     + '/N' + str(params.N_e) + '_L' + str(params.L))
-    else:
-        directory = ('backup/' + params.experiment_name + params.experimentmark
-                     + '/N' + str(params.N_e) + '_L' + str(params.L)
-                     + '_A'+str(params.A))
+    directory = ('backup/' + results_dir)
 
     # creates a new directory for storing the results
-    # sleeps for a short time to avoid conflicts when using a cluster
+    # sleeps for a short time to avoid conflicts when running in parallel
     time.sleep(np.random.rand())
     for n_sim in xrange(1, 1000):
         final_dir = directory + '_' + str(n_sim) + '/'
@@ -49,7 +40,7 @@ def backup_pickle(params, stats,
             break
 
     if save_params:
-        with open(final_dir+'sorn.p', 'wb') as f:
+        with open(final_dir+'params.p', 'wb') as f:
             pickle.dump(params, f)
 
     if save_stats:
@@ -64,9 +55,6 @@ def backup_pickle(params, stats,
         for f in ['utils', 'common', params.experiment_name]:
             shutil.copytree(f, final_dir+f,
                             ignore=ignore_patterns('*.pyc', '*.git'))
-
-    if params.display:
-        sys.stdout.write('done \n\n')
 
 
 def backup_h5(params, stats,

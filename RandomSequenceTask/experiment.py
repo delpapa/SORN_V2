@@ -1,4 +1,5 @@
 import random as randomstr
+import copy
 
 import numpy as np
 import sklearn
@@ -8,55 +9,65 @@ from source import RandomSequenceSource
 
 class Experiment(object):
 
-    def __init__(self,params):
+    def __init__(self, params):
 
-            # keep track of the original learning rates
-            self.init_eta_stdp = params.eta_stdp
-            self.init_eta_ip = params.eta_ip
+            # keep track of initial parameters
+            self.init_params = copy.deepcopy(params.par)
 
-    def start(self, params):
+            # define results dir name
+            self.results_dir = (params.aux.experiment_name
+                                + params.aux.experiment_tag
+                                + '/N' + str(params.par.N_e)
+                                + '_L' + str(params.par.L)
+                                + '_A' + str(params.par.A))
 
-        stats_tosave = [
-                        # 'ActivityStat',
-                        'CountingLetterStat',
-                        'CountingActivityStat'
-                        # 'ConnectionFractionStat',
-                        # 'InternalStateStat'
-                        ]
+            # a initial sanity check
+            assert params.par.L > params.par.A,\
+                "Alphabet size A must be smaller than the sequence size L"
 
-        inputsource = RandomSequenceSource(params)
+    def start(self):
 
-        return inputsource, stats_tosave
+        self.stats_tosave = [
+                             # 'ActivityStat',
+                             'CountingLetterStat',
+                             'CountingActivityStat'
+                             # 'ConnectionFractionStat',
+                             # 'InternalStateStat'
+                            ]
+
+        self.inputsource = RandomSequenceSource(self.init_params)
 
     def run(self, sorn, stats):
 
-        # 1. input with plasticity
-        if sorn.params.display:
-            print '\nPlasticity phase:'
+        display = sorn.params.aux.display
 
-        sorn.simulation(sorn.params.steps_plastic, stats, phase='plastic')
+        # 1. input with plasticity
+        if display:
+            print 'Plasticity phase:'
+
+        sorn.simulation(stats, phase='plastic')
 
         # 2. input without plasticity - train (STDP and IP off)
-        if sorn.params.display:
+        if display:
             print '\nReadout training phase:'
 
-        sorn.params.eta_stdp = 'off'
-        sorn.params.eta_ip = 'off'
-        sorn.simulation(sorn.params.steps_readouttrain, stats, phase='train')
+        sorn.params.par.eta_stdp ='off'
+        sorn.params.par.eta_ip = 'off'
+        sorn.simulation(stats, phase='train')
 
         # 3. input without plasticity - test performance (STDP and IP off)
-        if sorn.params.display:
+        if display:
             print '\nReadout testing phase:'
 
-        sorn.simulation(sorn.params.steps_readouttest, stats, phase='test')
+        sorn.simulation(stats, phase='test')
 
         # 4. calculate performance
-        if sorn.params.display:
-            print '\nCalculating performance using LG...',
+        if display:
+            print '\nCalculating performance using Logistic Regression...',
 
         # load stats to calculate the performance
-        t_train = sorn.params.steps_readouttrain
-        t_test = sorn.params.steps_readouttest
+        t_train = sorn.params.aux.steps_readouttrain
+        t_test = sorn.params.aux.steps_readouttest
 
         # performance is calculated using the previous time step activity
         X_train = stats.activity[:t_train-1].T
@@ -72,11 +83,5 @@ class Experiment(object):
         performance = output_weights.score(X_test.T, y_test_ind)
         stats.LG_performance = performance
 
-        import ipdb; ipdb.set_trace()
-
-        if sorn.params.display:
+        if display:
             print 'done'
-
-        # 5. reset parameters to save
-        sorn.params.eta_stdp = self.init_eta_stdp
-        sorn.params.eta_ip = self.init_eta_ip

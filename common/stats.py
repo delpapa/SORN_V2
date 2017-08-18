@@ -15,17 +15,18 @@ class Stats(object):
     def __init__(self, stats_tosave, params):
 
         if 'ActivityStat' in stats_tosave:
-            self.total_activity = np.zeros(params.readout_steps)
+            self.total_activity = np.zeros(params.aux.readout_steps)
 
         if 'CountingLetterStat' in stats_tosave:
-            self.letters = np.zeros((params.readout_steps))
-            self.sequence_ind = np.zeros((params.readout_steps))
+            self.letters = np.zeros((params.aux.readout_steps))
+            self.sequence_ind = np.zeros((params.aux.readout_steps))
 
         if 'CountingActivityStat' in stats_tosave:
-            self.activity = np.zeros((params.readout_steps, params.N_e))
+            self.activity = np.zeros((params.aux.readout_steps, params.par.N_e))
 
         if 'ConnectionFractionStat' in stats_tosave:
-            self.connec_frac = np.zeros(params.N_steps)
+            self.connec_frac = np.zeros(params.aux.N_steps)
 
         if 'InternalStateStat' in stats_tosave:
-            self.internal_state = np.zeros((params.readout_steps, params.N_e))
+            self.internal_state = np.zeros((params.aux.readout_steps,
+                                            params.par.N_e))

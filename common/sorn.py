@@ -22,25 +22,28 @@ class Sorn(object):
         self.params = c
         self.source = source
 
+        p = self.params.par
+        a = self.params.aux
+
         # Initialize weight matrices
         # W_to_from (W_ie = from excitatory to inhibitory)
-        self.W_ee = SparseSynapticMatrix((c.N_e,c.N_e), c.lamb, c.eta_stdp)
-        self.W_ie = FullSynapticMatrix((c.N_i,c.N_e))
-        self.W_ei = FullSynapticMatrix((c.N_e,c.N_i))
-        self.W_eu = self.source.generate_connection_e(c.N_e)
+        self.W_ee = SparseSynapticMatrix((p.N_e,p.N_e), p.lamb, p.eta_stdp)
+        self.W_ie = FullSynapticMatrix((a.N_i,p.N_e))
+        self.W_ei = FullSynapticMatrix((p.N_e,a.N_i))
+        self.W_eu = self.source.generate_connection_e(p.N_e)
 
         # Initialize the activation of neurons randomly
-        self.x = (np.random.random(c.N_e)<0.5) + 0
-        self.y = (np.random.random(c.N_i)<0.5) + 0
+        self.x = (np.random.random(p.N_e)<0.5) + 0
+        self.y = (np.random.random(a.N_i)<0.5) + 0
         self.u = source.next()
 
         # Initialize the pre-threshold variables
-        self.R_x = np.zeros(c.N_e)
-        self.R_y = np.zeros(c.N_i)
+        self.R_x = np.zeros(p.N_e)
+        self.R_y = np.zeros(a.N_i)
 
         # Initialize thresholds
-        self.T_i = c.T_i_min + np.random.random(c.N_i)*(c.T_i_max-c.T_i_min)
-        self.T_e = c.T_e_min + np.random.random(c.N_e)*(c.T_e_max-c.T_e_min)
+        self.T_i = p.T_i_min + np.random.random(a.N_i)*(p.T_i_max-p.T_i_min)
+        self.T_e = p.T_e_min + np.random.random(p.N_e)*(p.T_e_max-p.T_e_min)
 
     def step(self, u_new):
         """
@@ -50,11 +53,11 @@ class Sorn(object):
             u_new: array
                 The input for this step. 1 for the current input, 0 otherwise
         """
-        params = self.params
+        p = self.params.par
 
         # Compute new state
         self.R_x = self.W_ee*self.x - self.W_ei*self.y - self.T_e
-        x_temp = self.R_x + params.input_gain*(self.W_eu*u_new)
+        x_temp = self.R_x + p.input_gain*(self.W_eu*u_new)
         self.x_int = (self.R_x >= 0.0)+0
         x_new = (x_temp >= 0.0)+0
 
@@ -81,17 +84,14 @@ class Sorn(object):
             x: array
                 The current activity array
         """
-        if not self.params.eta_ip == 'off':
-            self.T_e += self.params.eta_ip*(x - self.params.h_ip)
+        if not self.params.par.eta_ip == 'off':
+            self.T_e += self.params.par.eta_ip*(x - self.params.par.h_ip)
 
-    def simulation(self, N, stats, phase='plastic'):
+    def simulation(self, stats, phase='plastic'):
         """
         Simulates SORN for a defined number of steps
 
         Parameters:
-            N: int
-                Total simulation steps
-
             stats: bunch
                 Bunch of stats to save
 
@@ -100,6 +100,15 @@ class Sorn(object):
                 Possible phases: 'plastic', 'train', or 'test'
         """
         source = self.source
+
+        if phase == 'plastic':
+            N = self.params.par.steps_plastic
+
+        elif phase == 'train':
+            N = self.params.aux.steps_readouttrain
+
+        else:
+            N = self.params.aux.steps_readouttest
 
         # Simulation loop
         for n in range(N):
@@ -114,7 +123,7 @@ class Sorn(object):
                 if phase == 'train':
                     step = n
                 if phase == 'test':
-                    step = n + self.params.steps_readouttrain
+                    step = n + self.params.aux.steps_readouttrain
 
                 if hasattr(stats, 'total_activity'):
                     stats.total_activity[step] = x.sum()
@@ -129,7 +138,7 @@ class Sorn(object):
                     stats.internal_state[step] = x_int
 
             # Command line progress message
-            if self.params.display:
+            if self.params.aux.display:
                 if (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
                     sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))
                 sys.stdout.flush()

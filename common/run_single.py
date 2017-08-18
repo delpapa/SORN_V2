@@ -21,8 +21,9 @@ params = exp_dir.param
 experiment_file = exp_dir.experiment
 
 # 2. add experiment specific parameters
-params.c.display = True                      # display progress
-params.c.experimentmark = ''                 # to mark different experiments
+params.get_aux()
+params.aux.display = True
+params.aux.experiment_tag = ''
 
 # 3. initialize sorn, source, and stats objects
 experiment = experiment_file.Experiment(params.c)
