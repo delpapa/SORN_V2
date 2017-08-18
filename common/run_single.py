@@ -17,7 +17,6 @@ from utils import backup_pickle
 # 1. load param and experiment files
 exp_dir = import_module(sys.argv[1])
 params = exp_dir.param
-import ipdb; ipdb.set_trace()
 experiment_file = exp_dir.experiment
 
 # 2. add experiment specific parameters
@@ -38,5 +37,5 @@ experiment.run(sorn, stats)
 # 5. save initial sorn parameters and stats objects
 backup_pickle(experiment.init_params,
               experiment.results_dir,
-              stats,
-              save_stats=False)
+              experiment.files_tosave,
+              stats)

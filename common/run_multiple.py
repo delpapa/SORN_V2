@@ -10,17 +10,14 @@ from common.sorn import Sorn
 from common.stats import Stats
 from utils import backup_pickle
 
-import RandomSequenceTask as exp_dir             # experiment directory
-
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
-variables = ['L', 'A']
+variables = ['L']
 values = [
-          np.array([100]),
-          np.array([4])
+          np.arange(4, 31, 2),
          ]
 # number of repetitions of each experiment (for statistics)
-total_runs = 1
+total_runs = 10
 
 # experiment parameters
 display_progress = True                          # display progress bar
@@ -30,7 +27,8 @@ experiment_tag = ''                              # to mark experiment
 #                              SORN simulation                                 #
 ################################################################################
 
-# 1. create a dictionary with the variables and values to run and
+# 1. import module and create a dictionary with the variables and values to run
+exp_dir = import_module(sys.argv[1])
 var_dict = dict(zip(variables, values))
 
 # 2. loop over everyting
@@ -56,20 +54,14 @@ for var in var_dict.keys():
             stats = Stats(experiment.stats_tosave, sorn.params)
 
             # 4. run one experiment once and calculate performance
-            print experiment.inputsource.sequence
-            print 'Experiment', run + 1, '--',
             for elem in variables:
                 print elem, '=', getattr(params.par, elem),
-            print '\n'
+            print '-- Exp.', run + 1
 
             experiment.run(sorn, stats)
 
             # 5. save initial sorn parameters and stats objects
             backup_pickle(experiment.init_params,
                           experiment.results_dir,
-                          stats,
-                          save_stats=False,
-                          save_dirs=False)
-
-            #TODO; is this really necessary?
-            del sorn, stats, experiment, experiment_file, params
+                          experiment.files_tosave,
+                          stats)

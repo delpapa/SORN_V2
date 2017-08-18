@@ -5,6 +5,7 @@ from common import synapses
 
 class RandomSequenceSource(object):
     """
+    Random Sequence source
     """
     def __init__(self, params):
 
@@ -13,7 +14,7 @@ class RandomSequenceSource(object):
         self.N_u = int(params.N_u)               # input pool size
 
         # generate sequence (make sure it contains all symbols!)
-        # TODO: how to implement this in fewer lines?
+        # TODO: there must be a better way to do this?
         contain_all = 0
         while not contain_all:
             self.sequence = np.random.randint(self.N_a, size=self.L)

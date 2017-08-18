@@ -8,7 +8,10 @@ from sklearn import linear_model
 from source import RandomSequenceSource
 
 class Experiment(object):
-
+    """
+    Experiment for the SORN: contains the source, the simulation procedure and
+    the performance calculation
+    """
     def __init__(self, params):
 
             # keep track of initial parameters
@@ -26,7 +29,9 @@ class Experiment(object):
                 "Alphabet size A must be smaller than the sequence size L"
 
     def start(self):
-
+        """
+        Start the experiment
+        """
         self.stats_tosave = [
                              # 'ActivityStat',
                              'CountingLetterStat',
@@ -35,10 +40,26 @@ class Experiment(object):
                              # 'InternalStateStat'
                             ]
 
+        self.files_tosave = [
+                             # 'params',
+                             # 'stats',
+                             'performance_only',
+                             # 'scripts'
+                            ]
+
         self.inputsource = RandomSequenceSource(self.init_params)
 
     def run(self, sorn, stats):
+        """
+        Run experiment once
 
+        Parameters:
+            sorn: Bunch
+                The bunch of sorn parameters
+            stats: Bunch
+                The bunch of stats to save
+
+        """
         display = sorn.params.aux.display
 
         # 1. input with plasticity

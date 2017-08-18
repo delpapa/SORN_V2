@@ -17,7 +17,7 @@ class CountingSource(object):
         # define alphabet (always size n+2)
         self.alphabet = 'ABCDEF'
         self.N_a = len(self.alphabet)
-        # alphabet: lookup is a dictionary with letters and indices
+        # lookup is a dictionary containing the 6 letters
         self.lookup = dict(zip(self.alphabet,range(self.N_a)))
 
         # build sequences
@@ -37,7 +37,7 @@ class CountingSource(object):
         self.glob_ind = 0                        # global index
 
         # overlap for input neuron pools
-        self.overlap = params.overlap
+        self.overlap = True
 
     def generate_connection_e(self, N_e):
         """

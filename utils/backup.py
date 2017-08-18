@@ -7,11 +7,7 @@ from shutil import ignore_patterns
 
 import numpy as np
 
-def backup_pickle(params, results_dir, stats,
-                  save_params = True,
-                  save_stats = True,
-                  save_performance_only = True,
-                  save_dirs = True):
+def backup_pickle(params, results_dir, files_tosave, stats):
     ''''
     Back up handling function
 
@@ -39,29 +35,24 @@ def backup_pickle(params, results_dir, stats,
             os.makedirs(final_dir)
             break
 
-    if save_params:
+    if 'params' in files_tosave:
         with open(final_dir+'params.p', 'wb') as f:
             pickle.dump(params, f)
 
-    if save_stats:
+    if 'stats' in files_tosave:
         with open(final_dir+'stats.p', 'wb') as f:
             pickle.dump(stats, f)
 
-    elif save_performance_only:
+    elif 'performance_only' in files_tosave:
         with open(final_dir+'stats.p', 'wb') as f:
             pickle.dump(stats.LG_performance, f)
 
-    if save_dirs:
+    if 'scripts' in files_tosave:
         for f in ['utils', 'common', results_dir.split('/')[0]]:
             shutil.copytree(f, final_dir+f,
                             ignore=ignore_patterns('*.pyc', '*.git'))
 
-
-def backup_h5(params, stats,
-                  save_params = True,
-                  save_stats = True,
-                  save_performance_only = True,
-                  save_dirs = True):
+def backup_h5():
 
     # TODO: this should be implemented ASAP
     pass

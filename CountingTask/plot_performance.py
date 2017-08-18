@@ -13,7 +13,7 @@ from utils import Bunch
 
 # parameters to include in the plot
 N_values = np.array([200])                       # network sizes
-experiment_mark = ''                             # experiment mark
+experiment_tag = ''                              # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -24,7 +24,7 @@ fig = plt.figure(1, figsize=(7, 7))
 
 # 1. load performances and sequence lengths
 print '\nCalculating performance for the Counting Task...'
-experiment_folder = 'CountingTask' + experiment_mark
+experiment_folder = 'CountingTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 
 final_performance = []
