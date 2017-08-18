@@ -52,7 +52,7 @@ def backup_pickle(params, results_dir, stats,
             pickle.dump(stats.LG_performance, f)
 
     if save_dirs:
-        for f in ['utils', 'common', params.experiment_name]:
+        for f in ['utils', 'common', results_dir.split('/')[0]]:
             shutil.copytree(f, final_dir+f,
                             ignore=ignore_patterns('*.pyc', '*.git'))
 

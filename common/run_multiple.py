@@ -43,6 +43,7 @@ for var in var_dict.keys():
             experiment_file = exp_dir.experiment
 
             # 2.2 add experiment specific parameters
+            params.get_par()
             setattr(params.par, var, value)
             params.get_aux()
             params.aux.display = display_progress
@@ -55,7 +56,7 @@ for var in var_dict.keys():
             stats = Stats(experiment.stats_tosave, sorn.params)
 
             # 4. run one experiment once and calculate performance
-            import ipdb; ipdb.set_trace()
+            print experiment.inputsource.sequence
             print 'Experiment', run + 1, '--',
             for elem in variables:
                 print elem, '=', getattr(params.par, elem),
@@ -70,5 +71,5 @@ for var in var_dict.keys():
                           save_stats=False,
                           save_dirs=False)
 
-            # 6. reset objects. TODO: how to do it properly with objects?
+            #TODO; is this really necessary?
             del sorn, stats, experiment, experiment_file, params
