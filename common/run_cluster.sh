@@ -4,7 +4,7 @@
 #SBATCH --ntasks=10
 #SBATCH --mem-per-cpu=5000
 #SBATCH --job-name=""
-#SBATCH --output=sornA4.out
+#SBATCH --output=sornA20.out
 #SBATCH --mail-user=delpapa@fias.uni-frankfurt.de
 #SBATCH --mail-type=END
 #SBATCH --time=7-00:00:00
