@@ -16,4 +16,4 @@ echo "SLURMTMPDIR="$SLURMTMPDIR
 
 echo "working directory = "$SLURM_SUBMIT_DIR
 
-srun python common/run_multiple_sorn.py
+srun python common/run_multiple.py
