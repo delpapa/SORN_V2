@@ -17,11 +17,11 @@ values = [
           np.arange(4, 31, 2),
          ]
 # number of repetitions of each experiment (for statistics)
-total_runs = 10
+total_runs = 20
 
 # experiment parameters
 display_progress = True                          # display progress bar
-experiment_tag = '_PlastOff'                     # to mark experiment
+experiment_tag = ''                              # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #

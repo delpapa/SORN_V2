@@ -84,24 +84,25 @@ class Experiment(object):
         t_train = sorn.params.aux.steps_readouttrain
         t_test = sorn.params.aux.steps_readouttest
 
-        X_train = (stats.internal_state[:t_train].T).astype(int)
+        X_train = stats.internal_state[:t_train].T
         y_train = (stats.letters[:t_train].T).astype(int)
         y_train_ind = (stats.sequence_ind[:t_train].T).astype(int)
 
-        X_test = (stats.internal_state[t_train:t_train+t_test].T).astype(int)
+        X_test = stats.internal_state[t_train:t_train+t_test].T
         y_test = (stats.letters[t_train:t_train+t_test].T).astype(int)
         y_test_ind = (stats.sequence_ind[t_train:t_train+t_test].T).astype(int)
 
         # Logistic Regression
         readout =  linear_model.LogisticRegression()
-        output_weights = readout.fit(X_train.T, y_train_ind)
-        performance = output_weights.score(X_test.T, y_test_ind)
+        output_weights = readout.fit(X_train.T, y_train)
+        performance = output_weights.score(X_test.T, y_test)
 
         # #### Readout training using PI matrix
-        # # trasform labels in one-hot array
+        #
+        # trasform labels in one-hot array
         # onehot_values = np.max(y_train) + 1
-        # y_train_onehot = np.eye(onehot_values)[y_train].astype(int)
-        # y_test_onehot = np.eye(onehot_values)[y_test].astype(int)
+        # y_train_onehot = np.eye(onehot_values)[y_train_ind]
+        # y_test_onehot = np.eye(onehot_values)[y_test_ind]
         #
         # X_train_pinv = np.linalg.pinv(X_train) # MP pseudo-inverse
         # W_trained = np.dot(y_train_onehot.T, X_train_pinv) # least squares
@@ -113,9 +114,7 @@ class Experiment(object):
         # prediction = np.argmax(y_predicted, axis=0)
         # performance_PI = (prediction == y_test).sum()/float(len(y_test))
 
-        # normalize according to max possible performance (see Lazar et al 2009)
-        max_performance = 1 - 1./(2*(sorn.params.par.L + 2))
-        stats.LG_performance = performance/max_performance
+        stats.LG_performance = performance
 
         if display:
             print 'done'

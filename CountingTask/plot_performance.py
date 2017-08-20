@@ -13,7 +13,7 @@ from utils import Bunch
 
 # parameters to include in the plot
 N_values = np.array([200])                       # network sizes
-experiment_tag = '_PlastOff'                     # experiment tag
+experiment_tag = ''                              # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -37,12 +37,13 @@ for experiment in os.listdir(experiment_path):
         print 'experiment', experiment, '...',
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
-        LR_performance = pickle.load(
-                              open(experiment_path+experiment+'/stats.p', 'rb'))
+        perf = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
 
-        final_performance.append(LR_performance)
+        # normalize performance as in Lazar et al. 2009, fig. 2
+        max_perf = 1 - 0.5/(float(L)+2)
+        final_performance.append(perf/max_perf)
         final_L.append(int(L))
-        print 'Performance - LR:', '%.2f' % LR_performance
+        print 'Performance - LR:', '%.2f' % perf
 final_L = np.array(final_L)
 final_performance = np.array(final_performance)
 
@@ -56,7 +57,7 @@ for l in np.unique(final_L):
     plt.plot(l, mean_L, 'og')
     plt.errorbar(l, mean_L, yerr=std_L, color='g')
 
-# 3. edit figure properties
+# 3. edit figure features
 fig_lettersize = 12
 
 plt.title('Counting Task')
@@ -68,5 +69,5 @@ plt.ylim([0.4, 1.1])
 plots_dir = 'plots/'+experiment_folder+'/'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
-# plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
+plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
 plt.show()
