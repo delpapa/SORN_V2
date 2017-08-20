@@ -10,9 +10,9 @@ import sklearn
 from sklearn import linear_model
 
 # parameters to include in the plot
-N_values = np.array([50])                       # network sizes
-A_values = np.arange(2, 52, 1)                  # input alphabet sizes
-experiment_mark = '_capacity'                           # experiment mark
+N_values = np.array([200])                       # network sizes
+A_values = np.array([4])                  # input alphabet sizes
+experiment_tag = ''                           # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -22,8 +22,8 @@ experiment_mark = '_capacity'                           # experiment mark
 fig = plt.figure(1, figsize=(7, 7))
 
 # 1. load performances and sequence lengths
-print '\nCalculating performance for the Sequence Learning Task...'
-experiment_folder = 'RandomSequence' + experiment_mark
+print '\nCalculating performance for the Random Sequence Task...'
+experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 
 all_performance = []
@@ -37,19 +37,17 @@ for experiment in os.listdir(experiment_path):
         print 'experiment', experiment, '...'
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
-        params = pickle.load(open(experiment_path+experiment+'/sorn.p', 'rb'))
+        params = pickle.load(open(experiment_path+experiment+'/performance.p', 'rb'))
 
-        all_performance.append(params.RS_performance)
+        all_performance.append(params)
         all_L.append(int(L))
         all_A.append(int(A))
-        # print 'Performance - LR:', '%.2f' % performance
+        print 'Performance - LR:', '%.2f' % performance
 all_L = np.array(all_L)
 all_A = np.array(all_A)
 all_performance = np.array(all_performance)
 
 # 2. plot average performances and errors as a function of the sequence size
-
-import ipdb; ipdb.set_trace()
 for a in np.unique(all_A):
     ind_a = np.where(all_A == a)[0]
 
@@ -82,5 +80,5 @@ plt.ylim([0.4, 1.1])
 plots_dir = 'plots/'+experiment_folder+'/'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
-plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
+# plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
 plt.show()

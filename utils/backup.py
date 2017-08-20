@@ -47,7 +47,7 @@ def backup_pickle(experiment, stats):
             pickle.dump(stats, f)
 
     elif 'performance_only' in files_tosave:
-        with open(final_dir+'stats.p', 'wb') as f:
+        with open(final_dir+'performance.p', 'wb') as f:
             pickle.dump(stats.LG_performance, f)
 
     if 'scripts' in files_tosave:

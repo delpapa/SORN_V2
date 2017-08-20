@@ -14,10 +14,10 @@ from utils import backup_pickle
 # these values always overwrite the values in that file
 variables = ['L']
 values = [
-          np.arange(4, 31, 2),
+          np.arange(100, 1001, 20),
          ]
 # number of repetitions of each experiment (for statistics)
-total_runs = 20
+total_runs = 1
 
 # experiment parameters
 display_progress = True                          # display progress bar
