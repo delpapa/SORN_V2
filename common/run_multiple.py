@@ -17,7 +17,7 @@ values = [
           np.arange(50, 1001, 50),
          ]
 # number of repetitions of each experiment (for statistics)
-total_runs = 10
+total_runs = 1
 
 # experiment parameters
 display_progress = True                          # display progress bar
