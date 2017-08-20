@@ -37,7 +37,7 @@ class CountingSource(object):
         self.glob_ind = 0                        # global index
 
         # overlap for input neuron pools
-        self.overlap = False
+        self.overlap = True
 
     def generate_connection_e(self, N_e):
         """
@@ -46,6 +46,10 @@ class CountingSource(object):
         Parameters:
             N_e: number of excitatory neurons
         """
+
+        # always overlap if there is not enough neuron pools for the alphabet
+        if self.N_u * self.N_a > N_e:
+            self.overlap = True
 
         # choose random input neuron pools
         W = np.zeros((N_e, self.N_a))

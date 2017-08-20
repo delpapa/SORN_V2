@@ -14,8 +14,8 @@ def get_par():
     par.N_e = 200                                  # excitatory neurons
     par.N_u = 10                                   # neurons in each input pool
 
-    par.eta_stdp = 0.001                           # STDP learning rate
-    par.eta_ip = 0.001                             # IP learning rate
+    par.eta_stdp = 'off'                           # STDP learning rate
+    par.eta_ip = 'off'                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
     par.input_gain = 1                             # input gain factor
@@ -30,7 +30,7 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.L = 10                                     # sequence size
+    par.L = 20                                     # sequence size
 
     par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
@@ -48,7 +48,7 @@ def get_aux():
                                                  os.path.realpath(__file__)))[1]
 
     # training ans testing time steps
-    aux.steps_readouttrain = np.maximum(par.steps_readout, 3*par.L)
+    aux.steps_readouttrain = par.steps_readout
     aux.steps_readouttest = par.steps_readout
 
     aux.N_steps =  (par.steps_plastic               # total number of time steps

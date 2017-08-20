@@ -21,7 +21,7 @@ total_runs = 10
 
 # experiment parameters
 display_progress = True                          # display progress bar
-experiment_tag = ''                              # to mark experiment
+experiment_tag = '_PlastOff'                     # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #

@@ -14,7 +14,7 @@ def get_par():
     par.N_e = 200                                  # excitatory neurons
     par.N_u = 10                                   # neurons in each input pool
 
-    par.eta_stdp = 0.001                          # STDP learning rate
+    par.eta_stdp = 0.001                           # STDP learning rate
     par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
@@ -30,8 +30,7 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.L = 100                                    # sequence size
-    par.A = 4                                      # alphabet size
+    par.L = 10                                     # sequence size
 
     par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
