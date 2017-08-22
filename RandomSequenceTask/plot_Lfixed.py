@@ -11,9 +11,8 @@ from sklearn import linear_model
 
 # parameters to include in the plot
 N_values = np.array([200])                       # network sizes
-A_values = np.arange(4, 27, 1)                  # input alphabet sizes
-experiment_mark = '_HIP02'                    # experiment mark
-
+A_values = np.arange(10, 201, 20)                # input alphabet sizes
+experiment_tag = ''                              # experiment mark
 
 ################################################################################
 #                            Plot performance                                  #
@@ -24,7 +23,7 @@ fig = plt.figure(1, figsize=(7, 7))
 
 # 1. load performances and sequence lengths
 print '\nCalculating performance for the Sequence Learning Task...'
-experiment_folder = 'RandomSequence' + experiment_mark
+experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 
 all_performance = []
@@ -38,9 +37,9 @@ for experiment in os.listdir(experiment_path):
         print 'experiment', experiment, '...'
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
-        params = pickle.load(open(experiment_path+experiment+'/sorn.p', 'rb'))
+        perf = pickle.load(open(experiment_path+experiment+'/performance.p', 'rb'))
 
-        all_performance.append(params.RS_performance)
+        all_performance.append(perf)
         all_L.append(int(L))
         all_A.append(int(A))
         # print 'Performance - LR:', '%.2f' % performance
@@ -49,10 +48,10 @@ all_A = np.array(all_A)
 all_performance = np.array(all_performance)
 
 # 2. plot average performances and errors as a function of the sequence size
-
 A = []
 performance = []
 performance_error = []
+import ipdb; ipdb.set_trace()
 for a in np.unique(all_A):
     ind_a = np.where(all_A == a)[0]
 
@@ -60,7 +59,7 @@ for a in np.unique(all_A):
     performance.append(all_performance[ind_a].mean())
     performance_error.append(all_performance[ind_a].std())
 
-plt.errorbar(A, performance, fmt='-o', label = 'L = 2000')
+plt.errorbar(A, performance, fmt='-o', label = 'L = 1000')
 
 # 3. edit figure properties
 fig_lettersize = 12
@@ -76,5 +75,5 @@ plt.ylim([0.4, 1.1])
 plots_dir = 'plots/'+experiment_folder+'/'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
-plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
+# plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
 plt.show()
