@@ -11,7 +11,7 @@ from sklearn import linear_model
 
 # parameters to include in the plot
 N_values = np.array([200])                       # network sizes
-A_values = np.arange(10, 201, 20)                # input alphabet sizes
+A_values = np.arange(1, 1001, 1)                # input alphabet sizes
 experiment_tag = ''                              # experiment mark
 
 ################################################################################
@@ -54,11 +54,12 @@ for l in np.unique(all_L):                           # for each L
     performance = []
     performance_error = []
     red_A = all_A[np.where(all_L == l)]
+    red_performance = all_performance[np.where(all_L == l)]
     for a in np.unique(red_A):                       # for each A
 
         A.append(a)
-        performance.append(all_performance[np.where(red_A == a)].mean())
-        performance_error.append(all_performance[np.where(red_A == a)].std())
+        performance.append(red_performance[np.where(red_A == a)].mean())
+        performance_error.append(red_performance[np.where(red_A == a)].std())
 
     plt.errorbar(A, performance, fmt='-o', label = 'L ='+ '%d' %l)
 

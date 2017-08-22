@@ -25,7 +25,7 @@ class Experiment(object):
                                 + '_A' + str(params.par.A))
 
             # a initial sanity checks
-            assert params.par.L > params.par.A,\
+            assert params.par.L >= params.par.A,\
                 "Alphabet size A must be smaller than the sequence size L"
             assert params.par.N_e > params.par.N_u,\
                 "Input pool size N_u should be smaller than network size N_e"
