@@ -12,9 +12,9 @@ from utils import backup_pickle
 
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
-variables = ['A']
+variables = ['L']
 values = [
-          np.arange(20, 401, 20),
+          np.arange(100, 1001, 10),
          ]
 # number of repetitions of each experiment (for statistics)
 total_runs = 2
