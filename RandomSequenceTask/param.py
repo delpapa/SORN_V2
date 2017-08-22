@@ -30,7 +30,7 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.L = 10000                                    # sequence size
+    par.L = 1000                                   # sequence size
     par.A = 20                                     # alphabet size
 
     par.steps_plastic = 50000                      # sorn training time steps

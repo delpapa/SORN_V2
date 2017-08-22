@@ -49,17 +49,18 @@ all_A = np.array(all_A)
 all_performance = np.array(all_performance)
 
 # 2. plot average performances and errors as a function of the sequence size
-A = []
-performance = []
-performance_error = []
-for a in np.unique(all_A):
-    ind_a = np.where(all_A == a)[0]
+for l in np.unique(all_L):                           # for each L
+    A = []
+    performance = []
+    performance_error = []
+    red_A = all_A[np.where(all_L == l)]
+    for a in np.unique(red_A):                       # for each A
 
-    A.append(a)
-    performance.append(all_performance[ind_a].mean())
-    performance_error.append(all_performance[ind_a].std())
+        A.append(a)
+        performance.append(all_performance[np.where(red_A == a)].mean())
+        performance_error.append(all_performance[np.where(red_A == a)].std())
 
-    plt.errorbar(A, performance, fmt='-o', label = 'L = 1000')
+    plt.errorbar(A, performance, fmt='-o', label = 'L ='+ '%d' %l)
 
 # 3. edit figure properties
 fig_lettersize = 12
