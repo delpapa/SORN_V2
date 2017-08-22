@@ -39,6 +39,7 @@ for experiment in os.listdir(experiment_path):
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
         perf = pickle.load(open(experiment_path+experiment+'/performance.p', 'rb'))
 
+        # saves everything
         all_performance.append(perf)
         all_L.append(int(L))
         all_A.append(int(A))
@@ -51,7 +52,6 @@ all_performance = np.array(all_performance)
 A = []
 performance = []
 performance_error = []
-import ipdb; ipdb.set_trace()
 for a in np.unique(all_A):
     ind_a = np.where(all_A == a)[0]
 
@@ -59,7 +59,7 @@ for a in np.unique(all_A):
     performance.append(all_performance[ind_a].mean())
     performance_error.append(all_performance[ind_a].std())
 
-plt.errorbar(A, performance, fmt='-o', label = 'L = 1000')
+    plt.errorbar(A, performance, fmt='-o', label = 'L = 1000')
 
 # 3. edit figure properties
 fig_lettersize = 12
