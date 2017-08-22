@@ -133,9 +133,23 @@ class Sorn(object):
 
             # update stats. TODO: this should be done by a stats method instead
             #               TODO: some stats have to be saved for the whole sim
-            import ipdb; ipdb.set_trace()
-            stats.save_step()
+            if phase in ['train', 'test']:
+                if phase == 'train':
+                    step = n
+                if phase == 'test':
+                    step = n + self.params.aux.steps_readouttrain
 
+                if hasattr(stats, 'total_activity'):
+                    stats.total_activity[step] = x.sum()
+                if hasattr(stats, 'connec_frac'):
+                    stats.connec_frac[step] = W_ee.W.sum()
+                if hasattr(stats, 'activity'):
+                    stats.activity[step] = x
+                if hasattr(stats, 'letters'):
+                    stats.sequence_ind[step] = int(source.sequence_ind())
+                    stats.letters[step] = int(np.argmax(u))
+                if hasattr(stats, 'internal_state'):
+                    stats.internal_state[step] = x_int
 
             # Command line progress message
             if self.params.aux.display:
