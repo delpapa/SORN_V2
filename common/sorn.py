@@ -57,17 +57,31 @@ class Sorn(object):
 
         # Compute new state
         self.R_x = self.W_ee*self.x - self.W_ei*self.y - self.T_e
+        if hasattr(p, 'sigma'):
+            self.R_x += p.sigma * np.random.rand(p.N_e)
+
         x_temp = self.R_x + p.input_gain*(self.W_eu*u_new)
         self.x_int = (self.R_x >= 0.0)+0
         x_new = (x_temp >= 0.0)+0
 
         self.R_y = self.W_ie*x_new - self.T_i
+        if hasattr(p, 'sigma'):
+            self.R_x += p.sigma * np.random.rand(p.N_e)
         y_new = (self.R_y >= 0.0)+0
 
         # Apply IP, STDP, SN
         self.ip(x_new)
         self.W_ee.stdp(self.x, x_new)
         self.W_ee.sn()
+
+        # Apply iSTDP and SP, if necessary
+        if hasattr(p, 'eta_istdp') and p.eta_istdp != 'off':
+
+            pass
+
+        if hasattr(p, 'sp_init') and p.sp_init != 'off':
+
+            pass
 
         self.x = x_new
         self.y = y_new
@@ -119,23 +133,9 @@ class Sorn(object):
 
             # update stats. TODO: this should be done by a stats method instead
             #               TODO: some stats have to be saved for the whole sim
-            if phase in ['train', 'test']:
-                if phase == 'train':
-                    step = n
-                if phase == 'test':
-                    step = n + self.params.aux.steps_readouttrain
+            import ipdb; ipdb.set_trace()
+            stats.save_step()
 
-                if hasattr(stats, 'total_activity'):
-                    stats.total_activity[step] = x.sum()
-                if hasattr(stats, 'connec_frac'):
-                    stats.connec_frac[step] = W_ee.W.sum()
-                if hasattr(stats, 'activity'):
-                    stats.activity[step] = x
-                if hasattr(stats, 'letters'):
-                    stats.sequence_ind[step] = int(source.sequence_ind())
-                    stats.letters[step] = int(np.argmax(u))
-                if hasattr(stats, 'internal_state'):
-                    stats.internal_state[step] = x_int
 
             # Command line progress message
             if self.params.aux.display:

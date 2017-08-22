@@ -10,8 +10,8 @@ import sklearn
 from sklearn import linear_model
 
 # parameters to include in the plot
-N_values = np.array([200])                       # network sizes
-A_values = np.array([4])                  # input alphabet sizes
+N_values = np.array([200])                    # network sizes
+A_values = np.array([4, 20])                  # input alphabet sizes
 experiment_tag = ''                           # experiment tag
 
 ################################################################################

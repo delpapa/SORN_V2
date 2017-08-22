@@ -28,7 +28,7 @@ class Experiment(object):
         Start the experiment
         """
         self.stats_tosave = [
-                             # 'ActivityStat',
+                             # 'ActivityReadoutStat',
                              'CountingLetterStat',
                              # 'CountingActivityStat',
                              # 'ConnectionFractionStat',
