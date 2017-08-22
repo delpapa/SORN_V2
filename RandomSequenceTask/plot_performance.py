@@ -11,7 +11,7 @@ from sklearn import linear_model
 
 # parameters to include in the plot
 N_values = np.array([200])                    # network sizes
-A_values = np.arange(10, 201, 20)            # input alphabet sizes
+A_values = np.array([100])               # input alphabet sizes
 experiment_tag = ''                           # experiment tag
 
 ################################################################################
@@ -22,7 +22,7 @@ experiment_tag = ''                           # experiment tag
 fig = plt.figure(1, figsize=(7, 7))
 
 # 1. load performances and sequence lengths
-print '\nCalculating performance for the Random Sequence Task...'
+print '\nCalculating performance for the Sequence Learning Task...'
 experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 
@@ -39,10 +39,11 @@ for experiment in os.listdir(experiment_path):
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
         perf = pickle.load(open(experiment_path+experiment+'/performance.p', 'rb'))
 
+        # saves everything
         all_performance.append(perf)
         all_L.append(int(L))
         all_A.append(int(A))
-        print 'Performance - LR:', '%.2f' % perf
+        # print 'Performance - LR:', '%.2f' % performance
 all_L = np.array(all_L)
 all_A = np.array(all_A)
 all_performance = np.array(all_performance)

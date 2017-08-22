@@ -61,7 +61,8 @@ for l in np.unique(all_L):                           # for each L
         performance.append(red_performance[np.where(red_A == a)].mean())
         performance_error.append(red_performance[np.where(red_A == a)].std())
 
-    plt.errorbar(A, performance, fmt='-o', label = 'L ='+ '%d' %l)
+    if l in [100, 400, 1000, 10000]:
+        plt.errorbar(A, performance, fmt='-o', label = 'L ='+ '%d' %l)
 
 # 3. edit figure properties
 fig_lettersize = 12

@@ -14,14 +14,14 @@ from utils import backup_pickle
 # these values always overwrite the values in that file
 variables = ['L']
 values = [
-          np.arange(100, 1001, 10),
+          np.arange(100, 1001, 100),
          ]
 # number of repetitions of each experiment (for statistics)
 total_runs = 2
 
 # experiment parameters
 display_progress = False                         # display progress bar
-experiment_tag = ''                              # to mark experiment
+experiment_tag = '_PlastOff'                              # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #
