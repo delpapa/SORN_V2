@@ -12,7 +12,7 @@ from sklearn import linear_model
 # parameters to include in the plot
 N_values = np.array([200])                    # network sizes
 A_values = np.array([100])               # input alphabet sizes
-experiment_tag = ''                           # experiment tag
+experiment_tag = '_PlastOff'                           # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #

@@ -43,7 +43,7 @@ for experiment in os.listdir(experiment_path):
         all_performance.append(perf)
         all_L.append(int(L))
         all_A.append(int(A))
-        # print 'Performance - LR:', '%.2f' % performance
+        print 'Performance - LR:', '%.2f' % perf
 all_L = np.array(all_L)
 all_A = np.array(all_A)
 all_performance = np.array(all_performance)
