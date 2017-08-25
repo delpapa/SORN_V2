@@ -44,8 +44,8 @@ class Experiment(object):
 
         self.files_tosave = [
                              # 'params',
-                             'stats'
-                             # 'performance_only'
+                             # 'stats'
+                             'performance_only'
                              # 'scripts'
                             ]
 
