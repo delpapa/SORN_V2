@@ -23,7 +23,7 @@ experiment_file = exp_dir.experiment
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = ''
+params.aux.experiment_tag = '_FadingMemory_RandReservoir'
 
 # 3. initialize sorn, source, and stats objects
 experiment = experiment_file.Experiment(params)

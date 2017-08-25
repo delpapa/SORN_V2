@@ -63,8 +63,6 @@ class SparseSynapticMatrix(object):
         """
         Performs one STDP step (from Christoph's implementation)
         """
-        if self.eta_stdp == 'off':
-            return
         if to_old is None:
             to_old = from_old
         if to_new is None:
@@ -82,8 +80,6 @@ class SparseSynapticMatrix(object):
         """
         Performs synaptic normalization
         """
-        if self.eta_stdp == 'off':
-            return
         z = abs(self.W).sum(1)
         data = self.W.data
         data /= np.array(z[self.W.indices]).reshape(data.shape)

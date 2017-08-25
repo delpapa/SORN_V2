@@ -20,6 +20,8 @@ class Stats(object):
         if 'ConnectionFractionStat' in stats_tosave:
             self.connec_frac = np.zeros(params.aux.N_steps)
 
+        if 'SynapticWeights' in stats_tosave:
+            pass
 
         if 'ActivityReadoutStat' in stats_tosave:
             self.total_activity = np.zeros(params.aux.readout_steps)
@@ -34,7 +36,7 @@ class Stats(object):
         if 'InternalStateStat' in stats_tosave:
             self.internal_state = np.zeros((params.aux.readout_steps,
                                             params.par.N_e))
-    # 
+    #
     # def save_step(self, ):
     #
     #                 if phase in ['train', 'test']:

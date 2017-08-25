@@ -70,9 +70,11 @@ class Sorn(object):
         y_new = (self.R_y >= 0.0)+0
 
         # Apply IP, STDP, SN
-        self.ip(x_new)
-        self.W_ee.stdp(self.x, x_new)
-        self.W_ee.sn()
+        if p.eta_ip != 'off':
+            self.ip(x_new)
+        if p.eta_stdp != 'off':
+            self.W_ee.stdp(self.x, x_new)
+            self.W_ee.sn()
 
         # Apply iSTDP and SP, if necessary
         if hasattr(p, 'eta_istdp') and p.eta_istdp != 'off':
@@ -125,7 +127,7 @@ class Sorn(object):
             N = self.params.aux.steps_readouttest
 
         # Simulation loop
-        for n in range(N):
+        for n in xrange(N):
 
             # Simulation step
             u = source.next()
