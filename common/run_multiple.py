@@ -22,7 +22,7 @@ total_runs = 1
 
 # experiment parameters
 display_progress = False                         # display progress bar
-experiment_tag = '_FadingMemory_RandReservoir'   # to mark experiment
+experiment_tag = '_FadingMemory'                 # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #
