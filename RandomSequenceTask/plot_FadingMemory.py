@@ -10,7 +10,7 @@ import sklearn
 from sklearn import linear_model
 
 # parameters to include in the plot
-L_values = np.array([2000])                           # sequence sizes
+L_values = np.array([50000])                           # sequence sizes
 A_values = np.array([4, 6, 10, 20, 40, 100])          # input alphabet sizes
 experiment_tag = '_FadingMemory'# experiment tag
 
