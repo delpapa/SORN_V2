@@ -20,7 +20,7 @@ experiment_tag = '_FadingMemory'                      # experiment tag
 ################################################################################
 
 # 0. build figures
-fig = plt.figure(1, figsize=(7, 7))
+fig = plt.figure(1, figsize=(5, 5))
 
 # 1. load performances and sequence lengths
 print '\nCalculating performance for the Sequence Learning Task...'

@@ -11,7 +11,7 @@ from sklearn import linear_model
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-N_values = np.array([100, 200, 400, 800, 1600])         # network sizes
+N_values = np.array([100, 200, 400, 800])         # network sizes
 A_values = np.array([4, 10, 20, 30, 40, 50, 100, 200, 300, 1000]) # input alphabet sizes
 L_values = np.array([50000])                          # sequence sizes
 experiment_tag = '_FadingMemory'                      # experiment tag
@@ -78,11 +78,11 @@ for i in xrange(final_plot.shape[1]):
 # 3. edit figure properties
 fig_lettersize = 12
 
-# plt.axhline(y=0.98, color='gray', linestyle='--')
 plt.title('Sequence Learning Task')
 plt.legend(loc='best')
-plt.xlabel(r'$t_{\rm past}$', fontsize=fig_lettersize)
-plt.ylabel('Performance', fontsize=fig_lettersize)
+plt.xlabel(r'$N$', fontsize=fig_lettersize)
+plt.ylabel('M', fontsize=fig_lettersize)
+plt.xlim(0, 2000)
 
 # 4. save figuresa
 plots_dir = 'plots/'+experiment_folder+'/'

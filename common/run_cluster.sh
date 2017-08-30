@@ -2,9 +2,9 @@
 
 #SBATCH --partition=sleuths
 #SBATCH --ntasks=10
-#SBATCH --mem-per-cpu=5000
+#SBATCH --mem-per-cpu=8000
 #SBATCH --job-name="sorn_FadingMemory"
-#SBATCH --output=sorn_FadingMemory.out
+#SBATCH --output=sorn_FadingMemory_N2000.out
 #SBATCH --mail-user=delpapa@fias.uni-frankfurt.de
 #SBATCH --mail-type=END
 #SBATCH --time=7-00:00:00
