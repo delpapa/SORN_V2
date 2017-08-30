@@ -11,8 +11,8 @@ aux = utils.Bunch()
 ################################################################################
 def get_par():
 
-    par.N_e = 400                                  # excitatory neurons
-    par.N_u = 200                                  # neurons in each input pool
+    par.N_e = 200                                  # excitatory neurons
+    par.N_u = 100                                  # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
     par.eta_ip = 0.001                             # IP learning rate
@@ -31,7 +31,7 @@ def get_par():
 #                           Experiment parameters                              #
 ################################################################################
     par.L = 2000                                    # sequence size
-    par.A = 10                                       # alphabet size
+    par.A = 20                                       # alphabet size
 
     par.steps_plastic = 50000                       # sorn training time steps
     par.steps_readout = 5000                        # readout train and test steps

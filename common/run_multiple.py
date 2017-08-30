@@ -14,7 +14,7 @@ from utils import backup_pickle
 # these values always overwrite the values in that file
 variables = ['L']
 values = [
-          np.array([100, 200, 500, 1000, 2000, 3000, 5000]),
+          np.array([100, 200, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 3000, 5000]),
          ]
 # number of repetitions of each experiment (for statistics)
 total_runs = 1
