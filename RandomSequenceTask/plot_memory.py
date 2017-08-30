@@ -11,7 +11,7 @@ from sklearn import linear_model
 
 # parameters to include in the plot
 L_values = np.array([2000])                    # network sizes
-A_values = np.arange(1, 2000, 1)              # input alphabet sizes
+A_values = np.array([4, 6, 10, 20, 40, 100])              # input alphabet sizes
 experiment_tag = '_FadingMemory'# experiment tag
 
 ################################################################################
@@ -33,7 +33,7 @@ for experiment in os.listdir(experiment_path):
 
     # read data files and load performances
     N, L, A, _ = [s[1:] for s in experiment.split('_')]
-    if int(L) in L_values:
+    if int(L) in L_values and int(A) in A_values:
         print 'experiment', experiment, '...'
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
