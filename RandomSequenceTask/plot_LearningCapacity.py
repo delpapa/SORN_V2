@@ -11,7 +11,7 @@ from sklearn import linear_model
 
 # parameters to include in the plot
 N_values = np.array([200, 400])                    # network sizes
-A_values = np.array([10])                          # input alphabet sizes
+A_values = np.array([20])                          # input alphabet sizes
 experiment_tag = '_LearningCapacity'               # experiment tag
 
 ################################################################################
