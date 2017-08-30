@@ -10,9 +10,10 @@ import sklearn
 from sklearn import linear_model
 
 # parameters to include in the plot
-N_values = np.array([200])                       # network sizes
-A_values = np.arange(1, 1001, 1)                # input alphabet sizes
-experiment_tag = ''                              # experiment mark
+N_values = np.array([50, 100, 200, 400, 800])         # network sizes
+A_values = np.array([4, 10, 20, 30, 40, 50, 100, 200, 300, 1000]) # input alphabet sizes
+L_values = np.array([50000])                          # sequence sizes
+experiment_tag = '_FadingMemory'                      # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -27,13 +28,14 @@ experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 
 all_performance = []
-all_L = []
+all_N = []
 all_A = []
+all_L = []
 for experiment in os.listdir(experiment_path):
 
     # read data files and load performances
     N, L, A, _ = [s[1:] for s in experiment.split('_')]
-    if int(N) in N_values and int(A) in A_values:
+    if int(N) in N_values and int(A) in A_values and int(N) in N_values:
         print 'experiment', experiment, '...'
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
@@ -41,38 +43,33 @@ for experiment in os.listdir(experiment_path):
 
         # saves everything
         all_performance.append(perf)
-        all_L.append(int(L))
         all_A.append(int(A))
-        print 'Performance - LR:', '%.2f' % perf
-all_L = np.array(all_L)
+        all_N.append(int(N))
+        all_L.append(int(L))
+
 all_A = np.array(all_A)
+all_N = np.array(all_N)
+all_L = np.array(all_L)
 all_performance = np.array(all_performance)
 
 # 2. plot average performances and errors as a function of the sequence size
-for l in np.unique(all_L):                           # for each L
-    A = []
-    performance = []
-    performance_error = []
-    red_A = all_A[np.where(all_L == l)]
-    red_performance = all_performance[np.where(all_L == l)]
-    for a in np.unique(red_A):                       # for each A
+for a in np.unique(all_A):
+    ind_a = np.where(all_A == a)[0]
+    red_performance = all_performance[ind_a].mean(0)
 
-        A.append(a)
-        performance.append(red_performance[np.where(red_A == a)].mean())
-        performance_error.append(red_performance[np.where(red_A == a)].std())
-
-    if l in [100, 400, 1000, 10000]:
-        plt.errorbar(A, performance, fmt='-o', label = 'L ='+ '%d' %l)
+    plt.plot(red_performance, '-o', label = 'A ='+str(a))
 
 # 3. edit figure properties
 fig_lettersize = 12
 
-plt.axhline(y=0.98, color='gray', linestyle='--')
+# plt.axhline(y=0.98, color='gray', linestyle='--')
 plt.title('Sequence Learning Task')
 plt.legend(loc='best')
-plt.xlabel('A', fontsize=fig_lettersize)
+plt.xlabel(r'$t_{\rm past}$', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
-plt.ylim([0.4, 1.1])
+plt.xticks(np.arange(16), np.arange(16).astype(str))
+plt.xlim([0, 15])
+plt.ylim([0., 1.1])
 
 # 4. save figuresa
 plots_dir = 'plots/'+experiment_folder+'/'

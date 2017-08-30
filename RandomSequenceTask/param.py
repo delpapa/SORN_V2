@@ -11,8 +11,8 @@ aux = utils.Bunch()
 ################################################################################
 def get_par():
 
-    par.N_e = 800                                  # excitatory neurons
-    par.N_u = 400                                  # neurons in each input pool
+    par.N_e = 50                                  # excitatory neurons
+    par.N_u = 25                                  # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
     par.eta_ip = 0.001                             # IP learning rate
