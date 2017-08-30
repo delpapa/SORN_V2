@@ -102,7 +102,7 @@ class Experiment(object):
         readout = linear_model.LogisticRegression()
         output_weights = readout.fit(X_train.T, y_train_ind)
         performance = output_weights.score(X_test.T, y_test_ind)
-        stats.LC_performance = performance
+        stats.performance = performance
 
         # t_past_max = 20
         # stats.t_past = np.arange(t_past_max)
