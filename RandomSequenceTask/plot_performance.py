@@ -77,7 +77,7 @@ plt.xlabel('L', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
 plt.ylim([0.4, 1.1])
 
-# 4. save figuresa
+# 4. save figures
 plots_dir = 'plots/'+experiment_folder+'/'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)

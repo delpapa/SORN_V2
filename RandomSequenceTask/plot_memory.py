@@ -12,7 +12,7 @@ from sklearn import linear_model
 # parameters to include in the plot
 L_values = np.array([2000])                    # network sizes
 A_values = np.arange(1, 2000, 1)              # input alphabet sizes
-experiment_tag = '_FadingMemory_RandReservoir'# experiment tag
+experiment_tag = '_FadingMemory'# experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
