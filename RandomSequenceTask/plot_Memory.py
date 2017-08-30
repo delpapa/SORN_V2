@@ -8,9 +8,10 @@ import numpy as np
 import matplotlib.pylab as plt
 import sklearn
 from sklearn import linear_model
+from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-N_values = np.array([50, 100, 200, 400, 800])         # network sizes
+N_values = np.array([100, 200, 400, 800, 1600])         # network sizes
 A_values = np.array([4, 10, 20, 30, 40, 50, 100, 200, 300, 1000]) # input alphabet sizes
 L_values = np.array([50000])                          # sequence sizes
 experiment_tag = '_FadingMemory'                      # experiment tag
@@ -18,6 +19,14 @@ experiment_tag = '_FadingMemory'                      # experiment tag
 ################################################################################
 #                            Plot performance                                  #
 ################################################################################
+
+def fading_memory(perf_data):
+
+    m = (perf_data[0]+perf_data[-1])/2
+    xdata = perf_data
+    ydata = np.arange(len(perf_data))
+    f_interp = interp1d(xdata, ydata)
+    return f_interp(m)
 
 # 0. build figures
 fig = plt.figure(1, figsize=(7, 7))
@@ -52,12 +61,19 @@ all_N = np.array(all_N)
 all_L = np.array(all_L)
 all_performance = np.array(all_performance)
 
-# 2. plot average performances and errors as a function of the sequence size
-for a in np.unique(all_A):
-    ind_a = np.where(all_A == a)[0]
-    red_performance = all_performance[ind_a].mean(0)
+final_plot = np.zeros((len(np.unique(all_N)), len(np.unique(all_A))))
+for i, n in enumerate(np.unique(all_N)):
+    ind_n = np.where(all_N == n)[0]
+    n_A = all_A[ind_n]
+    n_performance = all_performance[ind_n]
+    for j, a in enumerate(np.unique(n_A)):
+        ind_a = np.where(n_A == a)[0]
+        final_plot[i, j] = fading_memory(n_performance[ind_a].mean(0))
 
-    plt.plot(red_performance, '-o', label = 'A ='+str(a))
+for i in xrange(final_plot.shape[1]):
+    # fit_log(np.unique(all_A)[i], N_values, final_plot[:, i])
+    plt.errorbar(N_values, final_plot[:, i],
+     fmt='-o', label=r'$A =$'+str(np.unique(all_A)[i]))
 
 # 3. edit figure properties
 fig_lettersize = 12
@@ -67,13 +83,10 @@ plt.title('Sequence Learning Task')
 plt.legend(loc='best')
 plt.xlabel(r'$t_{\rm past}$', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
-plt.xticks(np.arange(16), np.arange(16).astype(str))
-plt.xlim([0, 15])
-plt.ylim([0., 1.1])
 
 # 4. save figuresa
 plots_dir = 'plots/'+experiment_folder+'/'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
-plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
+plt.savefig(plots_dir+'memory_x_N.pdf', format='pdf')
 plt.show()
