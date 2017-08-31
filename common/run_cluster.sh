@@ -3,8 +3,8 @@
 #SBATCH --partition=sleuths
 #SBATCH --ntasks=10
 #SBATCH --mem-per-cpu=7000
-#SBATCH --job-name="sorn_LearningCapacity"
-#SBATCH --output=sorn_LearningCapacity.out
+#SBATCH --job-name="sorn_LC_N200"
+#SBATCH --output=sorn_LC_N200.out
 #SBATCH --mail-user=delpapa@fias.uni-frankfurt.de
 #SBATCH --mail-type=END
 #SBATCH --time=7-00:00:00
