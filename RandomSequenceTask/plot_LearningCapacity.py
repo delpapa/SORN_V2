@@ -10,7 +10,7 @@ import sklearn
 from sklearn import linear_model
 
 # parameters to include in the plot
-N_values = np.array([50, 100, 200, 400])                    # network sizes
+N_values = np.array([200, 400])                    # network sizes
 A_values = np.array([20])                          # input alphabet sizes
 experiment_tag = '_LearningCapacity'               # experiment tag
 
@@ -65,7 +65,7 @@ for n in np.unique(all_N):
         log_error.append(1. - performance[-1])
         performance_error.append(all_performance[ind_n][ind_l].std())
 
-    plt.errorbar(L, performance, fmt='o', label = 'N ='+str(n))
+    plt.errorbar(L, np.array(performance), performance_error, fmt='o', label = 'N ='+str(n))
 
 # 3. edit figure properties
 fig_lettersize = 12
@@ -75,7 +75,7 @@ plt.title('Sequence Learning Task')
 plt.legend(loc='best')
 plt.xlabel('L', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
-plt.ylim([0.8, 1.1])
+plt.yscale('log')
 
 # 4. save figures
 plots_dir = 'plots/'+experiment_folder+'/'

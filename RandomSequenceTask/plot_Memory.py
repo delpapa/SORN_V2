@@ -13,7 +13,7 @@ from scipy.interpolate import interp1d
 
 # parameters to include in the plot
 N_values = np.array([50, 100, 200, 400, 800, 1600, 2000])         # network sizes
-A_values = np.array([4, 10, 20, 30]) # input alphabet sizes
+A_values = np.array([4, 10, 20, 30, 40, 50]) # input alphabet sizes
 L_values = np.array([50000])                          # sequence sizes
 experiment_tag = '_FadingMemory'                      # experiment tag
 
