@@ -8,17 +8,25 @@ import numpy as np
 import matplotlib.pylab as plt
 import sklearn
 from sklearn import linear_model
+from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-N_values = np.array([100, 200, 400, 800])         # network sizes
-A_values = np.array([4, 10, 20, 30, 40, 50, 100, 200, 300, 1000]) # input alphabet sizes
+N_values = np.array([50, 100, 200, 400, 800, 1600, 2000])         # network sizes
+A_values = np.array([4, 10, 20, 30]) # input alphabet sizes
 L_values = np.array([50000])                          # sequence sizes
 experiment_tag = '_FadingMemory'                      # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
 ################################################################################
+
+def log_interp1d(xx, yy, kind='linear'):
+    logx = np.log10(xx)
+    logy = np.log10(yy)
+    lin_interp = sp.interpolate.interp1d(logx, logy, kind=kind)
+    log_interp = lambda zz: np.power(10.0, lin_interp(np.log10(zz)))
+    return log_interp
 
 def fading_memory(perf_data):
 
@@ -28,8 +36,18 @@ def fading_memory(perf_data):
     f_interp = interp1d(xdata, ydata)
     return f_interp(m)
 
+def log_func(x, a, b):
+    return a*np.log(x) + b
+
+def fit_log(A, xdata, ydata):
+
+    popt, pcov = curve_fit(log_func, xdata, ydata)
+    log = interp1d(xdata, log_func(xdata, *popt))
+    xnew = np.arange(50, 2000)
+    plt.plot(xnew, log_func(xnew, *popt), 'k--')
+
 # 0. build figures
-fig = plt.figure(1, figsize=(7, 7))
+fig = plt.figure(1, figsize=(5, 5))
 
 # 1. load performances and sequence lengths
 print '\nCalculating performance for the Sequence Learning Task...'
@@ -68,12 +86,14 @@ for i, n in enumerate(np.unique(all_N)):
     n_performance = all_performance[ind_n]
     for j, a in enumerate(np.unique(n_A)):
         ind_a = np.where(n_A == a)[0]
+
         final_plot[i, j] = fading_memory(n_performance[ind_a].mean(0))
 
 for i in xrange(final_plot.shape[1]):
-    # fit_log(np.unique(all_A)[i], N_values, final_plot[:, i])
+    fit_log(np.unique(all_A)[i], N_values, final_plot[:, i])
     plt.errorbar(N_values, final_plot[:, i],
-     fmt='-o', label=r'$A =$'+str(np.unique(all_A)[i]))
+     fmt='o', label=r'$A =$'+str(np.unique(all_A)[i]))
+
 
 # 3. edit figure properties
 fig_lettersize = 12

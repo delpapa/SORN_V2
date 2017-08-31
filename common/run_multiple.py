@@ -12,16 +12,16 @@ from utils import backup_pickle
 
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
-variables = ['A']
+variables = ['L']
 values = [
-          np.array([4, 10, 20, 30, 40, 50, 100, 200, 300, 1000]),
+          np.array([100, 200, 1000, 2000]),
          ]
 # number of repetitions of each experiment (for statistics)
 total_runs = 1
 
 # experiment parameters
 display_progress = False                         # display progress bar
-experiment_tag = '_FadingMemory'                 # to mark experiment
+experiment_tag = '_LearningCapacity'                 # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #

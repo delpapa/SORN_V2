@@ -19,7 +19,7 @@ experiment_tag = '_LearningCapacity'               # experiment tag
 ################################################################################
 
 # 0. build figures
-fig = plt.figure(1, figsize=(7, 7))
+fig = plt.figure(1, figsize=(5, 5))
 
 # 1. load performances and sequence lengths
 print '\nCalculating performance for the Sequence Learning Task...'
@@ -75,11 +75,11 @@ plt.title('Sequence Learning Task')
 plt.legend(loc='best')
 plt.xlabel('L', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
-plt.ylim([0.4, 1.1])
+plt.ylim([0.8, 1.1])
 
 # 4. save figures
 plots_dir = 'plots/'+experiment_folder+'/'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
-# plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
+plt.savefig(plots_dir+'performance_x_L.pdf', format='pdf')
 plt.show()
