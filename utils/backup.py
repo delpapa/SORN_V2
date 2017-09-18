@@ -12,17 +12,9 @@ def backup_pickle(experiment, stats):
     Back up handling function
 
     Parameters:
-        par: bunch of simulation parameters
+        experiment: Experiment object, contains the initial sorn parameters
 
-        stats: bunch of stats saved during the simulation
-
-        save_params: if True, backup params
-
-        save_stats: if True, backup stats
-
-        save_performance_only: if True, backup the simulation performance
-
-        save_dirs: if True, backup every file used in the simulation
+        stats: bunch of stats stored during the simulation
     '''
     params = experiment.init_params
     results_dir = experiment.results_dir

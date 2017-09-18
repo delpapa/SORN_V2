@@ -3,6 +3,8 @@ A SORN repository for general purposes. This repository is based on the original
 
 ## Getting Started
 
+Every experiment is stored in a different folder. To run any experiment, type from the main folder: python common/test_single.py 'ExperimentName'.
+
 ### Prerequisites
 
 * [numpy](http://www.numpy.org/)

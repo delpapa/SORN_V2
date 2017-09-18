@@ -9,60 +9,76 @@ import scipy.sparse as sp
 ################################################################################
 
 class FullSynapticMatrix(object):
-    """
-    Dense connection matrix class for SORN I-E and E-I synapses
-    """
-    def __init__(self, shape):
+    """Dense connection matrix class for SORN I-E and E-I synapses.
 
-        self.W = np.random.rand(*shape)
+    This class contains every synaptic plasticity related method.
+    """
+    def __init__(self, par, shape):
+        """Creates a random normalized matrix
 
-        # normalize after random initialization
+        Parameters:
+            par: Bunch
+                Main initial sorn parameters
+
+            aux: Bunch
+                Auxiliary initial sorn parameters
+        """
+        self.eta_istdp = par.eta_istdp
+
+        self.W = np.random.random(shape)
         z = abs(self.W).sum(1)
-        self.W /= z[:,None]
+        self.W /= z[:,None] # normalize after random initialization
 
     def __mul__(self, x):
+        """Shorter matrix-array multiplication"""
         return self.W.dot(x)
 
 class SparseSynapticMatrix(object):
-    """
-    Sparse connection matrix class for SORN E-E synapses
-    Uses the CSC format
-    """
-    def __init__(self, shape, lamb, eta_stdp):
+    """Sparse connection matrix class for SORN E-E synapses.
 
-        self.lamb = lamb
-        self.eta_stdp = eta_stdp
-        (M,N) = shape
+    Uses the CSC format.
+    """
+    def __init__(self, par, aux):
+        """Creates a random, sparse and normalized matrix
+
+        Parameters:
+            par: Bunch
+                Main initial sorn parameters
+
+            aux: Bunch
+                Auxiliary initial sorn parameters
+        """
+        self.lamb = par.lamb
+        self.eta_stdp = par.eta_stdp
+        self.sp_prob = par.sp_prob
+        self.sp_init = par.sp_init
+        self.N = par.N_e
 
         # probability of connection NOT being present
-        p = 1 - lamb/float(N)
+        p_not = 1 - self.lamb/float(self.N)
 
         while True:
             # initialize random sparse synapses
-            W_ee = np.random.random((M, N))
-            W_ee[W_ee <= p] = 0
-            W_ee[W_ee > p] = np.random.random((np.sum(W_ee > p)))
+            W_ee = np.random.random((self.N, self.N))
+            W_ee[W_ee <= p_not] = 0
+            W_ee[W_ee > p_not] = np.random.random((np.sum(W_ee > p_not)))
 
             # remove self-connections
             np.fill_diagonal(W_ee, 0)
 
-            # verify if all neurons have at least one incomming synapse
+            # verify that all neurons have at least one incomming synapse
             inc_synaps = np.sum(W_ee, axis = 1)
             if not inc_synaps.__contains__(0):
                 break
 
         # make the matrix sparse
         self.W = sp.csc_matrix(W_ee)
-
-        # normalize after initialization
-        z = abs(self.W).sum(1)
+        z = abs(self.W).sum(1) # normalize after initialization
         data = self.W.data
         data /= np.array(z[self.W.indices]).reshape(data.shape)
 
     def stdp(self,from_old,from_new,to_old=None,to_new=None):
-        """
-        Performs one STDP step (from Christoph's implementation)
-        """
+        """Performs one STDP step (from Christoph's implementation)"""
         if to_old is None:
             to_old = from_old
         if to_new is None:
@@ -77,12 +93,36 @@ class SparseSynapticMatrix(object):
         data[data < 0] = 0
 
     def sn(self):
-        """
-        Performs synaptic normalization
-        """
+        """Performs synaptic normalization"""
         z = abs(self.W).sum(1)
         data = self.W.data
         data /= np.array(z[self.W.indices]).reshape(data.shape)
 
+    def sp(self):
+        """Performs one SP step"""
+        if np.random.rand() < self.sp_prob:
+
+            # find new connection
+            # try for 1000 times, otherwise ignore SP
+            counter = 0
+            while True:
+                i, j = np.random.randint(self.N, size=2)
+                connected = self.W[i,j] > 0
+                valid = (i != j)
+                if (valid and not connected) or counter==1000:
+                    break
+                if valid and connected:
+                    counter += 1
+
+            # include new connection
+            # temporaly convert to dok for easier update
+            if counter < 1000:
+                W_dok = self.W.todok()
+                W_dok[i,j] = self.sp_init
+                self.W = W_dok.tocsc()    
+            else:
+                print('\nCould not find a new connection\n')
+
     def __mul__(self,x):
+        """Shorter matrix-array multiplication"""
         return self.W * x

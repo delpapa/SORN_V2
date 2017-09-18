@@ -10,7 +10,10 @@ aux = utils.Bunch()
 #                           SORN main parameters                               #
 ################################################################################
 def get_par():
+    """ Get main sorn parameters.
 
+    For each sorn simulation, change these parameters manually.
+    """
     par.N_e = 200                                  # excitatory neurons
     par.N_u = 0                                    # neurons in each input pool
 
@@ -41,7 +44,10 @@ def get_par():
 #                    Additional derivative SORN parameters                     #
 ################################################################################
 def get_aux():
+    """ Get auxiliary sorn parameters.
 
+    These auxiliary parameters do not have to be changed manually.
+    """
     aux.N_i = int(np.floor(0.2*par.N_e))       # inhibitory neurons
     aux.N = par.N_e + aux.N_i             # total number of neurons
 

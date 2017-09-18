@@ -4,27 +4,24 @@ import random
 from common import synapses
 
 class NoSource(object):
-    """
-    Source for the sorn's spontaneous activity
-    """
-    def __init__(self, params):
+    """Null source for the sorn's spontaneous activity"""
+    def __init__(self, par):
 
-        self.N_u = int(params.N_u)
+        self.N_u = int(par.N_u)
 
-    def generate_connection_e(self, N_e):
-        """
-        Generate the W_eu connection matrix
+    def generate_connection_e(self, par, aux):
+        """Generate the W_eu connection matrix
 
         Parameters:
-            N_e: number of excitatory neurons
+            par: Bunch
+                Main initial sorn parameters
         """
-        # choose random array neuron pools
-        ans = synapses.FullSynapticMatrix((N_e, 1))
-        ans.W = np.zeros(N_e)
+        # use a full synaptic matrix
+        ans = synapses.FullSynapticMatrix(par, (par.N_e, self.N_u))
+        ans.W = np.zeros(par.N_e)
 
         return ans
 
     def next(self):
-        """
-        """
+        """NoSource always return 0 here"""
         return 0
