@@ -9,50 +9,49 @@ import numpy as np
 ################################################################################
 
 class Stats(object):
-    """
-    Stats to be saved at the end of the simulation
-    """
-    def __init__(self, stats_tosave, params):
+    """Stats to be  store at each simulation step."""
+    def __init__(self, stats_tostore, params):
 
-        if 'ActivityStat' in stats_tosave:
-            self.total_activity = np.zeros(params.aux.N_steps)
+        self.par = params.par
+        self.aux = params.aux
 
-        if 'ConnectionFractionStat' in stats_tosave:
+        if 'ActivityStat' in stats_tostore:
+            self.activity = np.zeros(params.aux.N_steps)
+
+        if 'ActivityReadoutStat' in stats_tostore:
+            self.activity_readout = np.zeros(params.aux.readout_steps)
+
+        if 'ConnectionFractionStat' in stats_tostore:
             self.connec_frac = np.zeros(params.aux.N_steps)
 
-        if 'SynapticWeights' in stats_tosave:
-            pass
+        if 'InputReadoutStat' in stats_tostore:
+            self.input_readout = np.zeros((params.aux.readout_steps))
+            self.input_index_readout = np.zeros((params.aux.readout_steps))
 
-        if 'ActivityReadoutStat' in stats_tosave:
-            self.total_activity = np.zeros(params.aux.readout_steps)
-
-        if 'CountingLetterStat' in stats_tosave:
-            self.letters = np.zeros((params.aux.readout_steps))
-            self.sequence_ind = np.zeros((params.aux.readout_steps))
-
-        if 'CountingActivityStat' in stats_tosave:
-            self.activity = np.zeros((params.aux.readout_steps, params.par.N_e))
-
-        if 'InternalStateStat' in stats_tosave:
-            self.internal_state = np.zeros((params.aux.readout_steps,
+        if 'RasterReadoutStat' in stats_tostore:
+            self.raster_readout = np.zeros((params.aux.readout_steps,\
                                             params.par.N_e))
-    #
-    # def save_step(self, ):
-    #
-    #                 if phase in ['train', 'test']:
-    #                     if phase == 'train':
-    #                         step = n
-    #                     if phase == 'test':
-    #                         step = n + self.params.aux.steps_readouttrain
-    #
-    #                     if hasattr(self, 'total_activity'):
-    #                         stats.total_activity[step] = x.sum()
-    #                     if hasattr(self, 'connec_frac'):
-    #                         stats.connec_frac[step] = W_ee.W.sum()
-    #                     if hasattr(self, 'activity'):
-    #                         stats.activity[step] = x
-    #                     if hasattr(self, 'letters'):
-    #                         stats.sequence_ind[step] = int(source.sequence_ind())
-    #                         stats.letters[step] = int(np.argmax(u))
-    #                     if hasattr(self, 'internal_state'):
-    #                         stats.internal_state[step] = x_int
+
+    def store_step(self, x, u, source, W_ee, step, phase):
+
+        # this is necessary to keep sotring data from train and test phases
+        # in the same array
+        readout = ['train', 'test']
+        if phase == 'test':
+            step += self.aux.steps_readouttrain
+
+        if hasattr(self, 'activity'):
+            self.activity[step] = x.sum()
+
+        if hasattr(self, 'activity_readout') and phase in readout:
+            self.activity_readout[step] = x.sum()
+
+        if hasattr(self, 'connec_frac'):
+            self.connec_frac[step] = W_ee.W.data.size / float(self.par.N_e**2)
+
+        if hasattr(self, 'input_readout') and phase in readout:
+            self.input_readout[step] = int(np.argmax(u))
+            self.input_index_readout[step] = int(source.sequence_ind())
+
+        if hasattr(self, 'raster_readout') and phase in readout:
+            self.raster_readout[step] = x

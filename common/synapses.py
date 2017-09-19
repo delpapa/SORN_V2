@@ -23,11 +23,25 @@ class FullSynapticMatrix(object):
             aux: Bunch
                 Auxiliary initial sorn parameters
         """
-        self.eta_istdp = par.eta_istdp
+        if hasattr(par, 'eta_istdp'):
+            self.eta_istdp = par.eta_istdp
+        self.h_ip = par.h_ip
 
         self.W = np.random.random(shape)
         z = abs(self.W).sum(1)
         self.W /= z[:,None] # normalize after random initialization
+
+    def istdp(self, y_old, x):
+        """Performs one iSTDP step (from Christoph's implementation)"""
+        self.W += -self.eta_istdp*((1-(x[:,None]*(1+1.0/self.h_ip)))\
+                                 *y_old[None,:])
+        self.W[self.W<=0] = 0.001
+        self.W[self.W>1.0] = 1.0
+
+    def sn(self):
+        """Performs synaptic normalization"""
+        z = abs(self.W).sum(1)
+        self.W = self.W / z[:, np.newaxis]
 
     def __mul__(self, x):
         """Shorter matrix-array multiplication"""
@@ -50,8 +64,11 @@ class SparseSynapticMatrix(object):
         """
         self.lamb = par.lamb
         self.eta_stdp = par.eta_stdp
-        self.sp_prob = par.sp_prob
-        self.sp_init = par.sp_init
+        self.prune_stdp = par.prune_stdp
+        if hasattr(par, 'sp_prob'):
+            self.sp_prob = par.sp_prob
+        if hasattr(par, 'sp_init'):
+            self.sp_init = par.sp_init
         self.N = par.N_e
 
         # probability of connection NOT being present
@@ -92,6 +109,10 @@ class SparseSynapticMatrix(object):
                              - to_old[row]*from_new[col])   #Suitable for CSC
         data[data < 0] = 0
 
+        # prune weights
+        if self.prune_stdp:
+            self.prune()
+
     def sn(self):
         """Performs synaptic normalization"""
         z = abs(self.W).sum(1)
@@ -119,9 +140,14 @@ class SparseSynapticMatrix(object):
             if counter < 1000:
                 W_dok = self.W.todok()
                 W_dok[i,j] = self.sp_init
-                self.W = W_dok.tocsc()    
+                self.W = W_dok.tocsc()
             else:
                 print('\nCould not find a new connection\n')
+
+    def prune(self):
+        """Prune very small weights"""
+        self.W.data[self.W.data<1e-10] = 0. # eliminate small weights
+        self.W.eliminate_zeros()
 
     def __mul__(self,x):
         """Shorter matrix-array multiplication"""

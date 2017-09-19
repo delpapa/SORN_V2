@@ -77,7 +77,8 @@ class Sorn(object):
 
         # Apply iSTDP and SP, if necessary
         if hasattr(par, 'eta_istdp') and par.eta_istdp != 'off':
-            pass
+            self.W_ei.istdp(self.y, x_new)
+            # self.W_ei.sn()
         if hasattr(par, 'sp_init') and par.sp_init != 'off':
             self.W_ee.sp()
 
@@ -126,27 +127,10 @@ class Sorn(object):
             u = source.next()
             (x, x_int, W_ee) = self.step(u)
 
-            # update stats. TODO: this should be done by a stats method instead
-            #               TODO: some stats have to be saved for the whole sim
-            if phase in ['train', 'test']:
-                if phase == 'train':
-                    step = n
-                if phase == 'test':
-                    step = n + self.params.aux.steps_readouttrain
+            # store step data
+            stats.store_step(x, u, source, W_ee, n, phase)
 
-                if hasattr(stats, 'total_activity'):
-                    stats.total_activity[step] = x.sum()
-                if hasattr(stats, 'connec_frac'):
-                    stats.connec_frac[step] = W_ee.W.sum()
-                if hasattr(stats, 'activity'):
-                    stats.activity[step] = x
-                if hasattr(stats, 'letters'):
-                    stats.sequence_ind[step] = int(source.sequence_ind())
-                    stats.letters[step] = int(np.argmax(u))
-                if hasattr(stats, 'internal_state'):
-                    stats.internal_state[step] = x_int
-
-            # Command line progress message
+            # command line progress message
             if self.params.aux.display:
                 if (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
                     sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))

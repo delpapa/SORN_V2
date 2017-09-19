@@ -4,10 +4,10 @@ import random
 from common import synapses
 
 class CountingSource(object):
-    """
-    Counting source (Lazar et. al 2009)
-        This source is composed of randomly alternating sequences of size L+2
-        of the form 'abb...bbc' and 'dee...eef'.
+    """Counting source (Lazar et. al 2009).
+
+    This source is composed of randomly alternating sequences of size L+2
+    of the form 'abb...bbc' and 'dee...eef'.
     """
     def __init__(self, params):
 
@@ -39,17 +39,16 @@ class CountingSource(object):
         # overlap for input neuron pools
         self.overlap = False
 
-    def generate_connection_e(self, N_e):
-        """
-        Generate the W_eu connection matrix
+    def generate_connection_e(self, par, aux):
+        """Generate the W_eu connection matrix
 
         Parameters:
-            N_e: number of excitatory neurons
+            par: Bunch
+                Main initial sorn parameters
         """
-
         # choose random input neuron pools
-        W = np.zeros((N_e, self.N_a))
-        available = set(range(N_e))
+        W = np.zeros((par.N_e, self.N_a))
+        available = set(range(par.N_e))
         for a in range(self.N_a):
             temp = random.sample(available, self.N_u)
             W[temp, a] = 1
@@ -57,7 +56,7 @@ class CountingSource(object):
                 available -= set(temp)
 
         # always use a full synaptic matrix
-        ans = synapses.FullSynapticMatrix((N_e, self.N_a))
+        ans = synapses.FullSynapticMatrix(par, (par.N_e, self.N_a))
         ans.W = W
 
         return ans

@@ -29,7 +29,7 @@ class RandomSequenceSource(object):
         self.sequence_index = 1                  # index for sequences
         self.ind = 0                    # index within sequence
 
-    def generate_connection_e(self, N_e):
+    def generate_connection_e(self, par, aux):
         """
         Generate the W_eu connection matrix
 
@@ -38,14 +38,14 @@ class RandomSequenceSource(object):
         """
 
         # choose random, overlapping input neuron pools
-        W = np.zeros((N_e, self.N_a))
-        available = set(range(N_e))
+        W = np.zeros((par.N_e, self.N_a))
+        available = set(range(par.N_e))
         for a in range(self.N_a):
             temp = random.sample(available, self.N_u)
             W[temp, a] = 1
 
         # always use a full synaptic matrix
-        ans = synapses.FullSynapticMatrix((N_e, self.N_a))
+        ans = synapses.FullSynapticMatrix(par, (par.N_e, self.N_a))
         ans.W = W
 
         return ans

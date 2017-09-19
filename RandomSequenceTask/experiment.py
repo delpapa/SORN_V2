@@ -8,51 +8,46 @@ from sklearn import linear_model
 from source import RandomSequenceSource
 
 class Experiment(object):
-    """
-    Experiment for the SORN: contains the source, the simulation procedure and
-    the performance calculation
+    """Experiment class.
+
+    It contains the source, the simulation procedure and back up instructions.
     """
     def __init__(self, params):
+        """Start the experiment.
 
-            # keep track of initial parameters
-            self.init_params = copy.deepcopy(params.par)
+        Initialize relevant variables and stats trackers.
 
-            # define results dir name
-            self.results_dir = (params.aux.experiment_name
-                                + params.aux.experiment_tag
-                                + '/N' + str(params.par.N_e)
-                                + '_L' + str(params.par.L)
-                                + '_A' + str(params.par.A))
-
-            # a initial sanity checks
-            assert params.par.L >= params.par.A,\
-                "Alphabet size A must be smaller than the sequence size L"
-            assert params.par.N_e > params.par.N_u,\
-                "Input pool size N_u should be smaller than network size N_e"
-            assert params.aux.experiment_tag in ['_LearningCapacity',
-                                                 '_FadingMemory'],\
-                "Please specify experiment_tag:'_LearningCapacity' or '_FadingMemory'"
-
-    def start(self):
+        Parameters:
+            params: Bunch
+                All sorn inital parameters
         """
-        Start the experiment
-        """
-        self.stats_tosave = [
-                             # 'ActivityReadoutStat',
-                             'CountingLetterStat',
-                             'CountingActivityStat',
-                             # 'ConnectionFractionStat',
-                             'InternalStateStat'
-                            ]
+        # always keep track of initial sorn parameters
+        self.init_params = copy.deepcopy(params.par)
 
+        # results directory name
+        self.results_dir = (params.aux.experiment_name
+                            + params.aux.experiment_tag
+                            + '/N' + str(params.par.N_e)
+                            + '_L' + str(params.par.L)
+                            + '_A' + str(params.par.A))
+
+        # define which stats to store during the simulation
+        self.stats_tostore = [
+                             'ActivityStat',
+                             'ConnectionFractionStat'
+                             ]
+
+        # define which parameters and files to save at the end of the simulation
+        #     params: save initial main sorn parameters
+        #     stats: save all stats trackers
+        #     scripts: backup scripts used during the simulation
         self.files_tosave = [
-                             # 'params',
-                             # 'stats'
-                             'performance_only'
+                             'params',
+                             'stats',
                              # 'scripts'
                             ]
 
-
+        # load input source
         self.inputsource = RandomSequenceSource(self.init_params)
 
     def run(self, sorn, stats):
@@ -98,11 +93,11 @@ class Experiment(object):
 
         if sorn.params.aux.experiment_tag == '_LearningCapacity':
             # performance is calculated using the previous time step activity
-            X_train = stats.activity[:t_train-1].T
-            y_train_ind = stats.sequence_ind[1:t_train].T
+            X_train = stats.raster_readout[:t_train-1].T
+            y_train_ind = stats.input_index_readout[1:t_train].T
 
-            X_test = stats.activity[t_train:t_train+t_test-1].T
-            y_test_ind = stats.sequence_ind[1+t_train:t_train+t_test].T
+            X_test = stats.raster_readout[t_train:t_train+t_test-1].T
+            y_test_ind = stats.input_index_readout[1+t_train:t_train+t_test].T
 
             readout = linear_model.LogisticRegression()
             output_weights = readout.fit(X_train.T, y_train_ind)
@@ -115,11 +110,11 @@ class Experiment(object):
             stats.t_past = np.arange(t_past_max)
             stats.performance = np.zeros(t_past_max)
             for t_past in xrange(t_past_max):
-                X_train = stats.activity[t_past:t_train]
-                y_train = stats.letters[:t_train-t_past].T.astype(int)
+                X_train = stats.raster_readout[t_past:t_train]
+                y_train = stats.input_readout[:t_train-t_past].T.astype(int)
 
-                X_test = stats.activity[t_train+t_past:t_train+t_test]
-                y_test = stats.letters[t_train:t_train+t_test-t_past].T.astype(int)
+                X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
+                y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
 
                 readout = linear_model.LogisticRegression()
                 output_weights = readout.fit(X_train, y_train)

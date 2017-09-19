@@ -28,7 +28,7 @@ params.aux.experiment_tag = ''
 # PS.the experiment class keeps a copy of the initial sorn main parameters
 experiment = exp_dir.experiment.Experiment(params)
 sorn = Sorn(params, experiment.inputsource)
-stats = Stats(experiment.stats_tostore, sorn.params)
+stats = Stats(experiment.stats_tostore, params)
 
 # 4. run one experiment once
 experiment.run(sorn, stats)

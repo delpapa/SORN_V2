@@ -18,6 +18,7 @@ def get_par():
     par.N_u = 100                                  # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
+    par.prune_stdp = True                          # prune very small weights
     par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 

@@ -17,9 +17,10 @@ def get_par():
     par.N_e = 200                                  # excitatory neurons
     par.N_u = 0                                    # neurons in each input pool
 
-    par.eta_stdp = 0.001                           # STDP learning rate
+    par.eta_stdp = 0.004                           # STDP learning rate
+    par.prune_stdp = True                          # prune very small weights
     par.eta_istdp = 0.001                          # iSTDP learning rate
-    par.eta_ip = 0.001                             # IP learning rate
+    par.eta_ip = 0.01                              # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
     par.sp_prob = 0.1                              # SP probability
     par.sp_init = 0.001                            # SP initial value
@@ -32,13 +33,13 @@ def get_par():
 
     par.T_e_max = 1                                # max initial threshold for E
     par.T_e_min = 0                                # min initial threshold for E
-    par.T_i_max = 1                                # max initial threshold for I
+    par.T_i_max = 0.5                              # max initial threshold for I
     par.T_i_min = 0                                # min initial threshold for I
 
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.steps_plastic = 50000                      # sorn training time steps
+    par.steps_plastic = 50000                     # sorn training time steps
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #

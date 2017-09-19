@@ -12,16 +12,16 @@ from utils import backup_pickle
 
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
-variables = ['L']
+variables = ['N_e']
 values = [
-          np.arange(6000, 40001, 2000),
+          np.array([200]),
          ]
 # number of repetitions of each experiment (for statistics)
-total_runs = 1
+total_runs = 10
 
 # experiment parameters
 display_progress = False                         # display progress bar
-experiment_tag = '_LearningCapacity'                 # to mark experiment
+experiment_tag = ''                              # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #
@@ -38,7 +38,6 @@ for var in var_dict.keys():
 
             # 2.1 load param and experiment files
             params = exp_dir.param
-            experiment_file = exp_dir.experiment
 
             # 2.2 add experiment specific parameters
             params.get_par()
@@ -48,12 +47,11 @@ for var in var_dict.keys():
             params.aux.experiment_tag = experiment_tag
 
             # 3. initialize sorn, source, and stats objects
-            experiment = experiment_file.Experiment(params)
-            experiment.start()
+            experiment = exp_dir.experiment.Experiment(params)
             sorn = Sorn(params, experiment.inputsource)
-            stats = Stats(experiment.stats_tosave, sorn.params)
+            stats = Stats(experiment.stats_tostore, params)
 
-            # 4. run one experiment once and calculate performance
+            # 4. run one experiment once
             for elem in variables:
                 print elem, '=', getattr(params.par, elem),
             print '-- Exp.', run + 1
