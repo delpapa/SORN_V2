@@ -1,7 +1,6 @@
 import sys
 
 import numpy as np
-import scipy.sparse as sp
 
 from synapses import FullSynapticMatrix, SparseSynapticMatrix
 
@@ -24,14 +23,14 @@ class Sorn(object):
 
         # Initialize weight matrices
         # W_to_from (W_ie = from excitatory to inhibitory)
-        self.W_ee = SparseSynapticMatrix(par, aux)
+        self.W_ee = SparseSynapticMatrix(par)
         self.W_ie = FullSynapticMatrix(par, (aux.N_i, par.N_e))
         self.W_ei = FullSynapticMatrix(par, (par.N_e, aux.N_i))
-        self.W_eu = self.source.generate_connection_e(par, aux)
+        self.W_eu = self.source.generate_connection_e(par)
 
         # Initialize the activation of neurons randomly
-        self.x = (np.random.random(par.N_e)<0.5) + 0
-        self.y = (np.random.random(aux.N_i)<0.5) + 0
+        self.x = (np.random.random(par.N_e) < 0.5) + 0
+        self.y = (np.random.random(aux.N_i) < 0.5) + 0
         self.u = source.next()
 
         # Initialize the pre-threshold variables
@@ -87,7 +86,7 @@ class Sorn(object):
         self.u = u_new
 
         # Update statistics
-        return self.x, self.x_int, self.W_ee
+        return self.x, self.W_ee
 
     def ip(self, x):
         """
@@ -125,13 +124,13 @@ class Sorn(object):
 
             # Simulation step
             u = source.next()
-            (x, x_int, W_ee) = self.step(u)
+            (x, W_ee) = self.step(u)
 
             # store step data
             stats.store_step(x, u, source, W_ee, n, phase)
 
             # command line progress message
             if self.params.aux.display:
-                if (N>100) and ((n%((N-1)//100) == 0) or (n == N-1)):
+                if (N > 100) and ((n%((N-1)//100) == 0) or (n == N-1)):
                     sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))
                 sys.stdout.flush()

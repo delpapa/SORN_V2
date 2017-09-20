@@ -1,9 +1,10 @@
-import random as randomstr
-import copy
+""" Neuronal Avalanches experiment
 
-import numpy as np
-import sklearn
-from sklearn import linear_model
+This script contains the experimental instructions for the Neuronal Avalanches
+experiment.
+"""
+
+import copy
 
 from source import NoSource
 
@@ -32,19 +33,19 @@ class Experiment(object):
 
         # define which stats to store during the simulation
         self.stats_tostore = [
-                             'ActivityStat',
-                             'ConnectionFractionStat'
-                             ]
+            'ActivityStat',
+            'ConnectionFractionStat',
+        ]
 
         # define which parameters and files to save at the end of the simulation
         #     params: save initial main sorn parameters
         #     stats: save all stats trackers
         #     scripts: backup scripts used during the simulation
         self.files_tosave = [
-                             'params',
-                             'stats',
-                             # 'scripts'
-                            ]
+            'params',
+            'stats',
+            # scripts'
+        ]
 
         # load input source
         self.inputsource = NoSource(self.init_params)

@@ -1,5 +1,11 @@
-import numpy as np
+"""" Random Sequence Source
+
+This script contains a random sequence source.
+"""
+
 import random
+
+import numpy as np
 
 from common import synapses
 
@@ -29,7 +35,7 @@ class RandomSequenceSource(object):
         self.sequence_index = 1                  # index for sequences
         self.ind = 0                    # index within sequence
 
-    def generate_connection_e(self, par, aux):
+    def generate_connection_e(self, par):
         """
         Generate the W_eu connection matrix
 
@@ -50,29 +56,18 @@ class RandomSequenceSource(object):
 
         return ans
 
-    def symbol(self):
-        """
-        Return symbol index
-        """
-        return self.symbol
-
     def sequence_ind(self):
-
+        """Return sequence index"""
         return self.ind
 
     def next_sequence(self):
-        """
-        Restart the sequence
-        """
+        """Restart the sequence"""
         self.ind = 0
         self.sequence_index += 1
         self.symbol = self.sequence[self.ind]
 
     def next(self):
-        """
-        Return next symbol or first symbol of sequence
-        """
-
+        """Return next symbol or first symbol of sequence"""
         if self.ind >= self.sequence.size-1:
             self.next_sequence()
 

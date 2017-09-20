@@ -1,8 +1,12 @@
-import random as randomstr
+""" Random Sequence experiment
+
+This script contains the experimental instructions for the Random Sequence
+experiment.
+"""
+
 import copy
 
 import numpy as np
-import sklearn
 from sklearn import linear_model
 
 from source import RandomSequenceSource
@@ -33,19 +37,19 @@ class Experiment(object):
 
         # define which stats to store during the simulation
         self.stats_tostore = [
-                             'ActivityStat',
-                             'ConnectionFractionStat'
-                             ]
+            'ActivityStat',
+            'ConnectionFractionStat',
+        ]
 
         # define which parameters and files to save at the end of the simulation
         #     params: save initial main sorn parameters
         #     stats: save all stats trackers
         #     scripts: backup scripts used during the simulation
         self.files_tosave = [
-                             'params',
-                             'stats',
-                             # 'scripts'
-                            ]
+            'params',
+            'stats',
+            # 'scripts',
+        ]
 
         # load input source
         self.inputsource = RandomSequenceSource(self.init_params)
@@ -73,7 +77,7 @@ class Experiment(object):
         if display:
             print '\nReadout training phase:'
 
-        sorn.params.par.eta_stdp ='off'
+        sorn.params.par.eta_stdp = 'off'
         sorn.params.par.eta_ip = 'off'
         sorn.simulation(stats, phase='train')
 

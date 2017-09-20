@@ -1,8 +1,11 @@
-import random as randomstr
+""" Counting Task experiment
+
+This script contains the experimental instructions for the Counting Task
+experiment.
+"""
+
 import copy
 
-import numpy as np
-import sklearn
 from sklearn import linear_model
 
 from source import CountingSource
@@ -25,18 +28,19 @@ class Experiment(object):
 
         # define which stats to store during the simulation
         self.stats_tostore = [
-                              'InputReadoutStat',
-                              'RasterReadoutStat'
-                             ]
+            'InputReadoutStat',
+            'RasterReadoutStat',
+        ]
+
         # define which parameters and files to save at the end of the simulation
         #     params: save initial main sorn parameters
         #     stats: save all stats trackers
         #     scripts: backup scripts used during the simulation
         self.files_tosave = [
-                             'params',
-                             'stats'
-                             # 'scripts'
-                            ]
+            'params',
+            'stats',
+            # 'scripts',
+        ]
 
         # load input source
         self.inputsource = CountingSource(self.init_params)
@@ -83,14 +87,14 @@ class Experiment(object):
 
         X_train = stats.raster_readout[:t_train].T
         y_train = (stats.input_readout[:t_train].T).astype(int)
-        y_train_ind = (stats.input_index_readout[:t_train].T).astype(int)
+        # y_train_ind = (stats.input_index_readout[:t_train].T).astype(int)
 
         X_test = stats.raster_readout[t_train:t_train+t_test].T
         y_test = (stats.input_readout[t_train:t_train+t_test].T).astype(int)
-        y_test_ind = (stats.input_index_readout[t_train:t_train+t_test].T).astype(int)
+        # y_test_ind = (stats.input_index_readout[t_train:t_train+t_test].T).astype(int)
 
         # Logistic Regression
-        readout =  linear_model.LogisticRegression()
+        readout = linear_model.LogisticRegression()
         output_weights = readout.fit(X_train.T, y_train)
         performance = output_weights.score(X_test.T, y_test)
 

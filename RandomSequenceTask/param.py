@@ -1,3 +1,8 @@
+""" Random Sequence parameters
+
+This script contains the parameters for the Random Sequence experiment.
+"""
+
 import os
 
 import numpy as np
@@ -52,15 +57,14 @@ def get_aux():
     aux.N = par.N_e + aux.N_i             # total number of neurons
 
     # the experiment_name should be the same name of the directory containing it
-    aux.experiment_name = os.path.split(os.path.dirname(
-                                                 os.path.realpath(__file__)))[1]
-
+    aux.experiment_name = os.path.split(os.path.dirname(\
+                                        os.path.realpath(__file__)))[1]
     # training ans testing time steps
     aux.steps_readouttrain = np.maximum(par.steps_readout, 3*par.L)
     aux.steps_readouttest = par.steps_readout
 
-    aux.N_steps =  (par.steps_plastic               # total number of time steps
-                    + aux.steps_readouttrain
-                    + aux.steps_readouttest)
+    aux.N_steps = (par.steps_plastic                # total number of time steps
+                   + aux.steps_readouttrain
+                   + aux.steps_readouttest)
     aux.readout_steps = (aux.steps_readouttrain     # number of readout steps
                         + aux.steps_readouttest)

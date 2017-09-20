@@ -1,15 +1,18 @@
+"""Stats tracker
+
+This script initializes all the possible trackers for each simulation. Different
+experiments may use the same stats.
+   'ActivityStat': the total activity (number of active neurons)
+   'ActivityReadoutStat': the total activity only for the readout
+   'ConnectionFractionStat': the fraction of active E-E connections
+   'InputReadoutStat': the input and input index for the readout
+   'RasterReadoutStat': the raster (activity of each neuron) for the readout
+"""
+
 import numpy as np
 
-################################################################################
-# Stats tracker: this file initializes all the possible trackers for every     #
-#                experiment. Different experiments can use the same stats      #
-#                                                                              #
-#   'ActivityStat': stores the total activity (number of active neurons)       #
-#   'CountingLetterStat': for the CountingTask                                 #
-################################################################################
-
 class Stats(object):
-    """Stats to be  store at each simulation step."""
+    """Stats to be store at each simulation step."""
     def __init__(self, stats_tostore, params):
 
         self.par = params.par
@@ -33,7 +36,7 @@ class Stats(object):
                                             params.par.N_e))
 
     def store_step(self, x, u, source, W_ee, step, phase):
-
+        """Store the stats each time step into numpy arrays"""
         # this is necessary to keep sotring data from train and test phases
         # in the same array
         readout = ['train', 'test']

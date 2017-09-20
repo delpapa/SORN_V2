@@ -1,10 +1,11 @@
-import os
+"""This script runs multiple sorn simulations for the experiment given as an
+argument with the specified parameters and experiment instructions. parameters
+can be varied here, using 'variables' and 'values'"""
+
 import sys
-sys.path.insert(0, '')
 from importlib import import_module
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 from common.sorn import Sorn
 from common.stats import Stats
@@ -12,12 +13,11 @@ from utils import backup_pickle
 
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
-variables = ['N_e']
-values = [
-          np.array([200]),
-         ]
+VARIABLES = ['N_e']
+VALUES = [np.array([200])]
+
 # number of repetitions of each experiment (for statistics)
-total_runs = 10
+RUNS = 10
 
 # experiment parameters
 display_progress = False                         # display progress bar
@@ -28,13 +28,14 @@ experiment_tag = ''                              # to mark experiment
 ################################################################################
 
 # 1. import module and create a dictionary with the variables and values to run
+sys.path.insert(0, '')
 exp_dir = import_module(sys.argv[1])
-var_dict = dict(zip(variables, values))
+var_dict = dict(zip(VARIABLES, VALUES))
 
 # 2. loop over everyting
 for var in var_dict.keys():
     for value in var_dict[var]:
-        for run in xrange(total_runs):
+        for run in xrange(RUNS):
 
             # 2.1 load param and experiment files
             params = exp_dir.param
@@ -52,7 +53,7 @@ for var in var_dict.keys():
             stats = Stats(experiment.stats_tostore, params)
 
             # 4. run one experiment once
-            for elem in variables:
+            for elem in VARIABLES:
                 print elem, '=', getattr(params.par, elem),
             print '-- Exp.', run + 1
 

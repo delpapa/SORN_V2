@@ -1,12 +1,12 @@
+"""Synapses matrices
+
+This script contains all the functions to create and update the weight matrices,
+including the plasticity rules STDP, iSTDP, SN and SP. As a rule, W_EE is sparce
+and W_IE, W_IE, W_EU are dense.
+"""
+
 import numpy as np
 import scipy.sparse as sp
-
-################################################################################
-# Synapses: this file contains all the functions to create and update the      #
-# weight matrices, including the plasticity rules. STDP can be much more       #
-# efficiently implemented using sparse matrices, therefore W_EE is sparse and  #
-# the other matrices are dense.                                                #
-################################################################################
 
 class FullSynapticMatrix(object):
     """Dense connection matrix class for SORN I-E and E-I synapses.
@@ -29,14 +29,14 @@ class FullSynapticMatrix(object):
 
         self.W = np.random.random(shape)
         z = abs(self.W).sum(1)
-        self.W /= z[:,None] # normalize after random initialization
+        self.W /= z[:, None] # normalize after random initialization
 
     def istdp(self, y_old, x):
         """Performs one iSTDP step (from Christoph's implementation)"""
-        self.W += -self.eta_istdp*((1-(x[:,None]*(1+1.0/self.h_ip)))\
-                                 *y_old[None,:])
-        self.W[self.W<=0] = 0.001
-        self.W[self.W>1.0] = 1.0
+        self.W += -self.eta_istdp*((1-(x[:, None]*(1+1.0/self.h_ip)))\
+                                 *y_old[None, :])
+        self.W[self.W <= 0] = 0.001
+        self.W[self.W > 1.0] = 1.0
 
     def sn(self):
         """Performs synaptic normalization"""
@@ -52,7 +52,7 @@ class SparseSynapticMatrix(object):
 
     Uses the CSC format.
     """
-    def __init__(self, par, aux):
+    def __init__(self, par):
         """Creates a random, sparse and normalized matrix
 
         Parameters:
@@ -84,7 +84,7 @@ class SparseSynapticMatrix(object):
             np.fill_diagonal(W_ee, 0)
 
             # verify that all neurons have at least one incomming synapse
-            inc_synaps = np.sum(W_ee, axis = 1)
+            inc_synaps = np.sum(W_ee, axis=1)
             if not inc_synaps.__contains__(0):
                 break
 
@@ -94,7 +94,7 @@ class SparseSynapticMatrix(object):
         data = self.W.data
         data /= np.array(z[self.W.indices]).reshape(data.shape)
 
-    def stdp(self,from_old,from_new,to_old=None,to_new=None):
+    def stdp(self, from_old, from_new, to_old=None, to_new=None):
         """Performs one STDP step (from Christoph's implementation)"""
         if to_old is None:
             to_old = from_old
@@ -102,7 +102,7 @@ class SparseSynapticMatrix(object):
             to_new = from_new
 
         N = self.W.shape[1]
-        col = np.repeat(np.arange(N),np.diff(self.W.indptr))
+        col = np.repeat(np.arange(N), np.diff(self.W.indptr))
         row = self.W.indices
         data = self.W.data
         data += self.eta_stdp*(to_new[row]*from_old[col] \
@@ -128,9 +128,9 @@ class SparseSynapticMatrix(object):
             counter = 0
             while True:
                 i, j = np.random.randint(self.N, size=2)
-                connected = self.W[i,j] > 0
+                connected = self.W[i, j] > 0
                 valid = (i != j)
-                if (valid and not connected) or counter==1000:
+                if (valid and not connected) or counter == 1000:
                     break
                 if valid and connected:
                     counter += 1
@@ -139,16 +139,16 @@ class SparseSynapticMatrix(object):
             # temporaly convert to dok for easier update
             if counter < 1000:
                 W_dok = self.W.todok()
-                W_dok[i,j] = self.sp_init
+                W_dok[i, j] = self.sp_init
                 self.W = W_dok.tocsc()
             else:
-                print('\nCould not find a new connection\n')
+                print '\nCould not find a new connection\n'
 
     def prune(self):
         """Prune very small weights"""
-        self.W.data[self.W.data<1e-10] = 0. # eliminate small weights
+        self.W.data[self.W.data < 1e-10] = 0. # eliminate small weights
         self.W.eliminate_zeros()
 
-    def __mul__(self,x):
+    def __mul__(self, x):
         """Shorter matrix-array multiplication"""
         return self.W * x

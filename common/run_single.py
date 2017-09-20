@@ -1,10 +1,8 @@
-import os
-import sys
-sys.path.insert(0, '')
-from importlib import import_module
+"""This script runs a single sorn simulation for the experiment given as an
+argument with the specified parameters and experiment instructions"""
 
-import numpy as np
-import matplotlib.pyplot as plt
+import sys
+from importlib import import_module
 
 from common.sorn import Sorn
 from common.stats import Stats
@@ -15,6 +13,7 @@ from utils import backup_pickle
 ################################################################################
 
 # 1. load param file
+sys.path.insert(0, '')
 exp_dir = import_module(sys.argv[1])
 params = exp_dir.param
 

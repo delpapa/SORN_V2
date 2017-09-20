@@ -1,3 +1,8 @@
+""" Neuronal Avalanches parameters
+
+This script contains the parameters for the Neuronal Avalanche experiment.
+"""
+
 import os
 
 import numpy as np
@@ -27,9 +32,9 @@ def get_par():
 
     par.input_gain = 1                             # input gain factor
 
-    par.sigma = 0.05                               # noise variance
+    par.sigma = 0.04                               # noise variance
 
-    par.lamb = 10                                  # number of out connections
+    par.lamb = 20                                  # number of out connections
 
     par.T_e_max = 1                                # max initial threshold for E
     par.T_e_min = 0                                # min initial threshold for E
@@ -39,7 +44,7 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.steps_plastic = 50000                     # sorn training time steps
+    par.steps_plastic = 1000                        # sorn training time steps
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #
@@ -53,7 +58,7 @@ def get_aux():
     aux.N = par.N_e + aux.N_i             # total number of neurons
 
     # the experiment_name should be the same name of the directory containing it
-    aux.experiment_name = os.path.split(os.path.dirname(
-                                                 os.path.realpath(__file__)))[1]
+    aux.experiment_name = os.path.split(os.path.dirname(\
+                                        os.path.realpath(__file__)))[1]
 
-    aux.N_steps =  (par.steps_plastic)              # total number of time steps
+    aux.N_steps = (par.steps_plastic)               # total number of time steps

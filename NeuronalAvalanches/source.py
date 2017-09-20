@@ -1,5 +1,9 @@
+"""" No souce: source for spontaneous activity
+
+This script contains an empty source. All inputs are '0'.
+"""
+
 import numpy as np
-import random
 
 from common import synapses
 
@@ -9,7 +13,7 @@ class NoSource(object):
 
         self.N_u = int(par.N_u)
 
-    def generate_connection_e(self, par, aux):
+    def generate_connection_e(self, par):
         """Generate the W_eu connection matrix
 
         Parameters:

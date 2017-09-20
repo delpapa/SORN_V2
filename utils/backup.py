@@ -1,4 +1,8 @@
-import sys
+"""Backup handler
+
+This script is contains the backup handling functions.
+"""
+
 import os
 import time
 import cPickle as pickle
@@ -37,7 +41,7 @@ def backup_pickle(experiment, stats):
     if 'stats' in files_tosave:
         with open(final_dir+'stats.p', 'wb') as f:
             # TODO: not sure why I cannot remove the store_step method
-            # save only the performance 
+            # save only the performance
             if 'performance_only' in files_tosave:
                 pickle.dump(stats.performance, f)
             else:
