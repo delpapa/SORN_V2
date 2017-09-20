@@ -1,7 +1,8 @@
 """Stats tracker
 
-This script initializes all the possible trackers for each simulation. Different
-experiments may use the same stats.
+This script initializes all the possible trackers for each simulation.
+Different experiments may use the same stats.
+
    'ActivityStat': the total activity (number of active neurons)
    'ActivityReadoutStat': the total activity only for the readout
    'ConnectionFractionStat': the fraction of active E-E connections
@@ -10,6 +11,7 @@ experiments may use the same stats.
 """
 
 import numpy as np
+
 
 class Stats(object):
     """Stats to be store at each simulation step."""
@@ -32,7 +34,7 @@ class Stats(object):
             self.input_index_readout = np.zeros((params.aux.readout_steps))
 
         if 'RasterReadoutStat' in stats_tostore:
-            self.raster_readout = np.zeros((params.aux.readout_steps,\
+            self.raster_readout = np.zeros((params.aux.readout_steps,
                                             params.par.N_e))
 
     def store_step(self, x, u, source, W_ee, step, phase):

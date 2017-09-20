@@ -4,6 +4,7 @@ import numpy as np
 
 from synapses import FullSynapticMatrix, SparseSynapticMatrix
 
+
 class Sorn(object):
     """The famous Self-Organizing Recurrent Neural Network (SORN) class"""
     def __init__(self, c, source):
@@ -131,6 +132,7 @@ class Sorn(object):
 
             # command line progress message
             if self.params.aux.display:
-                if (N > 100) and ((n%((N-1)//100) == 0) or (n == N-1)):
-                    sys.stdout.write('\rSimulation: %3d%%'%((int)(n/(N-1.)*100)))
+                if (N > 100) and ((n % ((N-1)//100) == 0) or (n == N-1)):
+                    sys.stdout.write('\rSimulation: %3d%%'
+                                     % ((int)(n/(N-1.)*100)))
                 sys.stdout.flush()

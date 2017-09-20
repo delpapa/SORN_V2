@@ -11,6 +11,7 @@ from shutil import ignore_patterns
 
 import numpy as np
 
+
 def backup_pickle(experiment, stats):
     ''''
     Back up handling function
