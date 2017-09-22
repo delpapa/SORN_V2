@@ -14,10 +14,10 @@ from utils import backup_pickle
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
 VARIABLES = [
-    'N_e',
+    # 'N_e',
 ]
 VALUES = [
-    np.array([200]),
+    # np.array([200]),
 ]
 
 # number of repetitions of each experiment (for statistics)
@@ -33,8 +33,15 @@ EXPERIMENT_TAG = ''                              # to mark experiment
 
 # 1. import module and create a dictionary with the variables and values to run
 sys.path.insert(0, '')
+assert len(sys.argv) > 1, \
+    "Experiment not chosen! Please include the experiment name as argument."
 exp_dir = import_module(sys.argv[1])
-import ipdb; ipdb.set_trace()
+
+assert len(VALUES) == len(VARIABLES), \
+    "VALUES and VARIABLES must have the same lenght!"
+if len(VALUES) == 0:
+    VALUES = [np.array([0])]
+    VARIABLES = ['']
 var_dict = dict(zip(VARIABLES, VALUES))
 
 # 2. loop over everyting
@@ -42,13 +49,13 @@ for run in xrange(RUNS):
     for var in var_dict.keys():
         for value in var_dict[var]:
 
-
             # 2.1 load param and experiment files
             params = exp_dir.param
 
             # 2.2 add experiment specific parameters
             params.get_par()
-            setattr(params.par, var, value)
+            if var != '':
+                setattr(params.par, var, value)
             params.get_aux()
             params.aux.display = DISPLAY_PROGRESS
             params.aux.experiment_tag = EXPERIMENT_TAG
@@ -59,9 +66,12 @@ for run in xrange(RUNS):
             stats = Stats(experiment.stats_tostore, params)
 
             # 4. run one experiment once
-            for elem in VARIABLES:
-                print elem, '=', getattr(params.par, elem),
-            print '-- Exp.', run + 1
+            if var != '':
+                for elem in VARIABLES:
+                    print elem, '=', getattr(params.par, elem),
+                    print '-- Exp.', run + 1
+            else:
+                print 'Exp.', run + 1
             experiment.run(sorn, stats)
 
             # 5. save initial sorn parameters and stats objects
