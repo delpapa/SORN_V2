@@ -3,7 +3,7 @@ argument with the specified parameters and experiment instructions. parameters
 can be varied here, using 'variables' and 'values'"""
 
 import sys
-sys.path.insert(0, '')
+sys.path.insert(0, '')  # this is needed for the cluster. TODO: why?
 from importlib import import_module
 
 import numpy as np
