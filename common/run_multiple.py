@@ -3,6 +3,7 @@ argument with the specified parameters and experiment instructions. parameters
 can be varied here, using 'variables' and 'values'"""
 
 import sys
+sys.path.insert(0, '')
 from importlib import import_module
 
 import numpy as np
@@ -32,7 +33,6 @@ EXPERIMENT_TAG = ''                              # to mark experiment
 ################################################################################
 
 # 1. import module and create a dictionary with the variables and values to run
-sys.path.insert(0, '')
 assert len(sys.argv) > 1, \
     "Experiment not chosen! Please include the experiment name as argument."
 exp_dir = import_module(sys.argv[1])
