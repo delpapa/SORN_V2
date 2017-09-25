@@ -1,3 +1,5 @@
+"""Plot a sample of the sorn activity (last 1000 time steps)"""
+
 import cPickle as pickle
 import os
 import sys
@@ -12,7 +14,7 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-experiment_tag = ''                             # experiment tag
+experiment_tag = '_test'                             # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #

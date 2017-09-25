@@ -1,3 +1,5 @@
+'''Plot the fraction of active connections as a function of the time steps'''
+
 import cPickle as pickle
 import os
 import sys
@@ -12,7 +14,7 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-experiment_tag = ''                             # experiment tag
+experiment_tag = '_test'                             # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -25,7 +27,7 @@ fig = plt.figure(1, figsize=(6, 5))
 print '\nPlotting ConnectionFraction...'
 experiment_folder = 'NeuronalAvalanches' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
-experiment = os.listdir(experiment_path)[0]
+experiment = os.listdir(experiment_path)[1]
 N, sigma, _ = [s[1:] for s in experiment.split('_')]
 print 'experiment', experiment, '...'
 

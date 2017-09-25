@@ -121,7 +121,7 @@ class SparseSynapticMatrix(object):
 
     def sp(self):
         """Performs one SP step"""
-        if np.random.rand() < self.sp_prob:
+        if np.random.rand() <= self.sp_prob:
 
             # find new connection
             # try for 1000 times, otherwise ignore SP

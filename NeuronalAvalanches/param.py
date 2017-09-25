@@ -32,7 +32,7 @@ def get_par():
 
     par.input_gain = 1                             # input gain factor
 
-    par.sigma = 0.04                               # noise variance
+    par.sigma = 0.05                               # noise variance
 
     par.lamb = 20                                  # number of out connections
 
@@ -44,7 +44,7 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.steps_plastic = 5000000                    # sorn training time steps
+    par.steps_plastic = 2000000                    # sorn training time steps
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #

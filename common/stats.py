@@ -21,21 +21,25 @@ class Stats(object):
         self.aux = params.aux
 
         if 'ActivityStat' in stats_tostore:
-            self.activity = np.zeros(params.aux.N_steps)
+            self.activity = np.zeros(params.aux.N_steps, dtype=np.int)
 
         if 'ActivityReadoutStat' in stats_tostore:
-            self.activity_readout = np.zeros(params.aux.readout_steps)
+            self.activity_readout = np.zeros(params.aux.readout_steps,
+                                             dtype=np.int)
 
         if 'ConnectionFractionStat' in stats_tostore:
             self.connec_frac = np.zeros(params.aux.N_steps)
 
         if 'InputReadoutStat' in stats_tostore:
-            self.input_readout = np.zeros((params.aux.readout_steps))
-            self.input_index_readout = np.zeros((params.aux.readout_steps))
+            self.input_readout = np.zeros(params.aux.readout_steps,
+                                          dtype=np.int)
+            self.input_index_readout = np.zeros(params.aux.readout_steps,
+                                          dtype=np.int)
 
         if 'RasterReadoutStat' in stats_tostore:
             self.raster_readout = np.zeros((params.aux.readout_steps,
-                                            params.par.N_e))
+                                            params.par.N_e),
+                                            dtype=np.int)
 
     def store_step(self, x, u, source, W_ee, step, phase):
         """Store the stats each time step into numpy arrays"""
@@ -46,6 +50,7 @@ class Stats(object):
             step += self.aux.steps_readouttrain
 
         if hasattr(self, 'activity'):
+            import ipdb; ipdb.set_trace()
             self.activity[step] = x.sum()
 
         if hasattr(self, 'activity_readout') and phase in readout:
@@ -55,8 +60,8 @@ class Stats(object):
             self.connec_frac[step] = W_ee.W.data.size / float(self.par.N_e**2)
 
         if hasattr(self, 'input_readout') and phase in readout:
-            self.input_readout[step] = int(np.argmax(u))
-            self.input_index_readout[step] = int(source.sequence_ind())
+            self.input_readout[step] = np.argmax(u)
+            self.input_index_readout[step] = source.sequence_ind()
 
         if hasattr(self, 'raster_readout') and phase in readout:
             self.raster_readout[step] = x

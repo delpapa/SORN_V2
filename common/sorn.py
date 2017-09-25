@@ -78,7 +78,7 @@ class Sorn(object):
         # Apply iSTDP and SP, if necessary
         if hasattr(par, 'eta_istdp') and par.eta_istdp != 'off':
             self.W_ei.istdp(self.y, x_new)
-            # self.W_ei.sn()
+            self.W_ei.sn()
         if hasattr(par, 'sp_init') and par.sp_init != 'off':
             self.W_ee.sp()
 
