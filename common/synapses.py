@@ -7,7 +7,6 @@ W_EE is sparce and W_IE, W_IE, W_EU are dense.
 
 import numpy as np
 import scipy.sparse as sp
-from sklearn.preprocessing import normalize
 
 
 class FullSynapticMatrix(object):
@@ -32,7 +31,8 @@ class FullSynapticMatrix(object):
         self.W = np.random.random(shape)
         # normalize after random initialization
         if self.W.size > 0:
-            self.W = normalize(self.W, norm='l1', axis=1)
+            z = abs(self.W).sum(1)
+            self.W /= z[:,None]
 
     def istdp(self, y_old, x):
         """Performs one iSTDP step (from Christoph's implementation)"""
@@ -43,7 +43,8 @@ class FullSynapticMatrix(object):
 
     def sn(self):
         """Performs synaptic normalization"""
-        self.W = normalize(self.W, norm='l1', axis=1)
+        z = abs(self.W).sum(1)
+        self.W /= z[:,None]
 
     def __mul__(self, x):
         """Shorter matrix-array multiplication"""
@@ -94,7 +95,8 @@ class SparseSynapticMatrix(object):
         # make the matrix sparse
         self.W = sp.csc_matrix(W_ee)
         # normalize after initialization
-        self.W = normalize(self.W, norm='l1', axis=1)
+        z = abs(self.W).sum(1)
+        self.W.data /= np.array(z[self.W.indices]).reshape(self.W.data.shape)
 
     def stdp(self, from_old, from_new, to_old=None, to_new=None):
         """Performs one STDP step (from Christoph's implementation)"""
@@ -117,11 +119,14 @@ class SparseSynapticMatrix(object):
 
     def sn(self):
         """Performs synaptic normalization"""
-        self.W = normalize(self.W, norm='l1', axis=1)
+
+        # sklearn normalize does not work here. TODO: why?
+        z = abs(self.W).sum(1)
+        self.W.data /= np.array(z[self.W.indices]).reshape(self.W.data.shape)
 
     def sp(self):
         """Performs one SP step"""
-        if np.random.rand() <= self.sp_prob:
+        if np.random.rand() < self.sp_prob:
 
             # find new connection
             # try for 1000 times, otherwise ignore SP

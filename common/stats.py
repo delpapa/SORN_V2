@@ -50,7 +50,6 @@ class Stats(object):
             step += self.aux.steps_readouttrain
 
         if hasattr(self, 'activity'):
-            import ipdb; ipdb.set_trace()
             self.activity[step] = x.sum()
 
         if hasattr(self, 'activity_readout') and phase in readout:
