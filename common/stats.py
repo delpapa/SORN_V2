@@ -25,21 +25,21 @@ class Stats(object):
 
         if 'ActivityReadoutStat' in stats_tostore:
             self.activity_readout = np.zeros(params.aux.readout_steps,
-                                             dtype=np.int)
+                                             dtype=np.int16)
 
         if 'ConnectionFractionStat' in stats_tostore:
             self.connec_frac = np.zeros(params.aux.N_steps)
 
         if 'InputReadoutStat' in stats_tostore:
             self.input_readout = np.zeros(params.aux.readout_steps,
-                                          dtype=np.int)
+                                          dtype=np.int16)
             self.input_index_readout = np.zeros(params.aux.readout_steps,
-                                          dtype=np.int)
+                                          dtype=np.int16)
 
         if 'RasterReadoutStat' in stats_tostore:
             self.raster_readout = np.zeros((params.aux.readout_steps,
                                             params.par.N_e),
-                                            dtype=np.int)
+                                            dtype=np.int8)
 
     def store_step(self, x, u, source, W_ee, step, phase):
         """Store the stats each time step into numpy arrays"""
