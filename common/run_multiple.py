@@ -26,7 +26,7 @@ RUNS = 20
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = ''                              # to mark experiment
+EXPERIMENT_TAG = '_PZ'                              # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #

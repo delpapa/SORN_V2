@@ -24,15 +24,15 @@ def get_par():
 
     par.eta_stdp = 0.004                           # STDP learning rate
     par.prune_stdp = True                          # prune very small weights
-    par.eta_istdp = 'off'                          # iSTDP learning rate
+    par.eta_istdp = 0.001                          # iSTDP learning rate
     par.eta_ip = 0.01                              # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
     par.sp_prob = 0                                # SP probability
-    par.sp_init = 'off'                            # SP initial value
+    par.sp_init = 0.001                            # SP initial value
 
     par.input_gain = 1                             # input gain factor
 
-    par.sigma = 0                                  # noise variance
+    par.sigma = 0.05                                  # noise variance
 
     par.lamb = 20                                  # number of out connections
 
