@@ -28,7 +28,7 @@ print '\nPlotting ConnectionFraction...'
 experiment_folder = 'MemoryAvalanche' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment = os.listdir(experiment_path)[0]
-N, sigma, _ = [s[1:] for s in experiment.split('_')]
+N, L, A, s, _ = [s[1:] for s in experiment.split('_')]
 print 'experiment', experiment, '...'
 
 # 2. load stats

@@ -19,7 +19,7 @@ from scipy.interpolate import interp1d
 import powerlaw as pl
 
 # parameters to include in the plot
-experiment_tag = '_test'                           # experiment tag
+experiment_tag = ''                           # experiment tag
 NUMBER_OF_FILES = 50
 
 ################################################################################
@@ -32,8 +32,8 @@ def avalanche_distributions(activity, theta = 'half_mean'):
     Returns two 1d-arrays containing the duration and size of each avalanche.
 
     Parameters:
-        activity: 1d-array
-            Array containing activity of a single experiment simulation
+        activity: list of 1d-arrays
+            Arrays containing activity of a single experiment simulation
         theta: str
             Indicates which theta should be used to threshold the activity.
             Options are: 'half_mean': half of the mean activity (rounded down)
@@ -43,25 +43,29 @@ def avalanche_distributions(activity, theta = 'half_mean'):
         theta = activity.mean()/2.
 
     thresholded_activity = activity - theta
-    length_act = len(activity)
+    n_sim = len(activity)
+    activity_length = len(activity[0])
+
     duration_list = []
     size_list = []
 
-    duration = 0
-    size = 0
-    for i in xrange(length_act):
+    for sim in xrange(n_sim):
 
-        # add one time step to the current avalanche
-        if thresholded_activity[i] > 0:
-            duration += 1
-            size += int(thresholded_activity[i])
+        duration = 0
+        size = 0
+        for i in xrange(activity_length):
 
-        # finish current avalanche and prepare for the next one
-        elif size != 0:
-            duration_list.append(duration)
-            size_list.append(size)
-            duration = 0
-            size = 0
+            # add one time step to the current avalanche
+            if thresholded_activity[sim][i] > 0:
+                duration += 1
+                size += int(activity[sim][i])
+
+                # finish current avalanche and prepare for the next one
+            elif size != 0:
+                duration_list.append(duration)
+                size_list.append(size)
+                duration = 0
+                size = 0
 
     return np.asarray(duration_list), np.asarray(size_list)
 
@@ -74,15 +78,18 @@ if __name__ == "__main__":
     print '\nPlotting Neuronal Avalanche duration and size distributions...'
     experiment_folder = 'MemoryAvalanche' + experiment_tag
     experiment_path = 'backup/' + experiment_folder + '/'
-    experiment = os.listdir(experiment_path)[0]
-    N, L, A, _ = [s[1:] for s in experiment.split('_')]
-    print 'experiment', experiment, '...'
 
-    # 2. load stats
-    stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
+    activity = []
+    for experiment in os.listdir(experiment_path):
+        N, L, A, s, _ = [s[1:] for s in experiment.split('_')]
+        print 'experiment', experiment, '...'
+
+        # 2. load stats
+        stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
+        activity.append(stats.activity)
 
     # 3. calculate neuronal avalanches
-    T_data, S_data = avalanche_distributions(stats.activity)
+    T_data, S_data = avalanche_distributions(np.array(activity))
 
     # 4. duration distribution
     fig_a = plt.subplot(121)
