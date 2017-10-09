@@ -15,14 +15,14 @@ from utils import backup_pickle
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
 VARIABLES = [
-    # 'N_e',
+    'sigma',
 ]
 VALUES = [
-    # np.array([200]),
+    np.array([0, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1]),
 ]
 
 # number of repetitions of each experiment (for statistics)
-RUNS = 10
+RUNS = 20
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar

@@ -50,13 +50,21 @@ class Stats(object):
             step += self.aux.steps_readouttrain
 
         if hasattr(self, 'activity'):
-            self.activity[step] = x.sum()
+            if phase == 'plastic':
+                self.activity[step] = x.sum()
+            elif phase in readout:
+                self.activity[self.par.steps_plastic+step] = x.sum()
 
         if hasattr(self, 'activity_readout') and phase in readout:
             self.activity_readout[step] = x.sum()
 
         if hasattr(self, 'connec_frac'):
-            self.connec_frac[step] = W_ee.W.data.size / float(self.par.N_e**2)
+            if phase == 'plastic':
+                self.connec_frac[step] = \
+                                       W_ee.W.data.size / float(self.par.N_e**2)
+            elif phase in readout:
+                self.connec_frac[self.par.steps_plastic+step] = \
+                                       W_ee.W.data.size / float(self.par.N_e**2)
 
         if hasattr(self, 'input_readout') and phase in readout:
             self.input_readout[step] = np.argmax(u)

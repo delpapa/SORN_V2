@@ -7,7 +7,7 @@ from importlib import import_module
 
 from common.sorn import Sorn
 from common.stats import Stats
-from utils import backup_pickle
+from utils import backup_pickle, backup_h5
 
 ################################################################################
 #                              SORN simulation                                 #
@@ -21,7 +21,7 @@ params = exp_dir.param
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = '_test'
+params.aux.experiment_tag = '_test_nonoise'
 
 # 3. initialize experiment, sorn, and stats objects
 # PS.the experiment class keeps a copy of the initial sorn main parameters
