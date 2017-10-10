@@ -22,7 +22,7 @@ VALUES = [
 ]
 
 # number of repetitions of each experiment (for statistics)
-RUNS = 20
+RUNS = 5
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
