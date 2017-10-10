@@ -7,7 +7,8 @@ import numpy as np
 import matplotlib.pylab as plt
 
 # parameters to include in the plot
-N_PAR = 200                                    # network size
+N_PAR = np.array([200])
+SIGMA_PAR = np.array([0., 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1])                                    # noise level
 A_PAR = np.array([20])    # input alphabet sizes
 SAVE_PLOT = True
 
@@ -21,7 +22,7 @@ fig = plt.figure(1, figsize=(6, 5))
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
 experiment_tag = ''
-experiment_folder = 'MemoryAvalanche' + experiment_tag
+experiment_folder = 'MemoryAvalanche_PZ' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
 
@@ -51,23 +52,26 @@ if 'A_PAR' in globals():
     sigma_list = sigma_list[a_index]
     performance_list = performance_list[a_index]
 
-# filter N
-n_index = np.where(n_list == N_PAR)[0].tolist()
-n_list = n_list[n_index]
-a_list = a_list[n_index]
-sigma_list = sigma_list[n_index]
-performance_list = performance_list[n_index]
-assert len(n_list) > 0, 'Currently no experiment data for chosen network size'
+# filter SIGMA
+if 'SIGMA_PAR' in globals():
+    sigma_index = []
+    for sigma in SIGMA_PAR:
+        sigma_index.extend(np.where(sigma_list == sigma)[0].tolist())
+    n_list = n_list[sigma_index]
+    a_list = a_list[sigma_index]
+    sigma_list = sigma_list[sigma_index]
+    performance_list = performance_list[sigma_index]
+assert len(n_list) > 0, 'Currently no experiment data for chosen noise level'
 
 # 3. plot memory vs. network size
-for alphabet in np.unique(a_list):
-    n_list_reduced = n_list[np.where(a_list == alphabet)]
-    a_list_reduced = a_list[np.where(a_list == alphabet)]
-    sigma_list_reduced = sigma_list[np.where(a_list == alphabet)]
-    performance_list_reduced = performance_list[np.where(a_list == alphabet)]
+for noise_level in np.unique(sigma_list):
+    n_list_reduced = n_list[np.where(sigma_list == noise_level)]
+    a_list_reduced = a_list[np.where(sigma_list == noise_level)]
+    sigma_list_reduced = sigma_list[np.where(sigma_list == noise_level)]
+    performance_list_reduced = performance_list[np.where(sigma_list == noise_level)]
     plt.plot(performance_list_reduced.mean(0),
              '-o',
-             label=r'$A = %d$' %int(alphabet))
+             label=r'$\sigma^2 = %.3f$' %float(noise_level))
 
 # 4. adjust figure parameters and save
 fig_lettersize = 12
@@ -82,6 +86,5 @@ if SAVE_PLOT:
     plots_dir = 'plots/'+experiment_folder+'/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-        plt.savefig(plots_dir+'performance_vs_tpast_N'+str(N_PAR)+'.pdf',
-                    format='pdf')
+    plt.savefig(plots_dir+'performance_vs_tpast.pdf', format='pdf')
 plt.show()

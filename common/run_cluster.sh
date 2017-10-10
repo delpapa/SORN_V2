@@ -3,8 +3,8 @@
 #SBATCH --partition=sleuths
 #SBATCH --ntasks=10
 #SBATCH --mem-per-cpu=7000
-#SBATCH --job-name="sorn_MemoryAvalanche_PZ"
-#SBATCH --output=sorn_MemoryAvalanche_PZ.out
+#SBATCH --job-name="sorn_NeuronalAvalanches_PZ"
+#SBATCH --output=sorn_NeuronalAvalanches_PZ.out
 #SBATCH --mail-user=delpapa@fias.uni-frankfurt.de
 #SBATCH --mail-type=END
 #SBATCH --time=7-00:00:00
@@ -15,4 +15,4 @@ echo "SLURM_NNODES"=$SLURM_NNODES
 
 echo "working directory = "$SLURM_SUBMIT_DIR
 
-srun python common/run_multiple.py MemoryAvalanche
+srun python common/run_multiple.py NeuronalAvalanches

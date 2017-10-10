@@ -19,7 +19,8 @@ from scipy.interpolate import interp1d
 import powerlaw as pl
 
 # parameters to include in the plot
-experiment_tag = ''                           # experiment tag
+experiment_tag = '_PZ'                           # experiment tag
+SIGMA_PAR = np.array([0., 0.005, 0.05, 0.5])
 NUMBER_OF_FILES = 50
 
 ################################################################################
@@ -79,68 +80,70 @@ if __name__ == "__main__":
     experiment_folder = 'MemoryAvalanche' + experiment_tag
     experiment_path = 'backup/' + experiment_folder + '/'
 
-    activity = []
-    for experiment in os.listdir(experiment_path):
-        N, L, A, s, _ = [s[1:] for s in experiment.split('_')]
-        print 'experiment', experiment, '...'
+    for sigma in SIGMA_PAR:
+        activity = []
+        for experiment in os.listdir(experiment_path):
+            N, L, A, s, _ = [s[1:] for s in experiment.split('_')]
 
         # 2. load stats
-        stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
-        activity.append(stats.activity)
+            if float(s) == sigma:
+                print 'experiment', experiment, '...'
+                stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
+                activity.append(stats.activity)
 
-    # 3. calculate neuronal avalanches
-    T_data, S_data = avalanche_distributions(np.array(activity))
+        # 3. calculate neuronal avalanches
+        T_data, S_data = avalanche_distributions(np.array(activity))
 
-    # 4. duration distribution
-    fig_a = plt.subplot(121)
-    T_x, T_inverse = np.unique(T_data, return_inverse=True)
-    T_y_freq = plt.bincount(T_inverse)
-    T_y = T_y_freq / float(T_y_freq.sum()) # normalization
+        # 4. duration distribution
+        fig_a = plt.subplot(121)
+        # T_x, T_inverse = np.unique(T_data, return_inverse=True)
+        # T_y_freq = plt.bincount(T_inverse)
+        # T_y = T_y_freq / float(T_y_freq.sum()) # normalization
 
-    T_fit = pl.Fit(T_data, xmin=6, xmax=60, discrete=True)
-    T_alpha = T_fit.alpha
-    T_sigma = T_fit.sigma
-    T_xmin = T_fit.xmin
+        # T_fit = pl.Fit(T_data, xmin=6, xmax=60, discrete=True)
+        # T_alpha = T_fit.alpha
+        # T_sigma = T_fit.sigma
+        # T_xmin = T_fit.xmin
 
-    plt.plot(T_x, T_y, '.', markersize=2)
-    pl.plot_pdf(T_data)
-    T_fit.power_law.plot_pdf(label=r'$\alpha = %.2f$' %T_alpha)
+        # plt.plot(T_x, T_y, '.', markersize=2)
+        pl.plot_pdf(T_data)
+        # T_fit.power_law.plot_pdf(label=r'$\alpha = %.2f$' %T_alpha)
 
-    fig_lettersize = 12
-    plt.title('Neuronal Avalanches - duration distribution')
-    plt.legend(loc='best')
-    plt.xlabel(r'$T$', fontsize=fig_lettersize)
-    plt.ylabel(r'$f(T)$', fontsize=fig_lettersize)
-    plt.xscale('log')
-    plt.yscale('log')
+        fig_lettersize = 12
+        plt.title('Neuronal Avalanches - duration distribution')
+        plt.legend(loc='best')
+        plt.xlabel(r'$T$', fontsize=fig_lettersize)
+        plt.ylabel(r'$f(T)$', fontsize=fig_lettersize)
+        plt.xscale('log')
+        plt.yscale('log')
 
-    # 5. size distribution
-    fig_b = plt.subplot(122)
-    S_x, S_inverse = np.unique(S_data, return_inverse=True)
-    S_y_freq = plt.bincount(S_inverse)
-    S_y = S_y_freq / float(S_y_freq.sum()) # normalization
+        # 5. size distribution
+        fig_b = plt.subplot(122)
+        # S_x, S_inverse = np.unique(S_data, return_inverse=True)
+        # S_y_freq = plt.bincount(S_inverse)
+        # S_y = S_y_freq / float(S_y_freq.sum()) # normalization
+        #
+        # S_fit = pl.Fit(S_data, xmin=10, xmax=1500, discrete=True)
+        # S_alpha = S_fit.alpha
+        # S_sigma = S_fit.sigma
+        # S_xmin = S_fit.xmin
 
-    S_fit = pl.Fit(S_data, xmin=10, xmax=1500, discrete=True)
-    S_alpha = S_fit.alpha
-    S_sigma = S_fit.sigma
-    S_xmin = S_fit.xmin
+        # plt.plot(S_x, S_y, '.', markersize=2)
+        pl.plot_pdf(S_data)
+        # S_fit.power_law.plot_pdf(label=r'$\tau = %.2f$' %S_alpha)
 
-    plt.plot(S_x, S_y, '.', markersize=2)
-    pl.plot_pdf(S_data)
-    S_fit.power_law.plot_pdf(label=r'$\tau = %.2f$' %S_alpha)
-
-    fig_lettersize = 12
-    plt.title('Neuronal Avalanches - size distribution')
-    plt.legend(loc='best')
-    plt.xlabel(r'$S$', fontsize=fig_lettersize)
-    plt.ylabel(r'$f(S)$', fontsize=fig_lettersize)
-    plt.xscale('log')
-    plt.yscale('log')
+        fig_lettersize = 12
+        plt.title('Neuronal Avalanches - size distribution')
+        plt.legend(loc='best')
+        plt.xlabel(r'$S$', fontsize=fig_lettersize)
+        plt.ylabel(r'$f(S)$', fontsize=fig_lettersize)
+        plt.xscale('log')
+        plt.yscale('log')
 
     # 6. save figures
     plots_dir = 'plots/'+experiment_folder+'/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-        plt.savefig(plots_dir+'NAdistributions.pdf', format='pdf')
+    plt.savefig(plots_dir+'NAdistributions.pdf', format='pdf')
 
     plt.show()
