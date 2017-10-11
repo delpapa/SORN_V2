@@ -18,7 +18,7 @@ VARIABLES = [
     'sigma',
 ]
 VALUES = [
-    np.array([0, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1]),
+    np.array([0, 0.005, 0.05, 0.5, 5]),
 ]
 
 # number of repetitions of each experiment (for statistics)
@@ -26,7 +26,7 @@ RUNS = 5
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_PZ'                              # to mark experiment
+EXPERIMENT_TAG = '_PZ_hugegain'                              # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #
