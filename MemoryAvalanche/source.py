@@ -46,9 +46,10 @@ class RandomSequenceSource(object):
         # choose random, overlapping input neuron pools
         W = np.zeros((par.N_e, self.N_a))
         available = set(range(par.N_e))
-        # TODO: be sure that the input pools are not equal - random.choice
+        # TODO: be sure that the input pools are not equal - random.shuffle
         for a in range(self.N_a):
             temp = random.sample(available, self.N_u)
+            available = available.difference(temp)
             W[temp, a] = 1
 
         # always use a full synaptic matrix

@@ -20,14 +20,14 @@ def get_par():
     For each sorn simulation, change these parameters manually.
     """
     par.N_e = 200                                  # excitatory neurons
-    par.N_u = 100                                  # neurons in each input pool
+    par.N_u = 10                                   # neurons in each input pool
 
     par.eta_stdp = 0.004                           # STDP learning rate
     par.prune_stdp = True                          # prune very small weights
     par.eta_istdp = 0.001                          # iSTDP learning rate
     par.eta_ip = 0.01                              # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
-    par.sp_prob = 0                                # SP probability
+    par.sp_prob = 0.1                              # SP probability
     par.sp_init = 0.001                            # SP initial value
 
     par.input_gain = 1                             # input gain factor
@@ -44,10 +44,10 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.L = 10000                                 # sequence size
+    par.L = 50000                                 # sequence size
     par.A = 20                                    # alphabet size
 
-    par.steps_plastic = 1000000                   # sorn training time steps
+    par.steps_plastic = 2000000                   # sorn training time steps
     par.steps_readout = 10000                     # readout train and test steps
 
 
