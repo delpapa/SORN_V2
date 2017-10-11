@@ -30,7 +30,7 @@ def get_par():
     par.sp_prob = 0.1                              # SP probability
     par.sp_init = 0.001                            # SP initial value
 
-    par.input_gain = 10000000                             # input gain factor
+    par.input_gain = 1                             # input gain factor
 
     par.sigma = 0.05                                  # noise variance
 
