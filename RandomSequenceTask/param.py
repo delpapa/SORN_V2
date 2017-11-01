@@ -40,7 +40,7 @@ def get_par():
 #                           Experiment parameters                              #
 ################################################################################
     par.L = 1000000                                # sequence size
-    par.A = 10                                      # alphabet size
+    par.A = 40                                      # alphabet size
 
     par.steps_plastic = 200000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
