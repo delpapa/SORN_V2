@@ -84,12 +84,13 @@ def backup_h5(experiment, stats):
 
     results = tables.open_file('results.h5', mode='w', title='results')
     root = results.root
-    
+
+    import ipdb; ipdb.set_trace()
     if 'params' in files_tosave:
         results.create_array(root, "params", params)
 
     if 'stats' in files_tosave:
-        # delete attributes that occupy a lot of space
+        # delete attributes that take a lot of space
         if hasattr(stats, 'input_index_readout'):
             del stats.input_index_readout
         if hasattr(stats, 'input_readout'):

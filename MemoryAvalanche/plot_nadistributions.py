@@ -19,8 +19,8 @@ from scipy.interpolate import interp1d
 import powerlaw as pl
 
 # parameters to include in the plot
-experiment_tag = '_PZ'                           # experiment tag
-SIGMA_PAR = np.array([0., 0.005, 0.05, 0.5])
+experiment_tag = '_PZ_hugegain'                           # experiment tag
+SIGMA_PAR = np.array([0.005, 0.05, 5])
 NUMBER_OF_FILES = 50
 
 ################################################################################
@@ -59,7 +59,7 @@ def avalanche_distributions(activity, theta = 'half_mean'):
             # add one time step to the current avalanche
             if thresholded_activity[sim][i] > 0:
                 duration += 1
-                size += int(activity[sim][i])
+                size += int(thresholded_activity[sim][i])
 
                 # finish current avalanche and prepare for the next one
             elif size != 0:
@@ -111,7 +111,6 @@ if __name__ == "__main__":
 
         fig_lettersize = 12
         plt.title('Neuronal Avalanches - duration distribution')
-        plt.legend(loc='best')
         plt.xlabel(r'$T$', fontsize=fig_lettersize)
         plt.ylabel(r'$f(T)$', fontsize=fig_lettersize)
         plt.xscale('log')
@@ -129,7 +128,7 @@ if __name__ == "__main__":
         # S_xmin = S_fit.xmin
 
         # plt.plot(S_x, S_y, '.', markersize=2)
-        pl.plot_pdf(S_data)
+        pl.plot_pdf(S_data, label=r'$\sigma^2 = %.3f$' %sigma)
         # S_fit.power_law.plot_pdf(label=r'$\tau = %.2f$' %S_alpha)
 
         fig_lettersize = 12

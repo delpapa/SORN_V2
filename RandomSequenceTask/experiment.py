@@ -37,8 +37,8 @@ class Experiment(object):
 
         # define which stats to store during the simulation
         self.stats_tostore = [
-            'ActivityStat',
-            'ConnectionFractionStat',
+            'InputReadoutStat',
+            'RasterReadoutStat',
         ]
 
         # define which parameters and files to save at the end of the simulation
@@ -95,34 +95,34 @@ class Experiment(object):
         t_train = sorn.params.aux.steps_readouttrain
         t_test = sorn.params.aux.steps_readouttest
 
-        if sorn.params.aux.experiment_tag == '_LearningCapacity':
-            # performance is calculated using the previous time step activity
-            X_train = stats.raster_readout[:t_train-1].T
-            y_train_ind = stats.input_index_readout[1:t_train].T
+        # if sorn.params.aux.experiment_tag == '_LearningCapacity':
+        #     # performance is calculated using the previous time step activity
+        #     X_train = stats.raster_readout[:t_train-1].T
+        #     y_train_ind = stats.input_index_readout[1:t_train].T
+        #
+        #     X_test = stats.raster_readout[t_train:t_train+t_test-1].T
+        #     y_test_ind = stats.input_index_readout[1+t_train:t_train+t_test].T
+        #
+        #     readout = linear_model.LogisticRegression()
+        #     output_weights = readout.fit(X_train.T, y_train_ind)
+        #     performance = output_weights.score(X_test.T, y_test_ind)
+        #     stats.performance = performance
 
-            X_test = stats.raster_readout[t_train:t_train+t_test-1].T
-            y_test_ind = stats.input_index_readout[1+t_train:t_train+t_test].T
+        # if sorn.params.aux.experiment_tag == '_FadingMemory':
+
+        t_past_max = 20
+        stats.t_past = np.arange(t_past_max)
+        stats.performance = np.zeros(t_past_max)
+        for t_past in xrange(t_past_max):
+            X_train = stats.raster_readout[t_past:t_train]
+            y_train = stats.input_readout[:t_train-t_past].T.astype(int)
+
+            X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
+            y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
 
             readout = linear_model.LogisticRegression()
-            output_weights = readout.fit(X_train.T, y_train_ind)
-            performance = output_weights.score(X_test.T, y_test_ind)
-            stats.performance = performance
-
-        if sorn.params.aux.experiment_tag == '_FadingMemory':
-
-            t_past_max = 20
-            stats.t_past = np.arange(t_past_max)
-            stats.performance = np.zeros(t_past_max)
-            for t_past in xrange(t_past_max):
-                X_train = stats.raster_readout[t_past:t_train]
-                y_train = stats.input_readout[:t_train-t_past].T.astype(int)
-
-                X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
-                y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
-
-                readout = linear_model.LogisticRegression()
-                output_weights = readout.fit(X_train, y_train)
-                stats.performance[t_past] = output_weights.score(X_test, y_test)
+            output_weights = readout.fit(X_train, y_train)
+            stats.performance[t_past] = output_weights.score(X_test, y_test)
 
         if display:
             print 'done'

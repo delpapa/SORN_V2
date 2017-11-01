@@ -15,18 +15,18 @@ from utils import backup_pickle
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
 VARIABLES = [
-    'sigma',
+    'steps_plastic',
 ]
 VALUES = [
-    np.array([0, 0.005, 0.05, 0.5, 5]),
+    np.array([0, 10000, 50000, 100000, 200000]),
 ]
 
 # number of repetitions of each experiment (for statistics)
-RUNS = 5
+RUNS = 1
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_PZ'                              # to mark experiment
+EXPERIMENT_TAG = '_perfXtplast_test'                  # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #

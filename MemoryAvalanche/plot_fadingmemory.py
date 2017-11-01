@@ -8,7 +8,7 @@ import matplotlib.pylab as plt
 
 # parameters to include in the plot
 N_PAR = np.array([200])
-SIGMA_PAR = np.array([0., 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1])                                    # noise level
+SIGMA_PAR = np.array([0., 0.05, 0.5, 5])                                    # noise level
 A_PAR = np.array([20])    # input alphabet sizes
 SAVE_PLOT = True
 
@@ -17,12 +17,12 @@ SAVE_PLOT = True
 ################################################################################
 
 # 0. build figures
-fig = plt.figure(1, figsize=(6, 5))
+fig = plt.figure(1, figsize=(9, 7))
 
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
-experiment_tag = ''
-experiment_folder = 'MemoryAvalanche_PZ' + experiment_tag
+experiment_tag = '_PZ'
+experiment_folder = 'MemoryAvalanche' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
 
@@ -69,18 +69,54 @@ for noise_level in np.unique(sigma_list):
     a_list_reduced = a_list[np.where(sigma_list == noise_level)]
     sigma_list_reduced = sigma_list[np.where(sigma_list == noise_level)]
     performance_list_reduced = performance_list[np.where(sigma_list == noise_level)]
-    plt.plot(performance_list_reduced.mean(0),
-             '-o',
-             label=r'$\sigma^2 = %.3f$' %float(noise_level))
+
+    perf_mean = performance_list_reduced.mean(0)
+    perf_err = performance_list_reduced.std(0)
+
+    if float(noise_level) == 0:
+        plt.plot(perf_mean,
+                '-',
+                color='darkcyan',
+                linewidth=1.5,
+                label=r'low')
+        plt.fill_between(range(len(perf_mean)),
+                 perf_mean-perf_err,
+                 perf_mean+perf_err,
+                 color='darkcyan',
+                 alpha = 0.5)
+    elif float(noise_level) == 0.5:
+        plt.plot(perf_mean,
+                '-',
+                color='k',
+                linewidth=2.0,
+                label=r'intermediate')
+        plt.fill_between(range(len(perf_mean)),
+                 perf_mean-perf_err,
+                 perf_mean+perf_err,
+                 color='k',
+                 alpha = 0.5)
+    elif float(noise_level) == 5.0:
+        plt.plot(perf_mean,
+                '-',
+                color='orange',
+                linewidth=1.5,
+                label=r'high')
+        plt.fill_between(range(len(perf_mean)),
+                perf_mean-perf_err,
+                perf_mean+perf_err,
+                color='orange',
+                alpha = 0.5)
 
 # 4. adjust figure parameters and save
-fig_lettersize = 12
-plt.title('Criticality - Fading Memory')
-plt.legend(loc='best')
+fig_lettersize = 25
+plt.legend(loc='best', frameon=False, fontsize=fig_lettersize)
 plt.xlabel(r'$t_{\rm past}$', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
-plt.xlim([0, 20])
-plt.xticks([0, 5, 10, 15, 20])
+plt.yscale('log')
+plt.xlim([0, 6])
+plt.ylim([0.01, 2])
+plt.yticks([0.01, 0.1, 1], fontsize=fig_lettersize)
+plt.xticks([0, 1, 2, 3, 4, 5, 6], fontsize=fig_lettersize)
 
 if SAVE_PLOT:
     plots_dir = 'plots/'+experiment_folder+'/'

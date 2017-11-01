@@ -14,7 +14,8 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-experiment_tag = '_PZ'                             # experiment tag
+experiment_tag = '_PZ_hugegain'                             # experiment tag
+SIGMA_PAR = np.array([0., 0.05, 5])
 
 ################################################################################
 #                            Plot performance                                  #
@@ -27,20 +28,22 @@ fig = plt.figure(1, figsize=(6, 5))
 print '\nPlotting ConnectionFraction...'
 experiment_folder = 'MemoryAvalanche' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
-experiment = os.listdir(experiment_path)[0]
-N, L, A, s, _ = [s[1:] for s in experiment.split('_')]
-print 'experiment', experiment, '...'
 
-# 2. load stats
-stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
+for experiment in os.listdir(experiment_path):
+    N, L, A, sigma, _ = [s[1:] for s in experiment.split('_')]
+    if float(sigma) in SIGMA_PAR:
+        print SIGMA_PAR
+        SIGMA_PAR = np.delete(SIGMA_PAR, np.where(SIGMA_PAR == float(sigma)))
+        # 2. load stats
+        stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
 
-# 3. plot connection fraction
-plt.plot(stats.connec_frac, label='ConnecFrac')
+        # 3. plot connection fraction
+        plt.plot(stats.connec_frac, label=r'$\sigma^2 = %.3f$' %float(sigma))
 
 # 3. edit figure properties
 fig_lettersize = 12
 
-plt.title('Neuronal Avalanches (RandomSequenceInput)')
+plt.title('MemoryAvalanche (Random Input)')
 plt.legend(loc='best')
 plt.xlabel(r'time step', fontsize=fig_lettersize)
 plt.ylabel(r'Active E-E connections', fontsize=fig_lettersize)

@@ -20,7 +20,7 @@ def get_par():
     For each sorn simulation, change these parameters manually.
     """
     par.N_e = 200                                  # excitatory neurons
-    par.N_u = 100                                  # neurons in each input pool
+    par.N_u = 10                                   # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
     par.prune_stdp = True                          # prune very small weights
@@ -39,11 +39,11 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.L = 50000                                    # sequence size
-    par.A = 20                                       # alphabet size
+    par.L = 1000000                                # sequence size
+    par.A = 20                                     # alphabet size
 
-    par.steps_plastic = 50000                       # sorn training time steps
-    par.steps_readout = 5000                        # readout train and test steps
+    par.steps_plastic = 50000                      # sorn training time steps
+    par.steps_readout = 5000                       # readout train and test steps
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #
@@ -60,7 +60,7 @@ def get_aux():
     aux.experiment_name = os.path.split(os.path.dirname(\
                                         os.path.realpath(__file__)))[1]
     # training ans testing time steps
-    aux.steps_readouttrain = np.maximum(par.steps_readout, 3*par.L)
+    aux.steps_readouttrain = 3*par.steps_readout# np.maximum(par.steps_readout, 3*par.L)
     aux.steps_readouttest = par.steps_readout
 
     aux.N_steps = (par.steps_plastic                # total number of time steps

@@ -14,7 +14,7 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-experiment_tag = '_test'                             # experiment tag
+experiment_tag = '_test2'                             # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #

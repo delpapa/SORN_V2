@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pylab as plt
 
 # parameters to include in the plot
-N_PAR = 800                                    # network size
+N_PAR = 200                                    # network size
 # A_PAR = np.array([4, 10, 20, 30, 40, 50])    # input alphabet sizes
 SAVE_PLOT = True
 
@@ -20,7 +20,7 @@ fig = plt.figure(1, figsize=(6, 5))
 
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
-experiment_tag = '_FadingMemory'
+experiment_tag = '_fig1_test_STDPpruneIP'
 experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
@@ -32,8 +32,8 @@ l_list = np.zeros(experiment_n)
 for exp, exp_name in enumerate(os.listdir(experiment_path)):
     N, L, A, _ = [s[1:] for s in exp_name.split('_')]
     exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
-    perf = pickle.load(open(experiment_path+exp_name+'/performance.p', 'rb'))
-    performance_list[exp] = perf
+    perf = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
+    performance_list[exp] = perf.performance
     n_list[exp] = int(N)
     a_list[exp] = int(A)
     l_list[exp] = int(L)

@@ -19,7 +19,7 @@ from scipy.interpolate import interp1d
 import powerlaw as pl
 
 # parameters to include in the plot
-experiment_tag = '_test'                           # experiment tag
+experiment_tag = '_test2'                           # experiment tag
 NUMBER_OF_FILES = 50
 
 ################################################################################
