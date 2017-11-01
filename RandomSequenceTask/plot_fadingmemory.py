@@ -20,7 +20,7 @@ fig = plt.figure(1, figsize=(6, 5))
 
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
-experiment_tag = '_fig1_test_STDPpruneIP'
+experiment_tag = '_fig1_test6'
 experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))

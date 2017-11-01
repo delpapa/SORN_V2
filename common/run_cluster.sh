@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #SBATCH --partition=sleuths
-#SBATCH --ntasks=2
+#SBATCH --ntasks=10
 #SBATCH --mem-per-cpu=7000
-#SBATCH --job-name="sorn__RandomSequenceTask_perfXtplast_test"
-#SBATCH --output=sorn__RandomSequenceTask_perfXtplast_test.out
+#SBATCH --job-name="sorn_RandomSequenceTask_perfXtplast_A20"
+#SBATCH --output=sorn_RandomSequenceTask_perfXtplast_A20.out
 #SBATCH --mail-user=delpapa@fias.uni-frankfurt.de
 #SBATCH --mail-type=END
 #SBATCH --time=7-00:00:00

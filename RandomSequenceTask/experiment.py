@@ -33,7 +33,8 @@ class Experiment(object):
                             + params.aux.experiment_tag
                             + '/N' + str(params.par.N_e)
                             + '_L' + str(params.par.L)
-                            + '_A' + str(params.par.A))
+                            + '_A' + str(params.par.A)
+                            + '_T' + str(params.par.steps_plastic))
 
         # define which stats to store during the simulation
         self.stats_tostore = [

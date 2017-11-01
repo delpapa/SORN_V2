@@ -18,7 +18,8 @@ VARIABLES = [
     'steps_plastic',
 ]
 VALUES = [
-    np.array([0, 10000, 50000, 100000, 200000]),
+    np.arange(0, 100000, 5000)
+    # np.array([0, 10000, 50000, 100000, 200000]),
 ]
 
 # number of repetitions of each experiment (for statistics)
@@ -26,7 +27,7 @@ RUNS = 1
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_perfXtplast_test'                  # to mark experiment
+EXPERIMENT_TAG = '_perfXtplast_A20'                  # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #
