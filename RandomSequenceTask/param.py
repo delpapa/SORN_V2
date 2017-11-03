@@ -22,9 +22,9 @@ def get_par():
     par.N_e = 200                                  # excitatory neurons
     par.N_u = 10                                   # neurons in each input pool
 
-    par.eta_stdp = 0.001                           # STDP learning rate
-    par.prune_stdp = True                          # prune very small weights
-    par.eta_ip = 0.001                             # IP learning rate
+    par.eta_stdp = 'off'                           # STDP learning rate
+    par.prune_stdp = False                          # prune very small weights
+    par.eta_ip = 'off'                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
     par.input_gain = 1                             # input gain factor
