@@ -10,7 +10,7 @@ from scipy.interpolate import interp1d
 
 # parameters to include in the plot
 N_PAR = np.array([200])  # network sizes
-A_PAR = np.array([20])               # input alphabet sizes
+A_PAR = np.array([4])               # input alphabet sizes
 SAVE_PLOT = True
 
 def log_interp1d(xx, yy, kind='linear'):
@@ -55,7 +55,7 @@ fig = plt.figure(1, figsize=(6, 5))
 
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
-experiment_tag = '_perfxtplastc_A20'
+experiment_tag = '_perfxtplastc'
 experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
@@ -64,12 +64,13 @@ performance_list = np.zeros((experiment_n, 20))
 t_list = np.zeros(experiment_n)
 a_list = np.zeros(experiment_n)
 for exp, exp_name in enumerate(os.listdir(experiment_path)):
-    N, L, A, T, _ = [s[1:] for s in exp_name.split('_')]
     exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
     stats = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
+    params = pickle.load(open(experiment_path+exp_name+'/init_params.p', 'rb'))
     performance_list[exp] = stats.performance
-    a_list[exp] = int(A)
-    t_list[exp] = int(T)
+    a_list[exp] = int(params.A)
+    t_list[exp] = int(params.steps_plastic)
+import ipdb; ipdb.set_trace()
 
 # 2. filter plot data points
 # filter A
