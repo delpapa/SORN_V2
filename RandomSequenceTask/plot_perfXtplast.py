@@ -10,7 +10,7 @@ from scipy.interpolate import interp1d
 
 # parameters to include in the plot
 N_PAR = np.array([200])  # network sizes
-A_PAR = np.array([4])               # input alphabet sizes
+A_PAR = np.array([4, 10, 50, 100, 200])               # input alphabet sizes
 SAVE_PLOT = True
 
 def log_interp1d(xx, yy, kind='linear'):
@@ -70,7 +70,6 @@ for exp, exp_name in enumerate(os.listdir(experiment_path)):
     performance_list[exp] = stats.performance
     a_list[exp] = int(params.A)
     t_list[exp] = int(params.steps_plastic)
-import ipdb; ipdb.set_trace()
 
 # 2. filter plot data points
 # filter A
@@ -83,47 +82,30 @@ if 'A_PAR' in globals():
     performance_list = performance_list[a_index]
 
 # 3. plot memory vs. network size
-memory = np.zeros(len(np.unique(t_list)))
-for i, tplast in enumerate(np.unique(t_list)):
-    perf_array = performance_list[np.where(t_list == tplast)].mean(0)
-    memory[i] = fading_memory(perf_array)
+memory = np.zeros( (len(np.unique(a_list)), len(np.unique(t_list))) )
 
-plt.plot(memory, label=r'$A=20$')
+# A loop
+for j, a in enumerate(np.unique(a_list)):
 
-# final_plot = np.zeros((len(np.unique(n_list)), len(np.unique(all_A))))
-# for i in xrange(final_plot.shape[1]):
-#     fit_log(np.unique(all_A)[i], N_values, final_plot[:, i])
-#     plt.errorbar(N_values, final_plot[:, i],
-#         fmt='o', label=r'$A =$'+str(np.unique(all_A)[i]))
-#
-#
-#
-#
-#
-#
-#
-# for i, n in enumerate(np.unique(all_N)):
-#     ind_n = np.where(all_N == n)[0]
-#     n_A = all_A[ind_n]
-#     n_performance = all_performance[ind_n]
-#     for j, a in enumerate(np.unique(n_A)):
-#         ind_a = np.where(n_A == a)[0]
-#
-#         final_plot[i, j] = fading_memory(n_performance[ind_a].mean(0))
-
-
-
+    a_list_part = a_list[np.where(a_list == a)]
+    t_list_part = t_list[np.where(a_list == a)]
+    performance_list_part = performance_list[np.where(a_list == a)]
+    for i, tplast in enumerate(np.unique(t_list_part)):
+        perf_array = performance_list_part[np.where(t_list_part == tplast)].mean(0)
+        memory[j, i] = fading_memory(perf_array)
+    plt.plot(np.unique(t_list_part), memory[j], label=r'$A=%d$' %a)
 
 # 4. adjust figure parameters and save
 fig_lettersize = 12
 plt.title('Random Sequence Task - Convergence')
 plt.legend(loc='best')
 plt.xlabel(r'$T_{\rm plast}$', fontsize=fig_lettersize)
-plt.ylabel('MC', fontsize=fig_lettersize)
-plt.ylim([0, 5])
+plt.ylabel('Fading Memory', fontsize=fig_lettersize)
+plt.xlim([0, 30000])
+plt.ylim([0, 7])
 plt.xticks(
-    np.arange(len(np.unique(t_list))),
-    np.unique(t_list),
+    [0, 10000, 20000, 30000],
+    ['0', '$1\cdot10^4$', '$2\cdot10^4$', '$3\cdot10^4$'],
     )
 
 if SAVE_PLOT:
