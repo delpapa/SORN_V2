@@ -24,7 +24,7 @@ def get_par():
 
     par.eta_stdp = 'off'                           # STDP learning rate
     par.prune_stdp = False                          # prune very small weights
-    par.eta_ip = 'off'                             # IP learning rate
+    par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
     par.input_gain = 1                             # input gain factor
