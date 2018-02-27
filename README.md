@@ -1,9 +1,15 @@
 # A Self-Organizing Recurrent Neural Network (SORN)
-A SORN repository for general purposes. This repository is based on the original [SORN repository](https://github.com/chrhartm/SORN) by Christoph Hartmann.  
+A SORN repository for general purposes, containing a few experiments and examples. This repository is based on the original [SORN repository](https://github.com/chrhartm/SORN) by Christoph Hartmann combined with adaptations to new experiments.  
+
+Currently under construction... :)
 
 ## Getting Started
 
-Every experiment is stored in a different folder. To run any experiment, type from the main folder: python common/test_single.py 'ExperimentName'.
+The scripts for experiment are stored in different folders with their respective name. Each folder contain at least scripts with the experiment parameters ('param.py'), instructions ('experiment.py'), and the input details ('source.py'). The parameters in these scripts can be modified at will to reproduce different results. Additionally, each folder contains the plot scripts, for plotting the results.
+
+To simulate a single experiment, 'python common/run_single.py <ExperimentName>'.
+
+Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAvalanches, LanguageTask
 
 ### Prerequisites
 
@@ -30,5 +36,3 @@ This task is the reimplementation of the counting task from the original SORN pa
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
-## Acknowledgments
