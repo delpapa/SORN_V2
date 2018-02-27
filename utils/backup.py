@@ -26,6 +26,8 @@ def backup_pickle(experiment, stats):
     results_dir = experiment.results_dir
     files_tosave = experiment.files_tosave
     directory = ('backup/' + results_dir)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
     # creates a new directory for storing the results
     # sleeps for a short time to avoid conflicts when running in parallel
@@ -55,7 +57,8 @@ def backup_pickle(experiment, stats):
             pickle.dump(stats, f)
 
     if 'scripts' in files_tosave:
-        for f in ['utils', 'common', results_dir.split('/')[0]]:
+        # TODO: this should not need a '_'
+        for f in ['utils', 'common', results_dir.split('_')[0]]:
             shutil.copytree(f, final_dir+f,
                             ignore=ignore_patterns('*.pyc', '*.git'))
 
