@@ -24,8 +24,12 @@ def get_par():
 
     par.eta_stdp = 0.001                           # STDP learning rate
     par.prune_stdp = True                          # prune very small weights
-    par.eta_ip = 'off'                             # IP learning rate
+    par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
+
+    # lognormal weights (from Lukas Koehls thesis)
+    # par.h_ip = np.random.lognormal(mean=np.log(0.1), sigma=0.1962,
+    #                                size=par.N_e)                        
 
     par.input_gain = 1                             # input gain factor
 

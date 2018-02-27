@@ -1,6 +1,16 @@
-""" Plot memory vs. network size"""
+"""
+Plot error as a function of T = t - tpast
+Curves for each alphabet size A
+Network size fixed in N=200
+Read experiments from RST_perfXtplast/
+Save plots at RST_perfXtplast/
+This was used as Fig. 2A in the tentative ESANN abstract.
+"""
+
 
 import os
+import sys
+sys.path.insert(0, '')
 
 import cPickle as pickle
 import numpy as np
@@ -9,53 +19,27 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 
 # parameters to include in the plot
-N_PAR = np.array([200])  # network sizes
-A_PAR = np.array([4, 10, 50, 100, 200])               # input alphabet sizes
+A_PAR = np.array([10, 20, 100, 200])               # input alphabet sizes
 SAVE_PLOT = True
 
-def log_interp1d(xx, yy, kind='linear'):
-    logx = np.log10(xx)
-    logy = np.log10(yy)
-    lin_interp = sp.interpolate.interp1d(logx, logy, kind=kind)
-    log_interp = lambda zz: np.power(10.0, lin_interp(np.log10(zz)))
-    return log_interp
+from matplotlib import cm
+start = 0.
+stop = 1.
+number_of_lines= 10
+cm_subsection = np.linspace(start, stop, number_of_lines)
 
-def fading_memory(perf_data):
-
-    m = (perf_data[0]+perf_data[-1])/2
-    xdata = perf_data
-    ydata = np.arange(len(perf_data))
-    f_interp = interp1d(xdata, ydata)
-    return f_interp(m)
-
-def log_func(x, a, b):
-    return a*np.log(x) + b
-
-def fit_log(A, xdata, ydata):
-
-    popt, pcov = curve_fit(log_func, xdata, ydata)
-    log = interp1d(xdata, log_func(xdata, *popt))
-    xnew = np.arange(50, 2000)
-    plt.plot(xnew, log_func(xnew, *popt), 'k--')
+colors = [ cm.Blues(x) for x in cm_subsection ]
 
 ################################################################################
 #                             Make plot                                        #
 ################################################################################
 
-def fading_memory(perf_data):
-    """Calculate how many past time steps are necessary for half performance"""
-    m = (perf_data[0]+perf_data[-1])/2
-    xdata = perf_data
-    ydata = np.arange(len(perf_data))
-    f_interp = interp1d(xdata, ydata)
-    return f_interp(m)
-
 # 0. build figures
-fig = plt.figure(1, figsize=(6, 5))
+fig = plt.figure(1, figsize=(5.3, 5))
 
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
-experiment_tag = '_perfxtplastc'
+experiment_tag = '_perfXtplast'
 experiment_folder = 'RandomSequenceTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
@@ -92,25 +76,61 @@ for j, a in enumerate(np.unique(a_list)):
     performance_list_part = performance_list[np.where(a_list == a)]
     for i, tplast in enumerate(np.unique(t_list_part)):
         perf_array = performance_list_part[np.where(t_list_part == tplast)].mean(0)
-        memory[j, i] = fading_memory(perf_array)
-    plt.plot(np.unique(t_list_part), memory[j], label=r'$A=%d$' %a)
+
+    if a in A_PAR:
+        if a == 10:
+            plt.plot(1 - perf_array,
+                color=colors[4],
+                linestyle='-',
+                linewidth=3,
+                label=r'$%d$' %a)
+
+        if a == 20:
+            plt.plot(1 - perf_array,
+                color=colors[5],
+                linestyle='-',
+                linewidth=3,
+                label=r'$%d$' %a)
+
+        if a == 100:
+            plt.plot(1 - perf_array,
+                color=colors[8],
+                linestyle='-',
+                linewidth=3,
+                label=r'$%d$' %a)
+
+        if a == 200:
+            plt.plot(1 - perf_array,
+                color=colors[9],
+                linestyle='-',
+                linewidth=3,
+                label=r'$%d$' %a)
 
 # 4. adjust figure parameters and save
-fig_lettersize = 12
-plt.title('Random Sequence Task - Convergence')
-plt.legend(loc='best')
-plt.xlabel(r'$T_{\rm plast}$', fontsize=fig_lettersize)
-plt.ylabel('Fading Memory', fontsize=fig_lettersize)
-plt.xlim([0, 30000])
-plt.ylim([0, 7])
+fig_lettersize = 15
+# plt.title('Random Sequence Task - Convergence')
+plt.axhline(0.10, linestyle='--', color='gray')
+leg = plt.legend(loc='best', title='Alphabet size', frameon=False, fontsize=fig_lettersize)
+leg.get_title().set_fontsize(fig_lettersize)
+plt.xlabel(r'$t_{\rm p}$', fontsize=fig_lettersize)
+plt.ylabel('Error', fontsize=fig_lettersize)
+plt.xlim([0, 10])
+plt.ylim([0, 1])
 plt.xticks(
-    [0, 10000, 20000, 30000],
-    ['0', '$1\cdot10^4$', '$2\cdot10^4$', '$3\cdot10^4$'],
+    [0, 2, 4, 6, 8, 10],
+    ['$0$', '$2$', '$4$', '$6$', '$8$', '$10$'],
+    size=fig_lettersize,
     )
+plt.yticks(
+    [0, 0.1, 0.5, 1.0],
+    ['$0\%$', '$10\%$', '$50\%$', '$100\%$'],
+    size=fig_lettersize,
+)
+plt.tight_layout()
 
 if SAVE_PLOT:
-    plots_dir = 'plots/'+experiment_folder+'/'
+    plots_dir = 'plots/ms/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-        plt.savefig(plots_dir+'perfXtplast_A20.pdf', format='pdf')
+    plt.savefig(plots_dir+'fadmem_error.pdf', format='pdf')
 plt.show()

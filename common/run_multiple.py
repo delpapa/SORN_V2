@@ -27,7 +27,7 @@ RUNS = 2
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_perfXtplast_NoIP'                  # to mark experiment
+EXPERIMENT_TAG = '_perfXtplast'                  # to mark experiment
 
 ################################################################################
 #                              SORN simulation                                 #

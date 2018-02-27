@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pylab as plt
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
+from matplotlib import cm
 
 # parameters to include in the plot
 N_PAR = np.array([50, 100, 200, 400, 800, 1600, 2000])  # network sizes

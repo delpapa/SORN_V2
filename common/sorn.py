@@ -100,6 +100,8 @@ class Sorn(object):
         if not self.params.par.eta_ip == 'off':
             self.T_e += self.params.par.eta_ip*(x - self.params.par.h_ip)
 
+
+
     def simulation(self, stats, phase='plastic'):
         """Sorn simulation for a defined number of steps.
 

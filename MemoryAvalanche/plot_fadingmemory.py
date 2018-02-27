@@ -1,10 +1,13 @@
 """ Performance vs. past time step"""
 
 import os
+import sys
+sys.path.insert(0, '')
 
 import cPickle as pickle
 import numpy as np
 import matplotlib.pylab as plt
+from matplotlib import cm
 
 # parameters to include in the plot
 N_PAR = np.array([200])
@@ -17,7 +20,7 @@ SAVE_PLOT = True
 ################################################################################
 
 # 0. build figures
-fig = plt.figure(1, figsize=(9, 7))
+fig = plt.figure(1, figsize=(5.3, 5))
 
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
@@ -34,6 +37,7 @@ sigma_list = np.zeros(experiment_n)
 for exp, exp_name in enumerate(os.listdir(experiment_path)):
     N, L, A, sigma, _ = [s[1:] for s in exp_name.split('_')]
     exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
+    print exp
     stats = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
     performance_list[exp] = stats.performance
     n_list[exp] = int(N)
@@ -65,6 +69,7 @@ assert len(n_list) > 0, 'Currently no experiment data for chosen noise level'
 
 # 3. plot memory vs. network size
 for noise_level in np.unique(sigma_list):
+    print noise_level
     n_list_reduced = n_list[np.where(sigma_list == noise_level)]
     a_list_reduced = a_list[np.where(sigma_list == noise_level)]
     sigma_list_reduced = sigma_list[np.where(sigma_list == noise_level)]
@@ -89,7 +94,7 @@ for noise_level in np.unique(sigma_list):
                 '-',
                 color='k',
                 linewidth=2.0,
-                label=r'intermediate')
+                label=r'medium')
         plt.fill_between(range(len(perf_mean)),
                  perf_mean-perf_err,
                  perf_mean+perf_err,
@@ -98,25 +103,28 @@ for noise_level in np.unique(sigma_list):
     elif float(noise_level) == 5.0:
         plt.plot(perf_mean,
                 '-',
-                color='orange',
+                color='red',
                 linewidth=1.5,
                 label=r'high')
         plt.fill_between(range(len(perf_mean)),
                 perf_mean-perf_err,
                 perf_mean+perf_err,
-                color='orange',
+                color='red',
                 alpha = 0.5)
+#plt.axhline(0.10, linestyle='--', color='gray')
 
 # 4. adjust figure parameters and save
-fig_lettersize = 25
-plt.legend(loc='best', frameon=False, fontsize=fig_lettersize)
-plt.xlabel(r'$t_{\rm past}$', fontsize=fig_lettersize)
-plt.ylabel('Performance', fontsize=fig_lettersize)
-plt.yscale('log')
+fig_lettersize = 15
+leg = plt.legend(loc='best', title='Noise level', frameon=False, fontsize=fig_lettersize)
+leg.get_title().set_fontsize(fig_lettersize)
+plt.xlabel('$t_p$', fontsize=fig_lettersize)
+plt.ylabel('Error', fontsize=fig_lettersize)
+#plt.yscale('log')
 plt.xlim([0, 6])
-plt.ylim([0.01, 2])
-plt.yticks([0.01, 0.1, 1], fontsize=fig_lettersize)
+plt.ylim([1, 0.0])
+plt.yticks([1, 0.5, 0.], ['$0\%$', '$50\%$', '$100\%$'], fontsize=fig_lettersize)
 plt.xticks([0, 1, 2, 3, 4, 5, 6], fontsize=fig_lettersize)
+plt.tight_layout()
 
 if SAVE_PLOT:
     plots_dir = 'plots/'+experiment_folder+'/'

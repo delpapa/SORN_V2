@@ -1,6 +1,9 @@
 """ Counting Task parameters
 
 This script contains the parameters for the Counting Task experiment.
+Parameters are divided in two subgroups:
+    'par' contains the main model parameters
+    'aux' contains auxiliary parameters, that usually do not need to be changed
 """
 
 import os
