@@ -21,7 +21,7 @@ params = exp_dir.param
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = '_test'
+params.aux.experiment_tag = '_test' # tag must start with _
 
 # 3. initialize experiment, sorn, and stats objects
 # PS.the experiment class keeps a copy of the initial sorn main parameters

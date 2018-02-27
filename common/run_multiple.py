@@ -27,7 +27,7 @@ RUNS = 2
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_SORN'                  # to mark experiment
+EXPERIMENT_TAG = '_SORN'                # to mark experiment (must start with _)
 
 ################################################################################
 #                              SORN simulation                                 #

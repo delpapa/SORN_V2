@@ -26,8 +26,6 @@ def backup_pickle(experiment, stats):
     results_dir = experiment.results_dir
     files_tosave = experiment.files_tosave
     directory = ('backup/' + results_dir)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
     # creates a new directory for storing the results
     # sleeps for a short time to avoid conflicts when running in parallel
