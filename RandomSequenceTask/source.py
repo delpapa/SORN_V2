@@ -77,5 +77,4 @@ class RandomSequenceSource(object):
             self.symbol = self.sequence[self.ind]
 
         ans = np.zeros(self.N_a)
-        ans[self.symbol] = 1
         return ans

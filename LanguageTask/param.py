@@ -1,9 +1,6 @@
-""" Counting Task parameters
+""" Language Task
 
-This script contains the parameters for the Counting Task experiment.
-Parameters are divided in two subgroups:
-    'par' contains the main model parameters
-    'aux' contains auxiliary parameters, that usually do not need to be changed
+This script contains the parameters for the Language experiment.
 """
 
 import os
@@ -30,6 +27,10 @@ def get_par():
     par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
+    # lognormal weights (from Lukas Koehls thesis)
+    # par.h_ip = np.random.lognormal(mean=np.log(0.1), sigma=0.1962,
+    #                                size=par.N_e)
+
     par.input_gain = 1                             # input gain factor
 
     par.lamb = 10                                  # number of out connections
@@ -42,9 +43,9 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.L = 20                                      # sequence size
+    par.file_path = '../data/M72_raw/corpus_simple.txt'
 
-    par.steps_plastic = 50000                      # sorn training time steps
+    par.steps_plastic = 2000000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
 
 ################################################################################
@@ -62,7 +63,7 @@ def get_aux():
     aux.experiment_name = os.path.split(os.path.dirname(\
                                         os.path.realpath(__file__)))[1]
     # training ans testing time steps
-    aux.steps_readouttrain = par.steps_readout
+    aux.steps_readouttrain = 3*par.steps_readout# np.maximum(par.steps_readout, 3*par.L)
     aux.steps_readouttest = par.steps_readout
 
     aux.N_steps = (par.steps_plastic                # total number of time steps

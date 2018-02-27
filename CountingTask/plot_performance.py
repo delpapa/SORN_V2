@@ -13,7 +13,7 @@ from utils import Bunch
 
 # parameters to include in the plot
 N_values = np.array([200])                       # network sizes
-experiment_tag = ''                              # experiment tag
+experiment_tag = '_SORN'                              # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -37,8 +37,9 @@ for experiment in os.listdir(experiment_path):
         print 'experiment', experiment, '...',
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
-        perf = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
-
+        stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
+        perf = stats.performance
+        print perf
         # normalize performance as in Lazar et al. 2009, fig. 2
         max_perf = 1 - 0.5/(float(L)+2)
         final_performance.append(perf/max_perf)

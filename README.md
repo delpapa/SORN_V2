@@ -17,9 +17,11 @@ Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAva
 * [scipy](https://www.scipy.org/)
 * [matplotlib](https://matplotlib.org/)
 * [bunch](https://pypi.python.org/pypi/bunch)
-* [powerlaw](https://pypi.python.org/pypi/powerlaw) (for the NeuronalAvalanches project, from Del Papa et al. 2017)
+* [powerlaw](https://pypi.python.org/pypi/powerlaw) (for the NeuronalAvalanches experiment, from Del Papa et al. 2017)
 
 ### Installing
+
+Clone the repository in your favorite SORN folder
 
 ## Projects
 
@@ -27,11 +29,18 @@ Each different project has it's own project folder (for example, 'CountingTask')
 
 ### CountingTask
 
-This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full).
+This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full). The task consist of randomly alternating sequences of the form 'ABB..BBC' and 'DEE..EEF', with size L = n+2.
+
+* TODO: fix performance calculation (internal state instead of activity)
+* TODO: improve 'plot_performance.py' script
 
 ### RandomSequenceTask
 
 ### NeuronalAvalanches
+
+* TODO: add plot scripts from FIAS PC
+* TODO: merge with FIAS PC codes and so on...
+* TODO: document properly
 
 ## License
 

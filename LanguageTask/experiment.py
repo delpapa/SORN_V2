@@ -1,30 +1,37 @@
-""" Counting Task experiment
+""" Random Sequence experiment
 
-This script contains the experimental instructions for the Counting Task
+This script contains the experimental instructions for the Random Sequence
 experiment.
 """
 
 import copy
 
+import numpy as np
 from sklearn import linear_model
 
-from source import CountingSource
+from source import TextSource
 
 class Experiment(object):
-    """
-    Experiment for the SORN: contains the source, the simulation procedure and
-    the performance calculation
+    """Experiment class.
+
+    It contains the source, the simulation procedure and back up instructions.
     """
     def __init__(self, params):
+        """Start the experiment.
 
+        Initialize relevant variables and stats trackers.
+
+        Parameters:
+            params: Bunch
+                All sorn inital parameters
+        """
         # always keep track of initial sorn parameters
         self.init_params = copy.deepcopy(params.par)
 
         # results directory name
         self.results_dir = (params.aux.experiment_name
                             + params.aux.experiment_tag
-                            + '/N' + str(params.par.N_e)
-                            + '_L' + str(params.par.L))
+                            + '/N' + str(params.par.N_e))
 
         # define which stats to store during the simulation
         self.stats_tostore = [
@@ -43,7 +50,7 @@ class Experiment(object):
         ]
 
         # load input source
-        self.inputsource = CountingSource(self.init_params)
+        self.inputsource = TextSource(self.init_params)
 
     def run(self, sorn, stats):
         """
@@ -61,6 +68,7 @@ class Experiment(object):
         # 1. input with plasticity
         if display:
             print 'Plasticity phase:'
+
         sorn.simulation(stats, phase='plastic')
 
         # 2. input without plasticity - train (STDP and IP off)
@@ -85,37 +93,19 @@ class Experiment(object):
         t_train = sorn.params.aux.steps_readouttrain
         t_test = sorn.params.aux.steps_readouttest
 
-        X_train = stats.raster_readout[:t_train-1].T
-        # y_train = (stats.input_readout[1:t_train].T).astype(int)
-        y_train_ind = (stats.input_index_readout[1:t_train].T).astype(int)
+        t_past_max = 20
+        stats.t_past = np.arange(t_past_max)
+        stats.performance = np.zeros(t_past_max)
+        for t_past in xrange(t_past_max):
+            X_train = stats.raster_readout[t_past:t_train]
+            y_train = stats.input_readout[:t_train-t_past].T.astype(int)
 
-        X_test = stats.raster_readout[t_train:t_train+t_test-1].T
-        # y_test = (stats.input_readout[t_train+1:t_train+t_test].T).astype(int)
-        y_test_ind = (stats.input_index_readout[t_train+1:t_train+t_test].T).astype(int)
+            X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
+            y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
 
-        # Logistic Regression
-        readout = linear_model.LogisticRegression()
-        output_weights = readout.fit(X_train.T, y_train_ind)
-        performance = output_weights.score(X_test.T, y_test_ind)
-
-        # #### Readout training using PI matrix
-        #
-        # trasform labels in one-hot array
-        # onehot_values = np.max(y_train) + 1
-        # y_train_onehot = np.eye(onehot_values)[y_train_ind]
-        # y_test_onehot = np.eye(onehot_values)[y_test_ind]
-        #
-        # X_train_pinv = np.linalg.pinv(X_train) # MP pseudo-inverse
-        # W_trained = np.dot(y_train_onehot.T, X_train_pinv) # least squares
-        #
-        # # Network prediction with trained weights
-        # y_predicted = np.dot(W_trained, X_test)
-        #
-        # # Performance by Pseudo-Inverse
-        # prediction = np.argmax(y_predicted, axis=0)
-        # performance_PI = (prediction == y_test).sum()/float(len(y_test))
-
-        stats.performance = performance
+            readout = linear_model.LogisticRegression()
+            output_weights = readout.fit(X_train, y_train)
+            stats.performance[t_past] = output_weights.score(X_test, y_test)
 
         if display:
             print 'done'
