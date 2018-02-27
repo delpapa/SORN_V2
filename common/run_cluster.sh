@@ -15,4 +15,4 @@ echo "SLURM_NNODES"=$SLURM_NNODES
 
 echo "working directory = "$SLURM_SUBMIT_DIR
 
-srun python common/run_multiple.py RandomSequenceTask
+srun python common/run_multiple.py CountingTask
