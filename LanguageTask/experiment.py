@@ -76,8 +76,17 @@ class Experiment(object):
             print '\nReadout training phase:'
 
         sorn.params.par.eta_stdp = 'off'
-        sorn.params.par.eta_ip = 'off'
+        # sorn.params.par.eta_ip = 'off'
         sorn.simulation(stats, phase='train')
+        # train readout layer
+        if display:
+            print '\nTraining readout layer...'
+        t_train = sorn.params.aux.steps_readouttrain
+        X_train = stats.raster_readout[:t_train-1]
+        y_train = stats.input_readout[1:t_train].T.astype(int)
+        n_symbols = sorn.source.A
+        lg = linear_model.LogisticRegression()
+        readout_layer = lg.fit(X_train, y_train)
 
         # 3. input without plasticity - test performance (STDP and IP off)
         if display:
@@ -85,27 +94,40 @@ class Experiment(object):
 
         sorn.simulation(stats, phase='test')
 
-        # 4. calculate performance
         if display:
-            print '\nCalculating performance using Logistic Regression...',
-
-        # load stats to calculate the performance
-        t_train = sorn.params.aux.steps_readouttrain
+            print '\nTesting readout layer...'
         t_test = sorn.params.aux.steps_readouttest
+        X_test = stats.raster_readout[t_train:t_train+t_test-1]
+        y_test = stats.input_readout[1+t_train:t_train+t_test].T.astype(int)
 
-        t_past_max = 20
-        stats.t_past = np.arange(t_past_max)
-        stats.performance = np.zeros(t_past_max)
-        for t_past in xrange(t_past_max):
-            X_train = stats.raster_readout[t_past:t_train]
-            y_train = stats.input_readout[:t_train-t_past].T.astype(int)
+        # print and store the performance for each letter
+        spec_perf = {}
+        for symbol in np.unique(y_test):
+            symbol_pos = np.where(symbol == y_test)
+            spec_perf[sorn.source.index_to_symbol(symbol)]=\
+                                         readout_layer.score(X_test[symbol_pos],
+                                                             y_test[symbol_pos])
 
-            X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
-            y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
+        # 4. spont_activity (retro feed input)
+        if display:
+            print '\nSpontaneous phase:'
+        # begin with a random input
+        symbol = np.random.choice(n_symbols)
+        u = np.zeros(n_symbols)
+        u[symbol] = 1
 
-            readout = linear_model.LogisticRegression()
-            output_weights = readout.fit(X_train, y_train)
-            stats.performance[t_past] = output_weights.score(X_test, y_test)
+        spont_output = ''
+        for _ in xrange(sorn.params.par.steps_spont):
+            (x, W_ee) = sorn.step(u)
+            symbol = int(readout_layer.predict(x.reshape(1,-1)))
+            spont_output += sorn.source.index_to_symbol(symbol)
+            u = np.zeros(n_symbols)
+            u[symbol] = 1
+
+        # parameters to save
+        stats.spont_output = spont_output
+        stats.spec_perf = spec_perf
+        print spont_output
 
         if display:
-            print 'done'
+            print '\ndone'

@@ -42,6 +42,10 @@ This task is the reimplementation of the counting task from the original SORN pa
 * TODO: merge with FIAS PC codes and so on...
 * TODO: document properly
 
+### LanguageTask
+
+* TODO: everything
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

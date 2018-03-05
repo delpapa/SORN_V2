@@ -4,28 +4,43 @@ This script contains a random sequence source.
 """
 
 import random
+import sys
+sys.path.insert(0, '../data/FDT')
+from create_FDT import Fox_drinks_tea as FDT
 
 import numpy as np
 
 from common import synapses
 
+
 class TextSource(object):
     """
-    Random Sequence source
+    Text source
+
+    Read text from a .txt file
     """
     def __init__(self, params):
 
-        self.file_path = params.file_path
-        with open(self.file_path, "rt") as fin:
-            self.corpus = fin.read().replace('\n', '')[:params.steps_plastic]
+        self.file_path= params.file_path
+        self.steps_plastic = params.steps_plastic
+        self.steps_readout = params.steps_readout
 
-        self.alphabet = ''.join(set(self.corpus))
+        # create new .txt file with the FDT sentences
+        with open(self.file_path, 'w') as fout:
+            fout.write(FDT(5000).full_string())
+
+        # for simplicity, only lower case
+        with open(self.file_path, "rt") as fin:
+            self.corpus = fin.read().replace('\n', '')
+        # only use lowercase
+        self.corpus = self.corpus.lower()
+
+        self.alphabet = ''.join(sorted(set(self.corpus)))
         self.A = len(self.alphabet)
-        # TODO: preprocess chars properly, removing +-= chars
         self.N_u = int(params.N_u)               # input pool size
 
         # letter and word counters
-        self.ind = 0                # index in the corpus
+        self.ind = -1                # index in the corpus
 
     def generate_connection_e(self, par):
         """
@@ -49,10 +64,18 @@ class TextSource(object):
 
         return ans
 
+    def sequence_ind(self):
+        return self.ind
+
+    def index_to_symbol(self, index):
+        return self.alphabet[index]
+
     def next(self):
         """Return next symbol of the corpus"""
         self.ind += 1
-        self.corpus[self.ind]
+        # restart sequence after it is over
+        if self.ind == len(self.corpus):
+            self.ind = 0
 
         ans = np.zeros(self.A)
         ans[self.alphabet.find(self.corpus[self.ind])] = 1
