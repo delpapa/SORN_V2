@@ -4,9 +4,6 @@ This script contains a random sequence source.
 """
 
 import random
-import sys
-sys.path.insert(0, '../data/FDT')
-from create_FDT import Fox_drinks_tea as FDT
 
 import numpy as np
 
