@@ -3,8 +3,8 @@
 #SBATCH --partition=sleuths
 #SBATCH --ntasks=10
 #SBATCH --mem-per-cpu=7000
-#SBATCH --job-name="NA_SORN"
-#SBATCH --output=NA_SORN.out
+#SBATCH --job-name="FDT_-16"
+#SBATCH --output=FDT_-16.out
 #SBATCH --mail-user=delpapa@fias.uni-frankfurt.de
 #SBATCH --mail-type=END
 #SBATCH --time=7-00:00:00

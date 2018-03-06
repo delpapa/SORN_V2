@@ -15,10 +15,10 @@ from utils import backup_pickle
 # variables and values to run: variables must have the same name as in param.py
 # these values always overwrite the values in that file
 VARIABLES = [
-    'L',
+    'N_e',
 ]
 VALUES = [
-    np.arange(2, 41, 2)
+    np.arange(200, 2001, 100)
     # np.array([0, 10000, 50000, 100000, 200000]),
 ]
 
@@ -27,7 +27,7 @@ RUNS = 2
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_SORN'                # to mark experiment (must start with _)
+EXPERIMENT_TAG = '_FDT-16'                # to mark experiment (must start with _)
 
 ################################################################################
 #                              SORN simulation                                 #

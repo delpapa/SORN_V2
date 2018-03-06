@@ -44,11 +44,11 @@ def get_par():
 #                           Experiment parameters                              #
 ################################################################################
     # par.file_path = '../data/M72_raw/corpus_simple.txt'
-    par.file_path = '../data/FDT/FDT.txt'
+    par.n_removed_sentences = 16
 
-    par.steps_plastic = 10000                      # sorn training time steps
+    par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
-    par.steps_spont = 5000                         # steps of spontaneous generation
+    par.steps_spont = 50000                         # steps of spontaneous generation
 
 
 ################################################################################

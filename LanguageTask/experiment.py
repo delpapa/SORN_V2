@@ -9,7 +9,7 @@ import copy
 import numpy as np
 from sklearn import linear_model
 
-from source import TextSource
+from source import GrammarSource as experiment_source
 
 class Experiment(object):
     """Experiment class.
@@ -50,7 +50,7 @@ class Experiment(object):
         ]
 
         # load input source
-        self.inputsource = TextSource(self.init_params)
+        self.inputsource = experiment_source(self.init_params)
 
     def run(self, sorn, stats):
         """
@@ -124,10 +124,20 @@ class Experiment(object):
             u = np.zeros(n_symbols)
             u[symbol] = 1
 
-        # parameters to save
-        stats.spont_output = spont_output
-        stats.spec_perf = spec_perf
-        print spont_output
+        # 5. calculate parameters to save
+        output_sentences = [s+'. ' for s in spont_output.split('. ')][1:-1]
+        stats.n_output_sentences = len(output_sentences)
+        stats.n_new = len([s for s in output_sentences \
+                           if s in sorn.source.removed_sentences])
+        stats.n_correct = len([s for s in output_sentences \
+                               if s in sorn.source.all_sentences])
+
+        # save some storage space
+        if hasattr(stats, 'aux'):
+            del stats.aux
+        if hasattr(stats, 'par'):
+            del stats.par
+        # stats.spec_perf = spec_perf
 
         if display:
             print '\ndone'

@@ -13,25 +13,64 @@ import numpy as np
 from common import synapses
 
 
-class TextSource(object):
+class GrammarSource(object):
     """
-    Text source
+    Grammar source
 
-    Read text from a .txt file
+    Create a input string with the Fox-drinks-tea Grammar
     """
     def __init__(self, params):
 
-        self.file_path= params.file_path
+        # self.file_path= params.file_path
         self.steps_plastic = params.steps_plastic
         self.steps_readout = params.steps_readout
 
-        # create new .txt file with the FDT sentences
-        with open(self.file_path, 'w') as fout:
-            fout.write(FDT(5000).full_string())
+        self.verbs = ['eats ',
+                      'drinks ']
 
-        # for simplicity, only lower case
-        with open(self.file_path, "rt") as fin:
-            self.corpus = fin.read().replace('\n', '')
+        self.subjects = ['man ',
+                         'woman ',
+                         'girl ',
+                         'boy ',
+                         'child ',
+                         'cat ',
+                         'dog ',
+                         'fox ']
+
+        self.objects_eat = ['meat. ',
+                            'bread. ',
+                            'fish. ',
+                            'vegetables. ']
+        self.objects_drink = ['milk. ',
+                              'water. ',
+                              'juice. ',
+                              'tea. ']
+        self.objects = [self.objects_eat, self.objects_drink]
+
+        partial_input_string = []
+        for _ in xrange(self.steps_plastic):
+            # create a lot of sentences!
+            sub = random.choice(self.subjects)
+            ver = random.choice(self.verbs)
+            if ver == self.verbs[0]:
+                obj = random.choice(self.objects_eat)
+            elif ver == self.verbs[1]:
+                obj = random.choice(self.objects_drink)
+            partial_input_string.append(sub+ver+obj)
+        self.all_sentences = np.unique(partial_input_string)
+        self.removed_sentences =\
+                            np.random.choice(np.unique(partial_input_string),                    params.n_removed_sentences)
+        partial_input_string = [x for x in partial_input_string if x not in
+                                self.removed_sentences]
+        self.corpus = ''.join(partial_input_string)
+
+
+        # # create new .txt file with the FDT sentences
+        # with open(self.file_path, 'w') as fout:
+        #     fout.write(FDT(5000).full_string())
+        # with open(self.file_path, "rt") as fin:
+        #     self.corpus = fin.read().replace('\n', '')
+
         # only use lowercase
         self.corpus = self.corpus.lower()
 
