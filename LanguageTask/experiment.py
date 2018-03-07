@@ -129,8 +129,8 @@ class Experiment(object):
         stats.n_output_sentences = len(output_sentences)
         stats.n_new = len([s for s in output_sentences \
                            if s in sorn.source.removed_sentences])
-        stats.n_correct = len([s for s in output_sentences \
-                               if s in sorn.source.all_sentences])
+        stats.n_wrong = len([s for s in output_sentences \
+                               if s not in sorn.source.all_sentences])
 
         # save some storage space
         if hasattr(stats, 'aux'):

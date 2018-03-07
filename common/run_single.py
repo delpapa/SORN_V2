@@ -9,6 +9,7 @@ from common.sorn import Sorn
 from common.stats import Stats
 from utils import backup_pickle
 
+
 ################################################################################
 #                              SORN simulation                                 #
 ################################################################################

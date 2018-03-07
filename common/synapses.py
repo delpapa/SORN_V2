@@ -81,7 +81,7 @@ class SparseSynapticMatrix(object):
         while True:
             # initialize random sparse synapses
             W_ee = np.random.random((self.N, self.N))
-            W_ee[W_ee <= p_not] = 0
+            W_ee[W_ee < p_not] = 0
             W_ee[W_ee > p_not] = np.random.random((np.sum(W_ee > p_not)))
 
             # remove self-connections

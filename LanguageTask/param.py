@@ -48,7 +48,7 @@ def get_par():
 
     par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
-    par.steps_spont = 50000                         # steps of spontaneous generation
+    par.steps_spont = 5000                         # steps of spontaneous generation
 
 
 ################################################################################
