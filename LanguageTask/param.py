@@ -44,7 +44,7 @@ def get_par():
 #                           Experiment parameters                              #
 ################################################################################
     # par.file_path = '../data/M72_raw/corpus_simple.txt'
-    par.n_removed_sentences = 4
+    par.n_removed_sentences = 32
 
     par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
