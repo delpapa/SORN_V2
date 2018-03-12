@@ -139,5 +139,6 @@ class Experiment(object):
             del stats.par
         # stats.spec_perf = spec_perf
 
+        import ipdb; ipdb.set_trace()
         if display:
             print '\ndone'
