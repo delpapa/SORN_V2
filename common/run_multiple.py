@@ -27,7 +27,7 @@ RUNS = 2
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_FDT-32'                # to mark experiment (must start with _)
+EXPERIMENT_TAG = '_FDT-48'                # to mark experiment (must start with _)
 
 ################################################################################
 #                              SORN simulation                                 #
