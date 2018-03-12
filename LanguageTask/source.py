@@ -59,7 +59,7 @@ class GrammarSource(object):
         np.random.shuffle(to_remove)
         self.removed_sentences = to_remove[:params.n_removed_sentences]
         self.used_sentences = np.unique([x for x in partial_input_string if x not in self.removed_sentences])
-        self.corpus = ''.join(partial_input_string)
+        self.corpus = ''.join(self.used_sentences)
 
 
         # # create new .txt file with the FDT sentences
@@ -89,7 +89,6 @@ class GrammarSource(object):
         # choose random, non-overlapping input neuron pools
         W = np.zeros((par.N_e, self.A))
         available = set(range(par.N_e))
-        # TODO: be sure that the input pools are not equal - random.choice
         for a in range(self.A):
             temp = random.sample(available, self.N_u)
             W[temp, a] = 1
