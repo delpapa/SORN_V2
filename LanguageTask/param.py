@@ -48,7 +48,7 @@ def get_par():
 
     par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
-    par.steps_spont = 5000                         # steps of spontaneous generation
+    par.steps_spont = 50000                         # steps of spontaneous generation
 
 
 ################################################################################
@@ -66,7 +66,7 @@ def get_aux():
     aux.experiment_name = os.path.split(os.path.dirname(\
                                         os.path.realpath(__file__)))[1]
     # training ans testing time steps
-    aux.steps_readouttrain = 3*par.steps_readout
+    aux.steps_readouttrain = par.steps_readout # change back to 3*
     aux.steps_readouttest = par.steps_readout
 
     aux.N_steps = (par.steps_plastic                # total number of time steps

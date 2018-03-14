@@ -33,8 +33,11 @@ def backup_pickle(experiment, stats):
     for n_sim in xrange(1, 100):
         final_dir = directory + '_' + str(n_sim) + '/'
         if not os.path.exists(final_dir):
-            os.makedirs(final_dir)
-            break
+            try:
+                os.makedirs(final_dir)
+                break
+            except:
+                pass
 
     if 'params' in files_tosave:
         with open(final_dir+'init_params.p', 'wb') as f:

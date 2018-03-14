@@ -26,7 +26,7 @@ fig = plt.figure(1, figsize=(7, 6))
 # 1. load performances and experiment parameters
 print '\nCalculating percent of wrong and new sentences... '
 
-experiment_tag = '_FDT-48'
+experiment_tag = '_FDT-16'
 experiment_folder = 'LanguageTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
@@ -81,15 +81,15 @@ plt.legend(loc='best', frameon=False, fontsize=fig_lettersize)
 plt.xlabel(r'Network size', fontsize=fig_lettersize)
 plt.ylabel(r'# sentences (%)', fontsize=fig_lettersize)
 # plt.xlim([0, 8000])
-plt.ylim([0., 1])
+plt.ylim([0., 0.4])
 # plt.xticks(
 #     [0, 10000, 20000, 30000],
 #     ['0', '$1\cdot10^4$', '$2\cdot10^4$', '$3\cdot10^4$'],
 #     size=fig_lettersize,
 #     )
 plt.yticks(
-    [0., 0.2, 0.4, 0.6, 0.8, 1],
-    ['$0$', '$20$', '$40$','$60$', '$80$', '$100$'],
+    [0., 0.1, 0.2, 0.3, 0.4],
+    ['$0$', '$10$', '$20$', '$30$', '$40$'],
     size=fig_lettersize,
     )
 

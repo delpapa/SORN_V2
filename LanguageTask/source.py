@@ -34,14 +34,14 @@ class GrammarSource(object):
                          'dog ',
                          'fox ']
 
-        self.objects_eat = ['meat. ',
-                            'bread. ',
-                            'fish. ',
-                            'vegetables. ']
-        self.objects_drink = ['milk. ',
-                              'water. ',
-                              'juice. ',
-                              'tea. ']
+        self.objects_eat = ['meat.',
+                            'bread.',
+                            'fish.',
+                            'vegetables.']
+        self.objects_drink = ['milk.',
+                              'water.',
+                              'juice.',
+                              'tea.']
         self.objects = [self.objects_eat, self.objects_drink]
 
         partial_input_string = []
@@ -55,12 +55,12 @@ class GrammarSource(object):
                 obj = random.choice(self.objects_drink)
             partial_input_string.append(sub+ver+obj)
         self.all_sentences = np.unique(partial_input_string)
-        to_remove = np.unique(partial_input_string)
-        np.random.shuffle(to_remove)
-        self.removed_sentences = to_remove[:params.n_removed_sentences]
-        self.used_sentences = np.unique([x for x in partial_input_string if x not in self.removed_sentences])
-        self.corpus = ''.join(self.used_sentences)
-
+        input_unique_sentences = np.unique(partial_input_string)
+        np.random.shuffle(input_unique_sentences)
+        self.removed_sentences = input_unique_sentences[:params.n_removed_sentences]
+        input_string = [x for x in partial_input_string if x not in self.removed_sentences]
+        self.used_sentences = np.unique(input_string)
+        self.corpus = ' '.join(input_string)
 
         # # create new .txt file with the FDT sentences
         # with open(self.file_path, 'w') as fout:

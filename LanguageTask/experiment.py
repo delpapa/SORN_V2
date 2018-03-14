@@ -5,6 +5,7 @@ experiment.
 """
 
 import copy
+from collections import Counter
 
 import numpy as np
 from sklearn import linear_model
@@ -124,13 +125,16 @@ class Experiment(object):
             u = np.zeros(n_symbols)
             u[symbol] = 1
 
-        # 5. calculate parameters to save
-        output_sentences = [s+'. ' for s in spont_output.split('. ')][1:-1]
+        # 5. calculate parameters to save (exclude first and last)
+        # separate sentences by '.' and remove spaces
+        output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
         stats.n_output_sentences = len(output_sentences)
-        stats.n_new = len([s for s in output_sentences \
+        new_sentences_dict = Counter([s for s in output_sentences \
                            if s in sorn.source.removed_sentences])
-        stats.n_wrong = len([s for s in output_sentences \
+        stats.n_new = sum(new_sentences_dict.values())
+        wrong_sentences_dict = Counter([s for s in output_sentences \
                                if s not in sorn.source.all_sentences])
+        stats.n_wrong = sum(wrong_sentences_dict.values())
 
         # save some storage space
         if hasattr(stats, 'aux'):
