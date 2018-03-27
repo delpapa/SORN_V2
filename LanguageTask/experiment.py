@@ -1,6 +1,6 @@
-""" Random Sequence experiment
+""" LanguageTask experiment
 
-This script contains the experimental instructions for the Random Sequence
+This script contains the experimental instructions for the LanguageTask
 experiment.
 """
 
@@ -12,74 +12,75 @@ from sklearn import linear_model
 
 from source import FDT_GrammarSource as experiment_source
 
+
 class Experiment(object):
     """Experiment class.
 
-    It contains the source, the simulation procedure and back up instructions.
+    It contains the source, the simulation procedure and back-up instructions.
     """
     def __init__(self, params):
-        """Start the experiment.
+        """Start the experiment. Initialize relevant variables and stats
+        trackers.
 
-        Initialize relevant variables and stats trackers.
-
-        Parameters:
-            params: Bunch
-                All sorn inital parameters
+        Arguments:
+        params -- Bunch of all sorn inital parameters
         """
+
         # always keep track of initial sorn parameters
         self.init_params = copy.deepcopy(params.par)
+        np.random.seed(42)
 
         # results directory name
+        # folder 'LanguageTask_XX/NXX/'
         self.results_dir = (params.aux.experiment_name
                             + params.aux.experiment_tag
                             + '/N' + str(params.par.N_e))
 
-        # define which stats to store during the simulation
-        self.stats_tostore = [
+        # define which stats to cache during the simulation
+        self.stats_cache = [
             'InputReadoutStat',
             'RasterReadoutStat',
         ]
 
         # define which parameters and files to save at the end of the simulation
-        #     params: save initial main sorn parameters
-        #     stats: save all stats trackers
-        #     scripts: backup scripts used during the simulation
+        # params: save initial main sorn parameters
+        # stats: save all stats trackers
+        # scripts: back-up scripts used during the simulation
         self.files_tosave = [
             'params',
             'stats',
             # 'scripts',
         ]
 
-        # load input source
+        # create and load input source
         self.inputsource = experiment_source(self.init_params)
 
     def run(self, sorn, stats):
         """
-        Run experiment once
+        Run experiment once and store parameters and variables to save.
 
-        Parameters:
-            sorn: Bunch
-                The bunch of sorn parameters
-            stats: Bunch
-                The bunch of stats to save
-
+        Arguments:
+        sorn -- Bunch of all sorn parameters
+        stats -- Bunch of stats to save at the end of the simulation
         """
+
         display = sorn.params.aux.display
 
-        # 1. input with plasticity
+        # Step 1. Input with plasticity
         if display:
             print 'Plasticity phase:'
 
         sorn.simulation(stats, phase='plastic')
 
-        # 2. input without plasticity - train (STDP and IP off)
+        # Step 2. Input without plasticity: train (with STDP and IP off)
         if display:
             print '\nReadout training phase:'
 
         sorn.params.par.eta_stdp = 'off'
         # sorn.params.par.eta_ip = 'off'
         sorn.simulation(stats, phase='train')
-        # train readout layer
+
+        # Step 3. Train readout layer with logistic regression
         if display:
             print '\nTraining readout layer...'
         t_train = sorn.params.aux.steps_readouttrain
@@ -89,19 +90,20 @@ class Experiment(object):
         lg = linear_model.LogisticRegression()
         readout_layer = lg.fit(X_train, y_train)
 
-        # 3. input without plasticity - test performance (STDP and IP off)
+        # Step 4. Input without plasticity: test (with STDP and IP off)
         if display:
             print '\nReadout testing phase:'
 
         sorn.simulation(stats, phase='test')
 
+        # Step 5. Estimate SORN performance
         if display:
             print '\nTesting readout layer...'
         t_test = sorn.params.aux.steps_readouttest
         X_test = stats.raster_readout[t_train:t_train+t_test-1]
         y_test = stats.input_readout[1+t_train:t_train+t_test].T.astype(int)
 
-        # print and store the performance for each letter
+        # store the performance for each letter in a dictionary
         spec_perf = {}
         for symbol in np.unique(y_test):
             symbol_pos = np.where(symbol == y_test)
@@ -109,35 +111,43 @@ class Experiment(object):
                                          readout_layer.score(X_test[symbol_pos],
                                                              y_test[symbol_pos])
 
-        # 4. spont_activity (retro feed input)
+        # Step 6. Generative SORN with spont_activity (retro feed input)
         if display:
             print '\nSpontaneous phase:'
+
         # begin with a random input
         symbol = np.random.choice(n_symbols)
         u = np.zeros(n_symbols)
         u[symbol] = 1
 
+        # update sorn and predict next input
         spont_output = ''
         for _ in xrange(sorn.params.par.steps_spont):
-            (x, W_ee) = sorn.step(u)
-            symbol = int(readout_layer.predict(x.reshape(1,-1)))
+            sorn.step(u)
+            symbol = int(readout_layer.predict(sorn.x.reshape(1,-1)))
             spont_output += sorn.source.index_to_symbol(symbol)
             u = np.zeros(n_symbols)
             u[symbol] = 1
 
-        # 5. calculate parameters to save (exclude first and last)
-        # separate sentences by '.' and remove spaces
+        # Step 7. Calculate parameters to save (exclude first and last sentences
+        # and separate sentences by '.'. Also, remove extra spaces.
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
-        output_senteces_dict = Counter(output_sentences)
-        stats.n_output_sentences = len(output_sentences)
-        new_sentences_dict = Counter([s for s in output_sentences \
-                           if s in sorn.source.removed_sentences])
-        stats.n_new = sum(new_sentences_dict.values())
-        wrong_sentences_dict = Counter([s for s in output_sentences \
-                               if s not in sorn.source.all_sentences])
-        stats.n_wrong = sum(wrong_sentences_dict.values())
 
-        # save some storage space
+        # all output sentences
+        output_dict = Counter(output_sentences)
+        stats.n_output = len(output_sentences)
+
+        # new output sentences
+        new_dict = Counter([s for s in output_sentences \
+                           if s in sorn.source.removed_sentences])
+        stats.n_new = sum(new_dict.values())
+
+        # wrong output sentences
+        wrong_dict = Counter([s for s in output_sentences \
+                               if s not in sorn.source.all_sentences])
+        stats.n_wrong = sum(wrong_dict.values())
+
+        # save some storage space by deleting some parameters.
         if hasattr(stats, 'aux'):
             del stats.aux
         if hasattr(stats, 'par'):
@@ -146,4 +156,4 @@ class Experiment(object):
 
         import ipdb; ipdb.set_trace()
         if display:
-            print '\ndone'
+            print '\ndone!'

@@ -14,7 +14,10 @@ import numpy as np
 
 
 class Stats(object):
-    """Stats to be store at each simulation step."""
+    """
+    Stats to be store at each simulation step.
+    """
+
     def __init__(self, stats_tostore, params):
 
         self.par = params.par
@@ -42,8 +45,19 @@ class Stats(object):
                                             dtype=np.int8)
 
     def store_step(self, x, u, source, W_ee, step, phase):
-        """Store the stats each time step into numpy arrays"""
-        # this is necessary to keep sotring data from train and test phases
+        """
+        Store the stats each time step into numpy arrays.
+
+        Arguments:
+        x -- current activity array
+        u -- one-hot array of the current input
+        source -- the SORN source object
+        W_ee -- Sparse synapses matrix of size (N_e, N_e)
+        step -- current time step
+        phase -- string of the simulation phase
+        """
+
+        # this is necessary to keep caching data from train and test phases
         # in the same array
         readout = ['train', 'test']
         if phase == 'test':

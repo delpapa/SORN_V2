@@ -1,4 +1,4 @@
-"""" Random Sequence Source
+""" Random Sequence Source
 
 This script contains a random sequence source.
 """

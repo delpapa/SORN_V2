@@ -64,7 +64,7 @@ for run in xrange(RUNS):
             # 3. initialize sorn, source, and stats objects
             experiment = exp_dir.experiment.Experiment(params)
             sorn = Sorn(params, experiment.inputsource)
-            stats = Stats(experiment.stats_tostore, params)
+            stats = Stats(experiment.stats_cache, params)
 
             # 4. run one experiment once
             if var != '':

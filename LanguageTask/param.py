@@ -19,7 +19,7 @@ def get_par():
 
     For each sorn simulation, change these parameters manually.
     """
-    par.N_e = 200                                  # excitatory neurons
+    par.N_e = 600                                  # excitatory neurons
     par.N_u = int(par.N_e/40)                      # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
@@ -59,6 +59,7 @@ def get_aux():
 
     These auxiliary parameters do not have to be changed manually.
     """
+
     aux.N_i = int(0.2*par.N_e)       # inhibitory neurons
     aux.N = par.N_e + aux.N_i             # total number of neurons
 

@@ -1,3 +1,5 @@
+""" The SORN class"""
+
 import sys
 
 import numpy as np
@@ -6,16 +8,19 @@ from synapses import FullSynapticMatrix, SparseSynapticMatrix
 
 
 class Sorn(object):
-    """The famous Self-Organizing Recurrent Neural Network (SORN) class"""
-    def __init__(self, c, source):
-        """Initializes sorn variables
+    """
+    The famous Self-Organizing Recurrent Neural Network (SORN) class.
+    """
 
-        Parameters:
-            c: bunch
-                The bunch of sorn parameters from param.py
-            source: Source
-                The input source
+    def __init__(self, c, source):
         """
+        Initializes sorn variables.
+
+        Arguments:
+        c -- Bunch of all sorn parameters from param.py
+        source -- The input source
+        """
+
         self.params = c
         self.source = source
 
@@ -32,9 +37,8 @@ class Sorn(object):
         # Initialize the activation of neurons randomly
         self.x = (np.random.random(par.N_e) < 0.5) + 0
         self.y = (np.random.random(aux.N_i) < 0.5) + 0
-        self.u = source.next()
 
-        # Initialize the pre-threshold variables
+        # Initialize the pre-threshold internal state variables
         self.R_x = np.zeros(par.N_e)
         self.R_y = np.zeros(aux.N_i)
 
@@ -46,12 +50,12 @@ class Sorn(object):
 
     def step(self, u_new):
         """
-        Performs a one-step update of the SORN
+        Performs a one-step update of the SORN.
 
-        Parameters:
-            u_new: array
-                The input for this step. 1 for the current input, 0 otherwise
+        Arguments:
+        u_new -- one-hot array input for the current time step
         """
+
         par = self.params.par
         aux = self.params.aux
 
@@ -82,37 +86,31 @@ class Sorn(object):
         if hasattr(par, 'sp_init') and par.sp_init != 'off':
             self.W_ee.sp()
 
+        # Update SORN variables
         self.x = x_new
         self.y = y_new
-        self.u = u_new
-
-        # Update statistics
-        return self.x, self.W_ee
 
     def ip(self, x):
         """
-        Performs intrinsic plasticity
+        Apply one step of intrinsic plasticity (IP).
 
-        Parameters:
-            x: array
-                The current activity array
+        Arguments:
+        x -- current activity array
         """
+
         if not self.params.par.eta_ip == 'off':
             self.T_e += self.params.par.eta_ip*(x - self.params.par.h_ip)
 
-
-
     def simulation(self, stats, phase='plastic'):
-        """Sorn simulation for a defined number of steps.
-
-        Parameters:
-            stats: Bunch
-                Bunch of stats to store
-
-            phase: string
-                Phase of the current simulation
-                Possible phases: 'plastic', 'train', or 'test'
         """
+        Sorn simulation for a defined number of steps.
+
+        Arguments:
+        stats -- Bunch of stats to store
+        phase -- string with the phase of the current simulation
+                 possible phases: 'plastic', 'train', 'test'
+        """
+
         source = self.source
 
         if phase == 'plastic':
@@ -127,10 +125,10 @@ class Sorn(object):
 
             # Simulation step
             u = source.next()
-            (x, W_ee) = self.step(u)
+            self.step(u)
 
-            # store step data
-            stats.store_step(x, u, source, W_ee, n, phase)
+            # cache this time step data
+            stats.store_step(self.x, u, source, self.W_ee, n, phase)
 
             # command line progress message
             if self.params.aux.display:

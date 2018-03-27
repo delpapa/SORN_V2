@@ -25,10 +25,10 @@ params.aux.display = True
 params.aux.experiment_tag = '_test_FDT' # tag must start with _
 
 # 3. initialize experiment, sorn, and stats objects
-# PS.the experiment class keeps a copy of the initial sorn main parameters
+#    the experiment class keeps a copy of the initial sorn main parameters
 experiment = exp_dir.experiment.Experiment(params)
 sorn = Sorn(params, experiment.inputsource)
-stats = Stats(experiment.stats_tostore, params)
+stats = Stats(experiment.stats_cache, params)
 
 # 4. run one experiment once
 experiment.run(sorn, stats)

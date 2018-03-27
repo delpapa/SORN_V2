@@ -13,7 +13,7 @@ class FullSynapticMatrix(object):
     """
     Dense connection matrix class for I-E, E-I and E-U synapses.
 
-    This class contains every synaptic plasticity related metho.
+    This class contains every synaptic plasticity related methods.
     """
 
     def __init__(self, par, shape):
@@ -65,25 +65,24 @@ class FullSynapticMatrix(object):
         Replace matrix-array multiplication for dot product, in order to make
         the code a big shorter and more readable.
         """
-        
+
         return self.W.dot(x)
 
 
 class SparseSynapticMatrix(object):
-    """Sparse connection matrix class for SORN E-E synapses.
+    """
+    Sparse connection matrix class for SORN E-E synapses.
 
     Uses the CSC format.
     """
+
     def __init__(self, par):
         """Creates a random, sparse and normalized matrix
 
-        Parameters:
-            par: Bunch
-                Main initial sorn parameters
-
-            aux: Bunch
-                Auxiliary initial sorn parameters
+        Arguments:
+        par -- Bunch of main initial sorn parameters
         """
+
         self.lamb = par.lamb
         self.eta_stdp = par.eta_stdp
         self.prune_stdp = par.prune_stdp
@@ -117,18 +116,30 @@ class SparseSynapticMatrix(object):
         self.W.data /= np.array(z[self.W.indices]).reshape(self.W.data.shape)
 
     def stdp(self, from_old, from_new, to_old=None, to_new=None):
-        """Performs one STDP step (from Christoph's implementation)"""
+        """
+        Apply one STDP step (from Christoph's implementation)
+
+        Arguments:
+        from_old -- activity array from previous time step (pre-synaptic)
+        from_new -- activity array from current time step (pre-synaptic)
+        to_old -- activity array from previous time step (pos-synaptic)
+                  None in case pre and pos synaptic matrix is the same
+        to_new -- activity array from current time step (pos-synaptic)
+                  None in case pre and pos synaptic matrix is the same
+        """
+
         if to_old is None:
             to_old = from_old
         if to_new is None:
             to_new = from_new
 
+        # Suitable update for CSC
         N = self.W.shape[1]
         col = np.repeat(np.arange(N), np.diff(self.W.indptr))
         row = self.W.indices
         data = self.W.data
         data += self.eta_stdp*(to_new[row]*from_old[col] -
-                               to_old[row]*from_new[col])   # Suitable for CSC
+                               to_old[row]*from_new[col])
         data[data < 0] = 0
 
         # prune weights
@@ -136,14 +147,19 @@ class SparseSynapticMatrix(object):
             self.prune()
 
     def sn(self):
-        """Performs synaptic normalization"""
+        """
+        Apply one step of synaptic normalization
+        """
 
         # sklearn normalize does not work here. TODO: why?
         z = abs(self.W).sum(1)
         self.W.data /= np.array(z[self.W.indices]).reshape(self.W.data.shape)
 
     def sp(self):
-        """Performs one SP step"""
+        """
+        Apply one step of structural plasticity
+        """
+
         if np.random.rand() < self.sp_prob:
 
             # find new connection
@@ -168,10 +184,17 @@ class SparseSynapticMatrix(object):
                 print '\nCould not find a new connection\n'
 
     def prune(self):
-        """Prune very small weights"""
+        """
+        Prune very small weights
+        """
+
         self.W.data[self.W.data < 1e-10] = 0.  # eliminate small weights
         self.W.eliminate_zeros()
 
     def __mul__(self, x):
-        """Shorter matrix-array multiplication"""
+        """
+        Replace matrix-array multiplication for dot product, in order to make
+        the code a big shorter and more readable.
+        """
+        
         return self.W * x
