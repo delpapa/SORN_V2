@@ -10,7 +10,7 @@ from collections import Counter
 import numpy as np
 from sklearn import linear_model
 
-from source import GrammarSource as experiment_source
+from source import FDT_GrammarSource as experiment_source
 
 class Experiment(object):
     """Experiment class.
@@ -128,6 +128,7 @@ class Experiment(object):
         # 5. calculate parameters to save (exclude first and last)
         # separate sentences by '.' and remove spaces
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
+        output_senteces_dict = Counter(output_sentences)
         stats.n_output_sentences = len(output_sentences)
         new_sentences_dict = Counter([s for s in output_sentences \
                            if s in sorn.source.removed_sentences])
@@ -143,5 +144,6 @@ class Experiment(object):
             del stats.par
         # stats.spec_perf = spec_perf
 
+        import ipdb; ipdb.set_trace()
         if display:
             print '\ndone'

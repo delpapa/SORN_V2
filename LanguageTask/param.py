@@ -20,7 +20,7 @@ def get_par():
     For each sorn simulation, change these parameters manually.
     """
     par.N_e = 200                                  # excitatory neurons
-    par.N_u = par.N_e/40                          # neurons in each input pool
+    par.N_u = int(par.N_e/40)                      # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
     par.prune_stdp = False                          # prune very small weights
@@ -48,7 +48,7 @@ def get_par():
 
     par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
-    par.steps_spont = 50000                         # steps of spontaneous generation
+    par.steps_spont = 5000                         # steps of spontaneous generation
 
 
 ################################################################################
@@ -59,7 +59,7 @@ def get_aux():
 
     These auxiliary parameters do not have to be changed manually.
     """
-    aux.N_i = int(np.floor(0.2*par.N_e))       # inhibitory neurons
+    aux.N_i = int(0.2*par.N_e)       # inhibitory neurons
     aux.N = par.N_e + aux.N_i             # total number of neurons
 
     # the experiment_name should be the same name of the directory containing it

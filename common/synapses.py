@@ -10,44 +10,62 @@ import scipy.sparse as sp
 
 
 class FullSynapticMatrix(object):
-    """Dense connection matrix class for SORN I-E and E-I synapses.
-
-    This class contains every synaptic plasticity related method.
     """
+    Dense connection matrix class for I-E, E-I and E-U synapses.
+
+    This class contains every synaptic plasticity related metho.
+    """
+
     def __init__(self, par, shape):
-        """Creates a random normalized matrix
-
-        Parameters:
-            par: Bunch
-                Main initial sorn parameters
-
-            aux: Bunch
-                Auxiliary initial sorn parameters
         """
+        Creates a randomly initialized and normalized fully connected matrix
+
+        Arguments:
+        par -- Bunch of main sorn parameters
+        shape -- Tuple with shape of the matrix to be initialize
+        """
+
         if hasattr(par, 'eta_istdp'):
             self.eta_istdp = par.eta_istdp
         self.h_ip = par.h_ip
 
         self.W = np.random.random(shape)
+
         # normalize after random initialization
         if self.W.size > 0:
             z = abs(self.W).sum(1)
             self.W /= z[:,None]
 
     def istdp(self, y_old, x):
-        """Performs one iSTDP step (from Christoph's implementation)"""
+        """
+        Apply one iSTDP step (from Christoph's implementation)
+
+        Arguments:
+        y_old -- previous inhibitory activity array
+        x -- current activity array
+        """
+
         self.W += -self.eta_istdp*((1-(x[:, None]*(1+1.0/self.h_ip)))*
                                    y_old[None, :])
+
+        # remove very small or bigger than 1 weigths, to keep the model stable
         self.W[self.W <= 0] = 0.001
         self.W[self.W > 1.0] = 1.0
 
     def sn(self):
-        """Performs synaptic normalization"""
+        """
+        Apply one synaptic normalization step
+        """
+
         z = abs(self.W).sum(1)
         self.W /= z[:,None]
 
     def __mul__(self, x):
-        """Shorter matrix-array multiplication"""
+        """
+        Replace matrix-array multiplication for dot product, in order to make
+        the code a big shorter and more readable.
+        """
+        
         return self.W.dot(x)
 
 
