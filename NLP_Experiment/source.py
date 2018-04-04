@@ -10,11 +10,9 @@ import numpy as np
 from common import synapses
 
 
-class FDT_GrammarSource(object):
+class TextSource(object):
     """
-    Fox-drinks-tea (FDT) grammar input source. This source defines a small
-    dictionary of the form 'subject' 'verb' 'object' and randomly draws
-    sentences from it.
+    Text source from an input .txt file.
     """
 
     def __init__(self, params):
@@ -25,63 +23,12 @@ class FDT_GrammarSource(object):
         params -- bunch of simulation parameters from param.py
         """
 
-        # self.file_path= params.file_path
+        self.file_path = params.file_path
         self.steps_plastic = params.steps_plastic
         self.steps_readout = params.steps_readout
 
-        self.verbs = ['eats ',
-                      'drinks ']
-
-        self.subjects = ['man ',
-                         'woman ',
-                         'girl ',
-                         'boy ',
-                         'child ',
-                         'cat ',
-                         'dog ',
-                         'fox ']
-
-        self.objects_eat = ['meat.',
-                            'bread.',
-                            'fish.',
-                            'vegetables.']
-        self.objects_drink = ['milk.',
-                              'water.',
-                              'juice.',
-                              'tea.']
-        self.objects = [self.objects_eat, self.objects_drink]
-
-        # create a huge list with all input sentences
-        partial_input_string = []
-        for _ in xrange(self.steps_plastic):
-            # create a lot of sentences!
-            sub = random.choice(self.subjects)
-            ver = random.choice(self.verbs)
-            if ver == self.verbs[0]:
-                obj = random.choice(self.objects_eat)
-            elif ver == self.verbs[1]:
-                obj = random.choice(self.objects_drink)
-            partial_input_string.append(sub+ver+obj)
-
-        # all unique input sentences
-        self.all_sentences = np.unique(partial_input_string)
-
-        # remove random sentences
-        shuffled_unique_sentences = np.unique(partial_input_string)
-        np.random.shuffle(shuffled_unique_sentences)
-        # self.removed_sentences = shuffled_unique_sentences[:params.n_removed_sentences]
-        self.removed_sentences = ['woman drinks milk.','fox drinks tea.','cat eats vegetables.','girl eats meat.', 'child eats fish.', 'boy drinks juice.', 'man drinks water.', 'dog eats bread.','woman eats meat.','fox eats bread.','cat drinks tea.','girl drinks juice.','child drinks water.','boy eats fish.','man eats vegetables.','dog drinks milk.']
-        input_string = [x for x in partial_input_string if x not in self.removed_sentences]
-        self.used_sentences = np.unique(input_string)
-
-        # input is a huge string
-        self.corpus = ' '.join(input_string)
-
-        # # create new .txt file with the FDT sentences
-        # with open(self.file_path, 'w') as fout:
-        #     fout.write(FDT(5000).full_string())
-        # with open(self.file_path, "rt") as fin:
-        #     self.corpus = fin.read().replace('\n', '')
+        with open(self.file_path, "rt") as fin:
+             self.corpus = fin.read().replace('\n', '')
 
         # only use lowercase
         self.corpus = self.corpus.lower()

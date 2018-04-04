@@ -3,6 +3,7 @@
 import sys
 
 import numpy as np
+import time
 
 from synapses import FullSynapticMatrix, SparseSynapticMatrix
 

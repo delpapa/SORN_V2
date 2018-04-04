@@ -18,7 +18,7 @@ VARIABLES = [
     'N_e',
 ]
 VALUES = [
-    np.arange(200, 2001, 100)
+    np.arange(200, 1501, 100)
     # np.array([0, 10000, 50000, 100000, 200000]),
 ]
 
@@ -27,7 +27,7 @@ RUNS = 2
 
 # experiment parameters
 DISPLAY_PROGRESS = False                         # display progress bar
-EXPERIMENT_TAG = '_FDT-16'                # to mark experiment (must start with _)
+EXPERIMENT_TAG = '_test_FDT_16'                # to mark experiment (must start with _)
 
 ################################################################################
 #                              SORN simulation                                 #

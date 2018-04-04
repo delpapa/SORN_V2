@@ -10,7 +10,7 @@ from collections import Counter
 import numpy as np
 from sklearn import linear_model
 
-from source import FDT_GrammarSource as experiment_source
+from source import MNISTSource as experiment_source
 
 
 class Experiment(object):
@@ -38,7 +38,7 @@ class Experiment(object):
 
         # define which stats to cache during the simulation
         self.stats_cache = [
-            # 'ActivityStat', # number of active neurons
+            'ActivityStat', # number of active neurons
             # 'ActivityReadoutStat', # the total activity only for the readout
             'ConnectionFractionStat', # the fraction of active E-E connections
             'InputReadoutStat', # the input and input index for the readout
@@ -83,29 +83,29 @@ class Experiment(object):
         # sorn.params.par.eta_ip = 'off'
         sorn.simulation(stats, phase='train')
 
+        import ipdb; ipdb.set_trace()
         # Step 3. Train readout layer with logistic regression
         if display:
             print '\nTraining readout layer...'
         t_train = sorn.params.aux.steps_readouttrain
-        X_train = stats.raster_readout[:t_train-1]
-        y_train = stats.input_readout[1:t_train].T.astype(int)
-        n_symbols = sorn.source.A
+        X_train = stats.raster_readout[:t_train]
+        y_train = stats.input_readout[:t_train].T.astype(int)
         lg = linear_model.LogisticRegression()
-        readout_layer = lg.fit(X_train, y_train)
         readout_layer = lg.fit(X_train, y_train)
 
         # Step 4. Input without plasticity: test (with STDP and IP off)
         if display:
             print '\nReadout testing phase:'
 
+        import ipdb; ipdb.set_trace()
         sorn.simulation(stats, phase='test')
 
         # Step 5. Estimate SORN performance
         if display:
             print '\nTesting readout layer...'
         t_test = sorn.params.aux.steps_readouttest
-        X_test = stats.raster_readout[t_train:t_train+t_test-1]
-        y_test = stats.input_readout[1+t_train:t_train+t_test].T.astype(int)
+        X_test = stats.raster_readout[t_train:t_train+t_test]
+        y_test = stats.input_readout[t_train:t_train+t_test].T.astype(int)
 
         # store the performance for each letter in a dictionary
         spec_perf = {}
@@ -119,8 +119,8 @@ class Experiment(object):
         if display:
             print '\nSpontaneous phase:'
 
-        # begin with the prediction from the last step
-        symbol = readout_layer.predict(X_test[-1].reshape(1,-1))
+        # begin with a random input
+        symbol = np.random.choice(n_symbols)
         u = np.zeros(n_symbols)
         u[symbol] = 1
 
@@ -135,28 +135,20 @@ class Experiment(object):
 
         # Step 7. Calculate parameters to save (exclude first and last sentences
         # and separate sentences by '.'. Also, remove extra spaces.
+        import ipdb; ipdb.set_trace()
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
 
         # all output sentences
         output_dict = Counter(output_sentences)
         stats.n_output = len(output_sentences)
 
-        # new output sentences
-        new_dict = Counter([s for s in output_sentences \
-                           if s in sorn.source.removed_sentences])
-        stats.n_new = sum(new_dict.values())
-
-        # wrong output sentences
-        wrong_dict = Counter([s for s in output_sentences \
-                               if s not in sorn.source.all_sentences])
-        stats.n_wrong = sum(wrong_dict.values())
-
         # save some storage space by deleting some parameters.
         if hasattr(stats, 'aux'):
             del stats.aux
         if hasattr(stats, 'par'):
             del stats.par
-        # stats.spec_perf = spec_perf
+        stats.spec_perf = spec_perf
 
+        import ipdb; ipdb.set_trace()
         if display:
             print '\ndone!'

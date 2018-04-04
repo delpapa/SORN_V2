@@ -15,13 +15,13 @@ import numpy as np
 
 def backup_pickle(experiment, stats):
     ''''
-    Back up handling function
+    Back up handling function.
 
-    Parameters:
-        experiment: Experiment object, contains the initial sorn parameters
-
-        stats: bunch of stats stored during the simulation
+    Arguments:
+    experiment -- Experiment object, contains the initial sorn parameters
+    stats -- bunch of stats stored during the simulation
     '''
+
     params = experiment.init_params
     results_dir = experiment.results_dir
     files_tosave = experiment.files_tosave

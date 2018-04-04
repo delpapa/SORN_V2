@@ -7,6 +7,7 @@ W_EE is sparce and W_IE, W_IE, W_EU are dense.
 
 import numpy as np
 import scipy.sparse as sp
+import time
 
 
 class FullSynapticMatrix(object):
@@ -196,5 +197,4 @@ class SparseSynapticMatrix(object):
         Replace matrix-array multiplication for dot product, in order to make
         the code a big shorter and more readable.
         """
-        
         return self.W * x
