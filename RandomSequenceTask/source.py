@@ -27,7 +27,7 @@ class RandomSequenceSource(object):
             for elem in range(self.N_a):
                 if (self.sequence == elem).sum() == 0:
                     break
-                else:
+                elif elem == self.N_a-1:
                     contain_all = 1
 
         # letter and word counters
