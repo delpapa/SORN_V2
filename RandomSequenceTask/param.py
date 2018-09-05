@@ -29,7 +29,7 @@ def get_par():
 
     # lognormal weights (from Lukas Koehls thesis)
     # par.h_ip = np.random.lognormal(mean=np.log(0.1), sigma=0.1962,
-    #                                size=par.N_e)                        
+    #                                size=par.N_e)
 
     par.input_gain = 1                             # input gain factor
 
@@ -44,7 +44,7 @@ def get_par():
 #                           Experiment parameters                              #
 ################################################################################
     par.L = 1000000                                # sequence size
-    par.A = 20                                      # alphabet size
+    par.A = 2                                      # alphabet size
 
     par.steps_plastic = 30000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
