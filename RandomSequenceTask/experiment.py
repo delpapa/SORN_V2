@@ -37,7 +37,7 @@ class Experiment(object):
                             + '_T' + str(params.par.steps_plastic))
 
         # define which stats to store during the simulation
-        self.stats_tostore = [
+        self.stats_cache = [
             'InputReadoutStat',
             'RasterReadoutStat',
         ]
@@ -112,18 +112,32 @@ class Experiment(object):
         # if sorn.params.aux.experiment_tag == '_FadingMemory':
 
         t_past_max = 20
+        t_code = 10
         stats.t_past = np.arange(t_past_max)
         stats.performance = np.zeros(t_past_max)
-        for t_past in xrange(t_past_max):
+        for t_past in xrange(t_code, t_past_max):
+
             X_train = stats.raster_readout[t_past:t_train]
             y_train = stats.input_readout[:t_train-t_past].T.astype(int)
+
+            X_train_new = []
+            for j in range(t_code, X_train.shape[0]):
+                X_train_new.append(X_train[j-t_code:j].reshape(X_train.shape[1]*t_code))
+            X_train_new = np.array(X_train_new)
+            y_train_new = y_train[:-t_code]
 
             X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
             y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
 
+            X_test_new = []
+            for j in range(t_code, X_test.shape[0]):
+                X_test_new.append(X_test[j-t_code:j].reshape(X_test.shape[1]*t_code))
+            X_test_new = np.array(X_test_new)
+            y_test_new = y_test[:-t_code]
+
             readout = linear_model.LogisticRegression()
-            output_weights = readout.fit(X_train, y_train)
-            stats.performance[t_past] = output_weights.score(X_test, y_test)
+            output_weights = readout.fit(X_train_new, y_train_new)
+            stats.performance[t_past] = output_weights.score(X_test_new, y_test_new)
 
         if display:
             print 'done'
