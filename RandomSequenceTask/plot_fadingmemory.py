@@ -1,6 +1,8 @@
 """ Performance vs. past time step"""
 
 import os
+import sys
+sys.path.insert(0, '')
 
 import cPickle as pickle
 import numpy as np
@@ -23,7 +25,7 @@ fig = plt.figure(1, figsize=(6, 5))
 # 1. load performances and experiment parameters
 print '\nCalculating memory for the Random Sequence Task...'
 
-for experiment_tag in ['N200_logn', 'N200', 'N200_RecR']:
+for experiment_tag in ['readout10', 'readout2', 'readout5', 'readout1']:
     experiment_folder = 'RandomSequenceTask_' + experiment_tag
     experiment_path = 'backup/' + experiment_folder + '/'
     experiment_n = len(os.listdir(experiment_path))
