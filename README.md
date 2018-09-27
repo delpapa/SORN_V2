@@ -1,9 +1,8 @@
-# A Self-Organizing Recurrent Neural Network (SORN)
+# The Self-Organizing Recurrent Neural Network (SORN)
+
 A SORN repository for general purposes, containing a few experiments and examples. This repository is based on the original [SORN repository](https://github.com/chrhartm/SORN) by Christoph Hartmann combined with adaptations to new experiments.  
 
-Currently under construction... :)
-
-## Getting Started
+## Getting started with the repository
 
 The scripts for each experiment are stored in different folders with the experiments' respective name. Each folder contain a minimum of three scripts: the experiment parameters ('param.py'), instructions ('experiment.py'), and the input details ('source.py'). The parameters in these scripts can be modified at will to reproduce different results. Additionally, each folder contains the relevant plot scripts, for visualizing the results.
 
@@ -27,19 +26,25 @@ Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAva
 
 #### Forking the repository
 
-Fork this repository onto your own github account and clone it into your favorite SORN folder:
+Fork a copy of this repository onto your own GitHub account and `clone` your fork of the repository into your computer, inside your favorite SORN folder, using:
 
-'git clone PATH_TO_YOUR_FAVORITE_SORN_REPOSITORY'
+`git clone "PATH_TO_FORKED_REPOSITORY"`
 
 #### Setting up the environment
 
-Install [Python 2.7]() and the conda package manager (use miniconda, not anaconda, because you need to install the packages we need). Navigate to the project directory inside a terminal and create a virtual environment (replace <environment_name>, for example, with "sorn_environment") and install the required packages:
+Install [Python 2.7](https://www.python.org/download/releases/2.7/) and the [conda package manager](https://conda.io/miniconda.html) (use miniconda, not anaconda). Navigate to the project directory inside a terminal and create a virtual environment (replace <ENVIRONMENT_NAME>, for example, with "sorn_env") and install the [required packages](https://github.com/delpapa/sorn/blob/master/requirements.txt):
 
-'conda create -n <environment_name> --file requirements.txt'
+`conda create -n <ENVIRONMENT_NAME> --file requirements.txt python=2.7`
 
-## Projects
+Activate the virtual environment:
 
-Each different project has it's own project folder (for example, 'CountingTask'), which contain it's parameters, experiment instructions, sources and plot files.
+`source activate <ENVIRONMENT_NAME>`
+
+By installing these packages in a virtual environment, you avoid dependency clashes with other packages that may already be installed elsewhere on your computer.
+
+## Experiments
+
+Each different experiment has it's own project folder (for example, `CountingTask`), which contains it's parameters, experiment instructions, sources and plot files. If you plan to extend the repository with new experiments, please keep this structure to avoid unecessary conflicts.
 
 ### CountingTask
 
@@ -51,10 +56,6 @@ This task is the reimplementation of the counting task from the original SORN pa
 ### RandomSequenceTask
 
 ### NeuronalAvalanches
-
-* TODO: add plot scripts from FIAS PC
-* TODO: merge with FIAS PC codes and so on...
-* TODO: document properly
 
 ### LanguageTask
 
