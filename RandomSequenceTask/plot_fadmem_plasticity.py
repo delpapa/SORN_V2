@@ -8,6 +8,8 @@ This was used as Fig. 2B in the tentative ESANN abstract.
 """
 
 import os
+import sys
+sys.path.insert(0, '')
 
 import cPickle as pickle
 import numpy as np
@@ -96,8 +98,8 @@ for i in ['RR', 'NoIP', 'NoSTDPPrune', 'SORN', 'smallSORN']:
 fig_lettersize = 15
 # plt.title('Plasticity effects')
 plt.legend(loc=(0.21, 0.001), frameon=False, fontsize=fig_lettersize)
-plt.xlabel(r'$T_{\rm plast}$', fontsize=fig_lettersize)
-plt.ylabel('$M_F$', fontsize=fig_lettersize)
+plt.xlabel(r'$T_{\rm plasticity}$', fontsize=fig_lettersize)
+plt.ylabel(r'$M_{ \tau }$', fontsize=fig_lettersize)
 plt.xlim([0, 30000])
 plt.ylim([0.5, 3.5])
 plt.xticks(

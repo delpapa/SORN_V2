@@ -45,6 +45,7 @@ number_of_lines= 10
 cm_subsection = np.linspace(start, stop, number_of_lines)
 
 colors = [ cm.Blues(x) for x in cm_subsection ]
+colors2 = [ cm.Reds(x) for x in cm_subsection ]
 
 ################################################################################
 #                             Make plot                                        #
@@ -106,6 +107,7 @@ for A in np.unique(a_list):
         performance_red_red = performance_red[n_list_red == N]
         memory_mean[i], memory_std[i] = fading_memory(performance_red_red)
 
+    #import ipdb; ipdb.set_trace()
     if A in [20, 30, 40]:
         print A
         #print np.unique(n_list_red)
@@ -149,13 +151,85 @@ for A in np.unique(a_list):
         #         label=str(A))
         #     # fit_log(np.unique(n_list_red), memory_mean)
 
+experiment_tag = '_test_memXsize'
+experiment_folder = 'RandomSequenceTask' + experiment_tag
+
+a_list = []
+n_list = []
+performance = []
+
+for j, i in enumerate(np.array([100, 200, 400, 800, 1600])):
+
+    # if i == 1600:
+    #     experiment_path = 'backup/' + experiment_folder + 'N' + str(i) + '_moretraining/'
+    # else:
+    experiment_path = 'backup/' + experiment_folder + '/'
+    experiment_n = len(os.listdir(experiment_path))
+
+    for exp, exp_name in enumerate(os.listdir(experiment_path)):
+        exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
+        stats = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
+        params = pickle.load(open(experiment_path+exp_name+'/init_params.p', 'rb'))
+        performance.append(stats.performance)
+        a_list.append(stats.par.A)
+        n_list.append(stats.par.N_e)
+performance = np.array(performance)
+a_list = np.array(a_list)
+n_list = np.array(n_list)
+
+for A in np.unique(a_list):
+    a_list_red = a_list[a_list == A]
+    n_list_red = n_list[a_list == A]
+    performance_red = performance[a_list == A]
+
+    memory_mean = np.zeros(np.unique(n_list_red).size)
+    memory_std = np.zeros(np.unique(n_list_red).size)
+    for i, N in enumerate(np.unique(n_list_red)):
+        a_list_red_red = a_list_red[n_list_red == N]
+        n_list_red_red = n_list_red[n_list_red == N]
+        performance_red_red = performance_red[n_list_red == N]
+        memory_mean[i], memory_std[i] = fading_memory(performance_red_red)
+
+    #import ipdb; ipdb.set_trace()
+
+    if A in [20, 30, 40]:
+        print A
+        #print np.unique(n_list_red)
+        #print memory_mean
+        if A == 20:
+            #fit_log(np.unique(n_list_red), memory_mean)
+            plt.plot(np.unique(n_list_red), memory_mean,
+                '-o',
+                color=colors2[5],
+                markersize='5',
+                label=str(A)+' (RR)',
+                alpha=0.5)
+    #    if A == 30:
+            #fit_log(np.unique(n_list_red), memory_mean)
+            # plt.plot(np.unique(n_list_red), memory_mean,
+            #     '-o',
+            #     color=colors2[6],
+            #     markersize='5',
+            #     label=str(A)+' (RR)',
+            #     alpha=0.5)
+    #    if A == 40:
+            #fit_log(np.unique(n_list_red), memory_mean)
+            # plt.plot(np.unique(n_list_red), memory_mean,
+            #     '-o',
+            #     color=colors2[7],
+            #     markersize='5',
+            #     label=str(A)+' (RR)',
+            #     alpha=0.5)
+
+
+
 # 4. adjust figure parameters and save
 fig_lettersize = 15
 # plt.title('Plasticity effects')
 leg = plt.legend(loc='best', title='Alphabet size', frameon=False, fontsize=fig_lettersize)
 leg.get_title().set_fontsize(fig_lettersize)
-plt.xlabel(r'$\rm N^E$', fontsize=fig_lettersize)
-plt.ylabel(r'$\rm M_{\tau}$', fontsize=fig_lettersize)
+plt.xlabel(r'$\rm N^{\rm E}$', fontsize=fig_lettersize)
+plt.ylabel(r'$\rm M_{ \tau }$', fontsize=fig_lettersize)
 plt.xlim([90, 2000])
 plt.xscale('log')
 plt.ylim([0, 7])
