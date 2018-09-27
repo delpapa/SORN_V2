@@ -27,7 +27,7 @@ class Experiment(object):
                             + '_L' + str(params.par.L))
 
         # define which stats to store during the simulation
-        self.stats_tostore = [
+        self.stats_cache = [
             'InputReadoutStat',
             'RasterReadoutStat',
         ]

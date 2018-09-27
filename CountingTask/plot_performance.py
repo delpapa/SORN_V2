@@ -12,8 +12,8 @@ from sklearn import linear_model
 from utils import Bunch
 
 # parameters to include in the plot
-N_values = np.array([200])                       # network sizes
-experiment_tag = '_SORN'                              # experiment tag
+N_values = np.array([200])              # network sizes
+experiment_tag = '_X'                   # experiment tag (change properly)
 
 ################################################################################
 #                            Plot performance                                  #
@@ -39,10 +39,8 @@ for experiment in os.listdir(experiment_path):
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
         stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
         perf = stats.performance
-        print perf
-        # normalize performance as in Lazar et al. 2009, fig. 2
-        max_perf = 1 - 0.5/(float(L)+2)
-        final_performance.append(perf/max_perf)
+
+        final_performance.append(perf)
         final_L.append(int(L))
         print 'Performance - LR:', '%.2f' % perf
 final_L = np.array(final_L)
