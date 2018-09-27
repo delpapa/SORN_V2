@@ -20,11 +20,11 @@ def get_par():
     For each sorn simulation, change these parameters manually.
     """
     par.N_e = 200                                  # excitatory neurons
-    par.N_u = 5                                   # neurons in each input pool
+    par.N_u = 10                                   # neurons in each input pool
 
-    par.eta_stdp = 0#0.001                           # STDP learning rate
+    par.eta_stdp = 0.001                           # STDP learning rate
     par.prune_stdp = True                          # prune very small weights
-    par.eta_ip = 0#0.001                             # IP learning rate
+    par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
     # lognormal weights (from Lukas Koehls thesis)
