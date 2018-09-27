@@ -19,8 +19,8 @@ def get_par():
 
     For each sorn simulation, change these parameters manually.
     """
-    par.N_e = 200                                  # excitatory neurons
-    par.N_u = 4                      # neurons in each input pool
+    par.N_e = 2000                                  # excitatory neurons
+    par.N_u = int(par.N_e/50)                          # neurons in each input pool
 
     par.eta_stdp = 0.001                           # STDP learning rate
     par.prune_stdp = True                          # prune very small weights
@@ -44,8 +44,8 @@ def get_par():
 ################################################################################
     par.file_path = r'../data/M72_raw/corpus_simple.txt'
 
-    par.steps_plastic = 50000                      # sorn training time steps
-    par.steps_readout = 5000                       # readout train and test steps
+    par.steps_plastic = 1000000                      # sorn training time steps
+    par.steps_readout = 50000                       # readout train and test steps
     par.steps_spont = 50000                         # steps of spontaneous generation
 
 

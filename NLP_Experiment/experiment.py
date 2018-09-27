@@ -134,13 +134,10 @@ class Experiment(object):
 
         # Step 7. Calculate parameters to save (exclude first and last sentences
         # and separate sentences by '.'. Also, remove extra spaces.
-        import ipdb; ipdb.set_trace()
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
+        stats.output = ''.join(output_sentences)
 
-        # all output sentences
-        output_dict = Counter(output_sentences)
-        stats.n_output = len(output_sentences)
-
+        import ipdb; ipdb.set_trace()
         # save some storage space by deleting some parameters.
         if hasattr(stats, 'aux'):
             del stats.aux
@@ -148,6 +145,5 @@ class Experiment(object):
             del stats.par
         stats.spec_perf = spec_perf
 
-        import ipdb; ipdb.set_trace()
         if display:
             print '\ndone!'
