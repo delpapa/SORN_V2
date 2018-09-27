@@ -49,6 +49,7 @@ class FDT_GrammarSource(object):
                               'water.',
                               'juice.',
                               'tea.']
+                              
         self.objects = [self.objects_eat, self.objects_drink]
 
         # create a huge list with all input sentences
