@@ -5,9 +5,9 @@ Currently under construction... :)
 
 ## Getting Started
 
-The scripts for experiment are stored in different folders with their respective name. Each folder contain at least scripts with the experiment parameters ('param.py'), instructions ('experiment.py'), and the input details ('source.py'). The parameters in these scripts can be modified at will to reproduce different results. Additionally, each folder contains the plot scripts, for plotting the results.
+The scripts for each experiment are stored in different folders with the experiments' respective name. Each folder contain a minimum of three scripts: the experiment parameters ('param.py'), instructions ('experiment.py'), and the input details ('source.py'). The parameters in these scripts can be modified at will to reproduce different results. Additionally, each folder contains the relevant plot scripts, for visualizing the results.
 
-To simulate a single experiment, 'python common/run_single.py <ExperimentName>'.
+To simulate a single experiment, run 'python common/run_single.py <ExperimentName>' from the main folder.
 
 Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAvalanches, LanguageTask
 
@@ -15,13 +15,27 @@ Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAva
 
 * [numpy](http://www.numpy.org/)
 * [scipy](https://www.scipy.org/)
+* [scikitlearn](http://scikit-learn.org/)
 * [matplotlib](https://matplotlib.org/)
 * [bunch](https://pypi.python.org/pypi/bunch)
 * [powerlaw](https://pypi.python.org/pypi/powerlaw) (for the NeuronalAvalanches experiment, from Del Papa et al. 2017)
 
-### Installing
+### Directory structure
 
-Clone the repository in your favorite SORN folder
+
+### Installation guide
+
+#### Forking the repository
+
+Fork this repository onto your own github account and clone it into your favorite SORN folder:
+
+'git clone PATH_TO_YOUR_FAVORITE_SORN_REPOSITORY'
+
+#### Setting up the environment
+
+Install [Python 2.7]() and the conda package manager (use miniconda, not anaconda, because you need to install the packages we need). Navigate to the project directory inside a terminal and create a virtual environment (replace <environment_name>, for example, with "sorn_environment") and install the required packages:
+
+'conda create -n <environment_name> --file requirements.txt'
 
 ## Projects
 
