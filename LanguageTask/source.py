@@ -69,19 +69,86 @@ class FDT_GrammarSource(object):
         # remove random sentences
         shuffled_unique_sentences = np.unique(partial_input_string)
         np.random.shuffle(shuffled_unique_sentences)
-        # self.removed_sentences = shuffled_unique_sentences[:params.n_removed_sentences]
-        self.removed_sentences = ['woman drinks milk.','fox drinks tea.','cat eats vegetables.','girl eats meat.', 'child eats fish.', 'boy drinks juice.', 'man drinks water.', 'dog eats bread.','woman eats meat.','fox eats bread.','cat drinks tea.','girl drinks juice.','child drinks water.','boy eats fish.','man eats vegetables.','dog drinks milk.']
+
+        # TODO: make sure all words appear at least once
+        # TODO: sentences must be removed at random!
+        # while True:
+        #     self.removed_sentences = shuffled_unique_sentences[:params.n_removed_sentences]
+        #     input_string = [x for x in partial_input_string if x not in self.removed_sentences]
+        #     self.used_sentences = np.unique(input_string)
+        #     if np.unique(''.join(self.used_sentences).replace('.', ' ').split()).size == 18:
+        #         break
+
+
+        if params.n_removed_sentences >= 8:
+            self.removed_sentences = ['woman drinks milk.',
+                                      'fox drinks tea.',
+                                      'cat eats vegetables.',
+                                      'girl eats meat.',
+                                      'child eats fish.',
+                                      'boy drinks juice.',
+                                      'man drinks water.',
+                                      'dog eats bread.']
+        if params.n_removed_sentences >= 16:
+            self.removed_sentences.append('woman eats meat.',
+                                          'fox eats bread.',
+                                          'cat drinks tea.',
+                                          'girl drinks juice.',
+                                          'child drinks water.',
+                                          'boy eats fish.',
+                                          'man eats vegetables.',
+                                          'dog drinks milk.']
+        if params.n_removed_sentences >= 24:
+            self.removed_sentences.append('woman eats vegetables.',
+                                          'fox eats fish.',
+                                          'cat drinks juice.',
+                                          'girl drinks tea.',
+                                          'child drinks milk.',
+                                          'boy eats bread.',
+                                          'man eats meat.',
+                                          'dog drinks water.')
+        if params.n_removed_sentences >= 32:
+            self.removed_sentences.append('woman drinks water.',
+                                          'fox drinks juice.',
+                                          'cat eats bread.',
+                                          'girl eats fish.',
+                                          'child eats vegetables.',
+                                          'boy drinks tea.',
+                                          'man drinks milk.',
+                                          'dog eats meat.')
+        if params.n_removed_sentences >= 40:
+            self.removed_sentences.append('woman drinks tea.',
+                                          'fox drinks milk.',
+                                          'cat eats meat.',
+                                          'girl eats vegetables.',
+                                          'child eats bread.',
+                                          'boy drinks water.',
+                                          'man drinks juice.',
+                                          'dog eats fish.')
+        if params.n_removed_sentences >= 48:
+            self.removed_sentences.append('woman eats fish.',
+                                          'fox eats meat.',
+                                          'cat drinks milk.',
+                                          'girl drinks water.',
+                                          'child drinks juice.',
+                                          'boy eats vegetables.',
+                                          'man eats bread.',
+                                          'dog drinks tea.')
+        if params.n_removed_sentences >= 56:
+            self.removed_sentences.append('woman drinks juice.',
+                                          'fox drinks water.',
+                                          'cat eats fish.',
+                                          'girl eats bread.',
+                                          'child eats meat.',
+                                          'boy drinks milk.',
+                                          'man drinks tea.',
+                                          'dog eats vegetables.')
+
         input_string = [x for x in partial_input_string if x not in self.removed_sentences]
         self.used_sentences = np.unique(input_string)
 
         # input is a huge string
         self.corpus = ' '.join(input_string)
-
-        # # create new .txt file with the FDT sentences
-        # with open(self.file_path, 'w') as fout:
-        #     fout.write(FDT(5000).full_string())
-        # with open(self.file_path, "rt") as fin:
-        #     self.corpus = fin.read().replace('\n', '')
 
         # only use lowercase
         self.corpus = self.corpus.lower()
@@ -91,7 +158,7 @@ class FDT_GrammarSource(object):
         self.N_e = params.N_e
         self.N_u = params.N_u
 
-        # letter and word counters
+        # letter counter
         self.ind = -1                # index in the corpus
 
     def generate_connection_e(self, params):
