@@ -30,7 +30,7 @@ def backup_pickle(experiment, stats):
     # creates a new directory for storing the results
     # sleeps for a short time to avoid conflicts when running in parallel
     time.sleep(np.random.rand())
-    for n_sim in xrange(1, 100):
+    for n_sim in xrange(1, 1000):
         final_dir = directory + '_' + str(n_sim) + '/'
         if not os.path.exists(final_dir):
             try:
