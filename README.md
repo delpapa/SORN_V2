@@ -26,7 +26,6 @@ Currently implemented experiments:
 
 ### Directory structure
 
-
 ### Installation guide
 
 #### Forking the repository
