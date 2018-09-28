@@ -4,11 +4,16 @@ A SORN repository for general purposes, containing a few experiments and example
 
 ## Getting started with the repository
 
-The scripts for each experiment are stored in different folders with the experiments' respective name. Each folder contain a minimum of three scripts: the experiment parameters ('param.py'), instructions ('experiment.py'), and the input details ('source.py'). The parameters in these scripts can be modified at will to reproduce different results. Additionally, each folder contains the relevant plot scripts, for visualizing the results.
+The scripts for each experiment are stored in different folders with the experiments' respective name. Each folder contain a minimum of three scripts: the experiment parameters (`param.py`), instructions (`experiment.py`), and the input details (`source.py`). The parameters in these scripts can be modified at will to reproduce various results. Additionally, each folder contains the relevant plot scripts, for visualizing the results.
 
-To simulate a single experiment, run 'python common/run_single.py <ExperimentName>' from the main folder.
+To simulate a single experiment, run `python common/run_single.py <ExperimentName>` from the main folder.
 
-Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAvalanches, LanguageTask
+Currently implemented experiments: 
+
+* CountingTask (from Lazar et al. 2009)
+* RandomSequenceTask
+* NeuronalAvalanches (from Del Papa et al. 2017, Del Papa et al. 2018)
+* LanguageTask (in progress...)
 
 ### Prerequisites
 
@@ -21,6 +26,33 @@ Currently implemented experiments: CountingTask, RandomSequenceTask, NeuronalAva
 
 ### Directory structure
 
+```bash
+.
+├── backup                         # simulations are backed up in this folder
+├── common                         # contains main simulation scripts and model classes
+│   ├── run_cluster.sh             # run the simulation in a remote (slurm) cluster
+│   ├── run_multiple.py            # run multiple simulations varying one particular parameter
+│   ├── run_single.py              # single run of a particlar simulation
+│   ├── sorn.py                    # main sorn class
+│   ├── stats.py                   # stats tracker
+│   ├── synapses.py                # script with all the functions relating to weights and weight updates
+├── CountingTask                   # scripts for the CountingTask (all other experiments should follow this example)
+│   ├── experiment.py              # experiment instructions
+│   ├── param.py                   # experiment parameters
+│   ├── plot_performance.py        # plot script (convention: start with 'plot_')
+│   └── source.py                  # script containing the input source for this particular task
+├── LanguageTask
+├── LICENSE
+├── NeuronalAvalanches
+├── NLP_Experiment
+├── plots                          # plots are stored in this folder
+├── RandomSequenceTask
+├── README.md
+├── requirements.txt               # requirements to build the python environment
+└── utils                          # contains bunch and the backup functions
+    ├── backup.py
+    └── bunch
+```
 
 ### Installation guide
 
@@ -40,7 +72,7 @@ Activate the virtual environment:
 
 `source activate <ENVIRONMENT_NAME>`
 
-By installing these packages in a virtual environment, you avoid dependency clashes with other packages that may already be installed elsewhere on your computer.
+By installing these packages in a virtual environment, you avoid dependency clashes with other packages that may already be installed elsewhere on your computer. Importantly, this SORN repository does not yet support python 3.
 
 ## Experiments
 
@@ -50,16 +82,13 @@ Each different experiment has it's own project folder (for example, `CountingTas
 
 This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full). The task consist of randomly alternating sequences of the form 'ABB..BBC' and 'DEE..EEF', with size L = n+2.
 
-* TODO: fix performance calculation (internal state instead of activity)
-* TODO: improve 'plot_performance.py' script
-
 ### RandomSequenceTask
+
+This task implements a random sequence input, which is used to estimate the SORN's fading memory. The random sequence input consists of a sequence of A symbols, and the fading memory capacity is the SORN's capacity of recovering past inputs with it's linear readout layer.
 
 ### NeuronalAvalanches
 
 ### LanguageTask
-
-* TODO: everything
 
 ## License
 
