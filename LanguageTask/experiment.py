@@ -151,8 +151,6 @@ class Experiment(object):
                                if s not in sorn.source.all_sentences])
         stats.n_wrong = sum(wrong_dict.values())
 
-        import ipdb; ipdb.set_trace()
-
         # save some storage space by deleting some parameters.
         if hasattr(stats, 'aux'):
             del stats.aux
