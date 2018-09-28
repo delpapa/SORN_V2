@@ -26,6 +26,34 @@ Currently implemented experiments:
 
 ### Directory structure
 
+```bash
+.
+├── backup                         # simulations are backed up in this folder
+├── common                         # contains main simulation scripts and model classes
+│   ├── run_cluster.sh             # run the simulation in a remote (slurm) cluster
+│   ├── run_multiple.py            # run multiple simulations varying one particular parameter
+│   ├── run_single.py              # single run of a particlar simulation
+│   ├── sorn.py                    # main sorn class
+│   ├── stats.py                   # stats tracker
+│   ├── synapses.py                # script with all the functions relating to weights and weight updates
+├── CountingTask                   # scripts for the CountingTask (all other experiments should follow this example)
+│   ├── experiment.py              # experiment instructions
+│   ├── param.py                   # experiment parameters
+│   ├── plot_performance.py        # plot script (convention: start with 'plot_')
+│   └── source.py                  # script containing the input source for this particular task
+├── LanguageTask
+├── LICENSE
+├── NeuronalAvalanches
+├── NLP_Experiment
+├── plots                          # plots are stored in this folder
+├── RandomSequenceTask
+├── README.md
+├── requirements.txt               # requirements to build the python environment
+└── utils                          # contains bunch and the backup functions
+    ├── backup.py
+    └── bunch
+```
+
 ### Installation guide
 
 #### Forking the repository
