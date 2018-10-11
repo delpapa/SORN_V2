@@ -26,7 +26,7 @@ fig = plt.figure(1, figsize=(7, 6))
 # 1. load performances and experiment parameters
 print '\nCalculating percent of wrong and new sentences... '
 
-experiment_tag = '_test_remove4'
+experiment_tag = '_remove'
 experiment_folder = 'LanguageTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
