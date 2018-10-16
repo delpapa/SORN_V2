@@ -33,6 +33,7 @@ experiment_n = len(os.listdir(experiment_path))
 percent_new = np.zeros(experiment_n)
 percent_error = np.zeros(experiment_n)
 n_removed = np.zeros(experiment_n)
+net_size = np.zeros(experiment_n)
 
 for exp, exp_name in enumerate(os.listdir(experiment_path)):
 
@@ -42,6 +43,8 @@ for exp, exp_name in enumerate(os.listdir(experiment_path)):
     percent_new[exp] = float(stats.n_new)/stats.n_output
     percent_error[exp] = float(stats.n_wrong)/stats.n_output
     n_removed[exp] = int(params.n_removed_sentences)
+    net_size[exp] = int(exp_name.split('_')[0][1:])
+
 
 rem = np.unique(n_removed)
 new = []
@@ -52,6 +55,7 @@ wrong = []
 wrong_std = []
 wrong_up = []
 wrong_down = []
+
 for i, n in enumerate(rem):
     net = np.where(n == n_removed)
     new.append(percent_new[net].mean())
@@ -83,7 +87,7 @@ plt.fill_between(rem,
                  color=wrong_color, alpha=0.2)
 
 # 4. adjust figure parameters and save
-fig_lettersize = 15
+fig_lettersize = 20
 # plt.title('Plasticity effects')
 plt.legend(loc='best', frameon=False, fontsize=fig_lettersize)
 plt.xlabel(r'excluded sentences (%)', fontsize=fig_lettersize)
