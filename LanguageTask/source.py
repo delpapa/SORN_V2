@@ -28,125 +28,283 @@ class FDT_GrammarSource(object):
         # self.file_path= params.file_path
         self.steps_plastic = params.steps_plastic
         self.steps_readout = params.steps_readout
+        self.dict = params.dictionary
 
-        self.verbs = ['eats ',
-                      'drinks ']
+        if self.dict == 'FDT':
 
-        self.subjects = ['man ',
-                         'woman ',
-                         'girl ',
-                         'boy ',
-                         'child ',
-                         'cat ',
-                         'dog ',
-                         'fox ']
+            self.verbs = ['eats ',
+                          'drinks ']
 
-        self.objects_eat = ['meat.',
-                            'bread.',
-                            'fish.',
-                            'vegetables.']
-        self.objects_drink = ['milk.',
-                              'water.',
-                              'juice.',
-                              'tea.']
+            self.subjects = ['man ',
+                             'woman ',
+                             'girl ',
+                             'boy ',
+                             'child ',
+                             'cat ',
+                             'dog ',
+                             'fox ']
 
-        self.objects = [self.objects_eat, self.objects_drink]
+            self.objects_eat = ['meat.',
+                                'bread.',
+                                'fish.',
+                                'vegetables.']
+            self.objects_drink = ['milk.',
+                                  'water.',
+                                  'juice.',
+                                  'tea.']
 
-        # create a huge list with all input sentences
-        partial_input_string = []
-        for _ in xrange(self.steps_plastic):
-            # create a lot of sentences!
-            sub = random.choice(self.subjects)
-            ver = random.choice(self.verbs)
-            if ver == self.verbs[0]:
-                obj = random.choice(self.objects_eat)
-            elif ver == self.verbs[1]:
-                obj = random.choice(self.objects_drink)
-            partial_input_string.append(sub+ver+obj)
+            self.objects = [self.objects_eat, self.objects_drink]
 
-        # all unique input sentences
-        self.all_sentences = np.unique(partial_input_string)
+            # create a huge list with all input sentences
+            partial_input_string = []
+            for _ in xrange(self.steps_plastic):
+                # create a lot of sentences!
+                sub = random.choice(self.subjects)
+                ver = random.choice(self.verbs)
+                if ver == self.verbs[0]:
+                    obj = random.choice(self.objects_eat)
+                elif ver == self.verbs[1]:
+                    obj = random.choice(self.objects_drink)
+                partial_input_string.append(sub+ver+obj)
 
-        # remove random sentences
-        shuffled_unique_sentences = np.unique(partial_input_string)
-        np.random.shuffle(shuffled_unique_sentences)
+            # all unique input sentences
+            self.all_sentences = np.unique(partial_input_string)
 
-        # TODO: make sure all words appear at least once
-        # TODO: sentences must be removed at random!
-        # while True:
-        #     self.removed_sentences = shuffled_unique_sentences[:params.n_removed_sentences]
-        #     input_string = [x for x in partial_input_string if x not in self.removed_sentences]
-        #     self.used_sentences = np.unique(input_string)
-        #     if np.unique(''.join(self.used_sentences).replace('.', ' ').split()).size == 18:
-        #         break
+            # remove random sentences
+            shuffled_unique_sentences = np.unique(partial_input_string)
+            np.random.shuffle(shuffled_unique_sentences)
 
+            # TODO: make sure all words appear at least once
+            # TODO: sentences must be removed at random!
 
-        if params.n_removed_sentences >= 8:
-            self.removed_sentences = ['woman drinks milk.',
-                                      'fox drinks tea.',
-                                      'cat eats vegetables.',
-                                      'girl eats meat.',
-                                      'child eats fish.',
-                                      'boy drinks juice.',
-                                      'man drinks water.',
-                                      'dog eats bread.']
-        if params.n_removed_sentences >= 16:
-            self.removed_sentences.extend(['woman eats meat.',
-                                          'fox eats bread.',
-                                          'cat drinks tea.',
-                                          'girl drinks juice.',
-                                          'child drinks water.',
-                                          'boy eats fish.',
-                                          'man eats vegetables.',
-                                          'dog drinks milk.'])
-        if params.n_removed_sentences >= 24:
-            self.removed_sentences.extend(['woman eats vegetables.',
-                                          'fox eats fish.',
-                                          'cat drinks juice.',
-                                          'girl drinks tea.',
-                                          'child drinks milk.',
-                                          'boy eats bread.',
-                                          'man eats meat.',
-                                          'dog drinks water.'])
-        if params.n_removed_sentences >= 32:
-            self.removed_sentences.extend(['woman drinks water.',
-                                          'fox drinks juice.',
-                                          'cat eats bread.',
-                                          'girl eats fish.',
-                                          'child eats vegetables.',
-                                          'boy drinks tea.',
-                                          'man drinks milk.',
-                                          'dog eats meat.'])
-        if params.n_removed_sentences >= 40:
-            self.removed_sentences.extend(['woman drinks tea.',
-                                          'fox drinks milk.',
-                                          'cat eats meat.',
-                                          'girl eats vegetables.',
-                                          'child eats bread.',
-                                          'boy drinks water.',
-                                          'man drinks juice.',
-                                          'dog eats fish.'])
-        if params.n_removed_sentences >= 48:
-            self.removed_sentences.extend(['woman eats fish.',
-                                          'fox eats meat.',
-                                          'cat drinks milk.',
-                                          'girl drinks water.',
-                                          'child drinks juice.',
-                                          'boy eats vegetables.',
-                                          'man eats bread.',
-                                          'dog drinks tea.'])
-        if params.n_removed_sentences >= 56:
-            self.removed_sentences.extend(['woman drinks juice.',
-                                          'fox drinks water.',
-                                          'cat eats fish.',
-                                          'girl eats bread.',
-                                          'child eats meat.',
-                                          'boy drinks milk.',
-                                          'man drinks tea.',
-                                          'dog eats vegetables.'])
+            if params.n_removed_sentences >= 8:
+                self.removed_sentences = ['woman drinks milk.',
+                                          'fox drinks tea.',
+                                          'cat eats vegetables.',
+                                          'girl eats meat.',
+                                          'child eats fish.',
+                                          'boy drinks juice.',
+                                          'man drinks water.',
+                                          'dog eats bread.']
+            if params.n_removed_sentences >= 16:
+                self.removed_sentences.extend(['woman eats meat.',
+                                              'fox eats bread.',
+                                              'cat drinks tea.',
+                                              'girl drinks juice.',
+                                              'child drinks water.',
+                                              'boy eats fish.',
+                                              'man eats vegetables.',
+                                              'dog drinks milk.'])
+            if params.n_removed_sentences >= 24:
+                self.removed_sentences.extend(['woman eats vegetables.',
+                                              'fox eats fish.',
+                                              'cat drinks juice.',
+                                              'girl drinks tea.',
+                                              'child drinks milk.',
+                                              'boy eats bread.',
+                                              'man eats meat.',
+                                              'dog drinks water.'])
+            if params.n_removed_sentences >= 32:
+                self.removed_sentences.extend(['woman drinks water.',
+                                              'fox drinks juice.',
+                                              'cat eats bread.',
+                                              'girl eats fish.',
+                                              'child eats vegetables.',
+                                              'boy drinks tea.',
+                                              'man drinks milk.',
+                                              'dog eats meat.'])
+            if params.n_removed_sentences >= 40:
+                self.removed_sentences.extend(['woman drinks tea.',
+                                              'fox drinks milk.',
+                                              'cat eats meat.',
+                                              'girl eats vegetables.',
+                                              'child eats bread.',
+                                              'boy drinks water.',
+                                              'man drinks juice.',
+                                              'dog eats fish.'])
+            if params.n_removed_sentences >= 48:
+                self.removed_sentences.extend(['woman eats fish.',
+                                              'fox eats meat.',
+                                              'cat drinks milk.',
+                                              'girl drinks water.',
+                                              'child drinks juice.',
+                                              'boy eats vegetables.',
+                                              'man eats bread.',
+                                              'dog drinks tea.'])
+            if params.n_removed_sentences >= 56:
+                self.removed_sentences.extend(['woman drinks juice.',
+                                              'fox drinks water.',
+                                              'cat eats fish.',
+                                              'girl eats bread.',
+                                              'child eats meat.',
+                                              'boy drinks milk.',
+                                              'man drinks tea.',
+                                              'dog eats vegetables.'])
 
-        input_string = [x for x in partial_input_string if x not in self.removed_sentences]
-        self.used_sentences = np.unique(input_string)
+            input_string = [x for x in partial_input_string if x not in self.removed_sentences]
+            self.used_sentences = np.unique(input_string)
+
+        if self.dict == 'SP':
+
+            self.subjects_singular = ['dog ',
+                                      'cat ',
+                                      'pig ',
+                                      'bird ',
+                                      'sun ',
+                                      'fish ',
+                                      'wind ',
+                                      'monkey ',
+                                      'horse ',
+                                      'lion ',
+                                      'elephant ',
+                                      'duck ']
+            self.subjects_plural = [s[:-1]+'s ' for s in self.subjects_singular]
+            self.subjects = self.subjects_singular + self.subjects_plural
+            self.subjects = np.array(self.subjects)
+
+            self.verbs_plural =  ['bark.',
+                                  'meow.',
+                                  'oink.',
+                                  'sing.',
+                                  'shine.',
+                                  'swim.',
+                                  'blow.',
+                                  'climb.',
+                                  'gallop.',
+                                  'hunt.',
+                                  'toot.',
+                                  'quack.']
+            self.verbs_singular = [s[:-1]+'s.' for s in self.verbs_plural]
+            self.verbs = self.verbs_singular + self.verbs_plural
+            self.verbs = np.array(self.verbs)
+
+            # create a huge list with all input sentences
+            partial_input_string = []
+            for _ in xrange(self.steps_plastic):
+                # create a lot of sentences!
+                sub = random.choice(self.subjects)
+                ver = self.verbs[np.where(self.subjects==sub)][0]
+                partial_input_string.append(sub+ver)
+
+            # all unique input sentences
+            self.all_sentences = np.unique(partial_input_string)
+            input_string = [x for x in partial_input_string]
+            self.used_sentences = np.unique(input_string)
+            self.removed_sentences = []
+
+        if self.dict == 'eFDT':
+
+            self.verbs = ['eats ',
+                          'drinks ']
+
+            self.subjects = ['man ',
+                             'woman ',
+                             'girl ',
+                             'boy ',
+                             'child ',
+                             'cat ',
+                             'dog ',
+                             'fox ']
+
+            self.objects_eat = ['meat.',
+                                'bread.',
+                                'fish.',
+                                'vegetables.']
+            self.objects_drink = ['milk.',
+                                  'water.',
+                                  'juice.',
+                                  'tea.']
+
+            self.objects = [self.objects_eat, self.objects_drink]
+
+            # create a huge list with all input sentences
+            partial_input_string = []
+            for _ in xrange(self.steps_plastic):
+                # create a lot of sentences!
+                sub = random.choice(self.subjects)
+                ver = random.choice(self.verbs)
+                if ver == self.verbs[0]:
+                    obj = random.choice(self.objects_eat)
+                elif ver == self.verbs[1]:
+                    obj = random.choice(self.objects_drink)
+                partial_input_string.append(sub+ver+obj)
+
+            # all unique input sentences
+            self.all_sentences = np.unique(partial_input_string)
+
+            # remove random sentences
+            shuffled_unique_sentences = np.unique(partial_input_string)
+            np.random.shuffle(shuffled_unique_sentences)
+
+            # TODO: make sure all words appear at least once
+            # TODO: sentences must be removed at random!
+
+            if params.n_removed_sentences >= 8:
+                self.removed_sentences = ['woman drinks milk.',
+                                          'fox drinks tea.',
+                                          'cat eats vegetables.',
+                                          'girl eats meat.',
+                                          'child eats fish.',
+                                          'boy drinks juice.',
+                                          'man drinks water.',
+                                          'dog eats bread.']
+            if params.n_removed_sentences >= 16:
+                self.removed_sentences.extend(['woman eats meat.',
+                                              'fox eats bread.',
+                                              'cat drinks tea.',
+                                              'girl drinks juice.',
+                                              'child drinks water.',
+                                              'boy eats fish.',
+                                              'man eats vegetables.',
+                                              'dog drinks milk.'])
+            if params.n_removed_sentences >= 24:
+                self.removed_sentences.extend(['woman eats vegetables.',
+                                              'fox eats fish.',
+                                              'cat drinks juice.',
+                                              'girl drinks tea.',
+                                              'child drinks milk.',
+                                              'boy eats bread.',
+                                              'man eats meat.',
+                                              'dog drinks water.'])
+            if params.n_removed_sentences >= 32:
+                self.removed_sentences.extend(['woman drinks water.',
+                                              'fox drinks juice.',
+                                              'cat eats bread.',
+                                              'girl eats fish.',
+                                              'child eats vegetables.',
+                                              'boy drinks tea.',
+                                              'man drinks milk.',
+                                              'dog eats meat.'])
+            if params.n_removed_sentences >= 40:
+                self.removed_sentences.extend(['woman drinks tea.',
+                                              'fox drinks milk.',
+                                              'cat eats meat.',
+                                              'girl eats vegetables.',
+                                              'child eats bread.',
+                                              'boy drinks water.',
+                                              'man drinks juice.',
+                                              'dog eats fish.'])
+            if params.n_removed_sentences >= 48:
+                self.removed_sentences.extend(['woman eats fish.',
+                                              'fox eats meat.',
+                                              'cat drinks milk.',
+                                              'girl drinks water.',
+                                              'child drinks juice.',
+                                              'boy eats vegetables.',
+                                              'man eats bread.',
+                                              'dog drinks tea.'])
+            if params.n_removed_sentences >= 56:
+                self.removed_sentences.extend(['woman drinks juice.',
+                                              'fox drinks water.',
+                                              'cat eats fish.',
+                                              'girl eats bread.',
+                                              'child eats meat.',
+                                              'boy drinks milk.',
+                                              'man drinks tea.',
+                                              'dog eats vegetables.'])
+
+            input_string = [x for x in partial_input_string if x not in self.removed_sentences]
+            self.used_sentences = np.unique(input_string)
 
         # input is a huge string
         self.corpus = ' '.join(input_string)

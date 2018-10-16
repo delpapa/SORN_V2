@@ -19,17 +19,13 @@ def get_par():
 
     For each sorn simulation, change these parameters manually.
     """
-    par.N_e = 5000                                 # excitatory neurons
+    par.N_e = 600                                  # excitatory neurons
     par.N_u = int(par.N_e/40)                      # neurons in each input pool
 
-    par.eta_stdp = 0.001                           # STDP learning rate
+    par.eta_stdp = 0.005                           # STDP learning rate
     par.prune_stdp = False                         # prune very small weights
     par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
-
-    # lognormal weights (from Lukas Koehls thesis)
-    # par.h_ip = np.random.lognormal(mean=np.log(0.1), sigma=0.1962,
-    #                                size=par.N_e)
 
     par.input_gain = 1                             # input gain factor
 
@@ -43,9 +39,10 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.n_removed_sentences = 32  # options are in np.arange(8, 64, 8)
+    par.dictionary = 'SP' # ('FDT', 'eFDT', or 'SP')
+    par.n_removed_sentences = 0  # options are in np.arange(8, 64, 8) for FDT
 
-    par.steps_plastic = 200000                      # sorn training time steps
+    par.steps_plastic = 50000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
     par.steps_spont = 5000                         # steps of spontaneous generation
 
