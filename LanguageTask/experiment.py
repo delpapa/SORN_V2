@@ -137,19 +137,39 @@ class Experiment(object):
         # and separate sentences by '.'. Also, remove extra spaces.
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
 
-        # all output sentences
-        output_dict = Counter(output_sentences)
-        stats.n_output = len(output_sentences)
+        if sorn.source.dict == 'corpus':
 
-        # new output sentences
-        new_dict = Counter([s for s in output_sentences \
-                           if s in sorn.source.removed_sentences])
-        stats.n_new = sum(new_dict.values())
+            stats.output = ''.join(output_sentences)
 
-        # wrong output sentences
-        wrong_dict = Counter([s for s in output_sentences \
-                               if s not in sorn.source.all_sentences])
-        stats.n_wrong = sum(wrong_dict.values())
+        else:
+            # all output sentences
+            output_dict = Counter(output_sentences)
+            stats.n_output = len(output_sentences)
+
+            # new output sentences
+            new_dict = Counter([s for s in output_sentences \
+                               if s in sorn.source.removed_sentences])
+            stats.n_new = sum(new_dict.values())
+
+            # wrong output sentences
+            wrong_dict = Counter([s for s in output_sentences \
+                                   if s not in sorn.source.all_sentences])
+            stats.n_wrong = sum(wrong_dict.values())
+
+            if sorn.source.dict == 'SP':
+                gram_dict = Counter([s for s in output_sentences \
+                                      if s in sorn.source.grammatical_errors])
+                stats.n_gram = sum(gram_dict.values())
+
+                sema_dict = Counter([s for s in output_sentences \
+                                      if s in sorn.source.semantic_errors])
+                stats.n_sema = sum(sema_dict.values())
+
+                others_dict = Counter([s for s in output_sentences \
+                                      if s not in sorn.source.all_sentences \
+                                      if s not in sorn.source.grammatical_errors \
+                                      if s not in sorn.source.semantic_errors])
+                stats.n_others = sum(others_dict.values())
 
         # save some storage space by deleting some parameters.
         if hasattr(stats, 'aux'):
