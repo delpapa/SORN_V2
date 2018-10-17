@@ -26,25 +26,20 @@ fig = plt.figure(1, figsize=(7, 6))
 # 1. load performances and experiment parameters
 print '\nCalculating percent of wrong sentences... '
 
-experiment_tag = '_sp'
-experiment_folder = 'LanguageTask' + experiment_tag
-experiment_path = 'backup/' + experiment_folder + '/'
-experiment_n = len(os.listdir(experiment_path))
-percent_error = np.zeros(experiment_n)
-net_size = np.zeros(experiment_n)
-dicts = []
+for experiment_tag in ['error_and_new', 'eFDT', 'sp']:
+    experiment_folder = 'LanguageTask_' + experiment_tag
+    experiment_path = 'backup/' + experiment_folder + '/'
+    experiment_n = len(os.listdir(experiment_path))
+    percent_error = np.zeros(experiment_n)
+    net_size = np.zeros(experiment_n)
 
-for exp, exp_name in enumerate(os.listdir(experiment_path)):
+    for exp, exp_name in enumerate(os.listdir(experiment_path)):
 
-    exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
-    stats = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
-    params = pickle.load(open(experiment_path+exp_name+'/init_params.p', 'rb'))
-    dicts.append(params.dictionary)
-    percent_error[exp] = float(stats.n_wrong)/stats.n_output
-    net_size[exp] = int(exp_name.split('_')[0][1:])
+        exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
+        stats = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
+        percent_error[exp] = float(stats.n_wrong)/stats.n_output
+        net_size[exp] = int(exp_name.split('_')[0][1:])
 
-
-for d, d_name in enumerate(np.unique(dicts)):
     N_e = np.unique(net_size)
     wrong = []
     wrong_std = []
@@ -57,9 +52,16 @@ for d, d_name in enumerate(np.unique(dicts)):
         wrong_up.append(np.percentile(percent_error[net], 75))
         wrong_down.append(np.percentile(percent_error[net], 25))
 
+    if experiment_tag == 'error_and_new':
+        plot_label = 'FDT'
+    elif experiment_tag == 'eFDT':
+        plot_label = 'eFDT'
+    elif experiment_tag == 'sp':
+        plot_label = 'Sing./Plur.'
+
     plt.plot(N_e, wrong, '-o',
              alpha=0.5,
-             label='Singular-Plural')
+             label=plot_label)
 
     plt.fill_between(N_e,
                      np.array(wrong)-np.array(wrong_std),
@@ -71,12 +73,12 @@ fig_lettersize = 20
 # plt.title('Plasticity effects')
 plt.legend(loc='best', frameon=False, fontsize=fig_lettersize)
 plt.xlabel(r'$N^{\rm E}$', fontsize=fig_lettersize)
-plt.ylabel(r'sentences (%)', fontsize=fig_lettersize)
-plt.xlim([100, 1000])
+plt.ylabel(r' incorrect sentences (%)', fontsize=fig_lettersize)
+plt.xlim([100, 1500])
 plt.ylim([0., 0.6])
 plt.xticks(
-    [200, 400, 600, 800, 1000],
-    ['$200$',  '$400$',  '$600$', '$800$', '$1000$'],
+    [200, 500, 800, 1100, 1400, 1700],
+    ['$200$',  '$500$',  '$800$', '$1100$', '$1400$', '$1700$'],
     size=fig_lettersize,
     )
 plt.yticks(
