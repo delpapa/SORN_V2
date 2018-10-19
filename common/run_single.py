@@ -22,7 +22,7 @@ params = exp_dir.param
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = '_eFDT' # must start with '_' (change X to experiment name)
+params.aux.experiment_tag = 'CHILDES_big' # must start with '_' (change X to experiment name)
 
 # 3. initialize experiment, sorn, and stats objects
 #    the experiment class keeps a copy of the initial sorn main parameters

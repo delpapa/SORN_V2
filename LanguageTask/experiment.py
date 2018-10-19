@@ -140,6 +140,12 @@ class Experiment(object):
         if sorn.source.dict == 'corpus':
 
             stats.output = ''.join(output_sentences)
+            stats.W_ee = sorn.W_ee.W
+            stats.W_ei = sorn.W_ei.W
+            stats.W_ie = sorn.W_ie.W
+            stats.W_eu = sorn.W_eu.W
+            stats.T_e = sorn.T_e
+            stats.T_e = sorn.T_e
 
         else:
             # all output sentences
