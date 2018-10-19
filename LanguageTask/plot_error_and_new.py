@@ -71,7 +71,7 @@ plt.plot(N_e, new, '-o',
          label='new')
 plt.plot(N_e, wrong, '-o',
          color=wrong_color, alpha=0.5,
-         label='wrong')
+         label='incorrect')
 
 plt.fill_between(N_e,
                  np.array(new)-np.array(new_std),

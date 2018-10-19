@@ -54,18 +54,26 @@ for experiment_tag in ['error_and_new', 'eFDT', 'sp']:
 
     if experiment_tag == 'error_and_new':
         plot_label = 'FDT'
+        plot_color = 'r'
+        plot_style = '-'
     elif experiment_tag == 'eFDT':
         plot_label = 'eFDT'
+        plot_color = 'r'
+        plot_style = '--'
     elif experiment_tag == 'sp':
         plot_label = 'Sing./Plur.'
+        plot_color = 'orange'
+        plot_style = '-'
 
-    plt.plot(N_e, wrong, '-o',
+    plt.plot(N_e, wrong, plot_style,
              alpha=0.5,
+             color=plot_color,
              label=plot_label)
 
     plt.fill_between(N_e,
                      np.array(wrong)-np.array(wrong_std),
                      np.array(wrong)+np.array(wrong_std),
+                     color=plot_color,
                      alpha=0.2)
 
 # 4. adjust figure parameters and save

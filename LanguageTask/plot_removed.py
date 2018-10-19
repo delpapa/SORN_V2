@@ -75,7 +75,7 @@ plt.plot(rem, new, '-o',
          label='new')
 plt.plot(rem, wrong, '-o',
          color=wrong_color, alpha=0.5,
-         label='wrong')
+         label='incorrect')
 
 plt.fill_between(rem,
                  np.array(new)-np.array(new_std),

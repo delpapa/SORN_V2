@@ -75,25 +75,25 @@ for i, n in enumerate(N_e):
     sema_up.append(np.percentile(sema_error[net], 75))
     sema_down.append(np.percentile(sema_error[net], 25))
 
-plt.plot(N_e, others, '-o',
+plt.plot(N_e, others, '-',
          alpha=0.5, color='r',
-         label='other errors')
+         label='other')
 plt.fill_between(N_e,
                  np.array(others)-np.array(others_std),
                  np.array(others)+np.array(others_std),
                  alpha=0.2, color='r')
 
-plt.plot(N_e, gram, '-o',
+plt.plot(N_e, gram, '-',
          alpha=0.5,
-         label='grammatical errors')
+         label='grammatical')
 plt.fill_between(N_e,
                  np.array(gram)-np.array(gram_std),
                  np.array(gram)+np.array(gram_std),
                  alpha=0.2)
 
-plt.plot(N_e, sema, '-o',
+plt.plot(N_e, sema, '-',
          alpha=0.5,
-         label='semantic errors')
+         label='semantic')
 plt.fill_between(N_e,
                  np.array(sema)-np.array(sema_std),
                  np.array(sema)+np.array(sema_std),
@@ -106,15 +106,15 @@ plt.legend(loc='best', frameon=False, fontsize=fig_lettersize)
 plt.xlabel(r'$N^{\rm E}$', fontsize=fig_lettersize)
 plt.ylabel(r' incorrect sentences (%)', fontsize=fig_lettersize)
 plt.xlim([100, 1500])
-plt.ylim([0., 0.4])
+plt.ylim([0., 0.3])
 plt.xticks(
     [200, 500, 800, 1100, 1400, 1700],
     ['$200$',  '$500$',  '$800$', '$1100$', '$1400$', '$1700$'],
     size=fig_lettersize,
     )
 plt.yticks(
-    [0., 0.1, 0.2, 0.3, 0.4],
-    ['$0$', '$10$', '$20$', '$30$', '$40$'],
+    [0., 0.1, 0.2, 0.3],
+    ['$0$', '$10$', '$20$', '$30$'],
     size=fig_lettersize,
     )
 
@@ -122,5 +122,5 @@ if SAVE_PLOT:
     plots_dir = 'plots/' + experiment_folder + '/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-    plt.savefig(plots_dir+'dicts_error.pdf', format='pdf')
+    plt.savefig(plots_dir+'error_types.pdf', format='pdf')
 plt.show()
