@@ -16,19 +16,19 @@ from utils import backup_pickle
 try:
     exp_dir = import_module(sys.argv[1])
 except:
-    raise ValueError('Please specify a valid experiment name\
-                                          as first argument.')
+    raise ValueError('Please specify a valid experiment name as first argument.')
 params = exp_dir.param
 
 # 2. add experiment specific parameters
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = sys.argv[2]
+params.aux.experiment_tag = '_{}'.format(sys.argv[2])
 
 # 3. initialize experiment, sorn, and stats objects
 #    the experiment class keeps a copy of the initial sorn main parameters
 experiment = exp_dir.experiment.Experiment(params)
+experiment.files_tosave = ['params', 'stats']
 sorn = Sorn(params, experiment.inputsource)
 stats = Stats(experiment.stats_cache, params)
 

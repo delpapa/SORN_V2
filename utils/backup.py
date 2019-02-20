@@ -24,13 +24,13 @@ def backup_pickle(experiment, stats):
     params = experiment.init_params
     results_dir = experiment.results_dir
     files_tosave = experiment.files_tosave
-    directory = ('backup/' + results_dir)
+    directory = ('backup/{}'.format(results_dir))
 
     # creates a new directory for storing the results
     # sleeps for a short time to avoid conflicts when running in parallel
     time.sleep(np.random.rand())
     for n_sim in range(1, 1000):
-        final_dir = directory + '_' + str(n_sim) + '/'
+        final_dir = '{}_{}/'.format(directory, str(n_sim))
         if not os.path.exists(final_dir):
             try:
                 os.makedirs(final_dir)

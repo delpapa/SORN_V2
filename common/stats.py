@@ -64,7 +64,7 @@ class Stats(object):
             step += self.aux.steps_readouttrain
 
         if hasattr(self, 'activity'):
-            if phase == 'plastic':
+            if phase is 'plastic':
                 self.activity[step] = x.sum()
             elif phase in readout:
                 self.activity[self.par.steps_plastic+step] = x.sum()
@@ -73,7 +73,7 @@ class Stats(object):
             self.activity_readout[step] = x.sum()
 
         if hasattr(self, 'connec_frac'):
-            if phase == 'plastic':
+            if phase is 'plastic':
                 self.connec_frac[step] = \
                                        W_ee.W.data.size / float(self.par.N_e**2)
             elif phase in readout:

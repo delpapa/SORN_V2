@@ -8,7 +8,7 @@ import time
 from .synapses import FullSynapticMatrix, SparseSynapticMatrix
 
 
-class Sorn(object):
+class Sorn:
     """
     The famous Self-Organizing Recurrent Neural Network (SORN) class.
     """
@@ -74,22 +74,24 @@ class Sorn(object):
         y_new = (self.R_y >= 0.0)+0
 
         # Apply IP, STDP, SN
-        if par.eta_ip != 'off':
+        if par.eta_ip is not 'off':
             self.ip(x_new)
-        if par.eta_stdp != 'off':
+        if par.eta_stdp is not 'off':
             self.W_ee.stdp(self.x, x_new)
             self.W_ee.sn()
 
         # Apply iSTDP and SP, if necessary
-        if hasattr(par, 'eta_istdp') and par.eta_istdp != 'off':
+        if hasattr(par, 'eta_istdp') and par.eta_istdp is not 'off':
             self.W_ei.istdp(self.y, x_new)
             self.W_ei.sn()
-        if hasattr(par, 'sp_init') and par.sp_init != 'off':
+        if hasattr(par, 'sp_init') and par.sp_init is not 'off':
             self.W_ee.sp()
 
         # Update SORN variables
         self.x = x_new
         self.y = y_new
+
+        import ipdb; ipdb.set_trace()
 
     def ip(self, x):
         """
@@ -99,7 +101,7 @@ class Sorn(object):
         x -- current activity array
         """
 
-        if not self.params.par.eta_ip == 'off':
+        if self.params.par.eta_ip is not 'off':
             self.T_e += self.params.par.eta_ip*(x - self.params.par.h_ip)
 
     def simulation(self, stats, phase='plastic'):
@@ -114,11 +116,11 @@ class Sorn(object):
 
         source = self.source
 
-        if phase == 'plastic':
+        if phase is 'plastic':
             N = self.params.par.steps_plastic
-        elif phase == 'train':
+        elif phase is 'train':
             N = self.params.aux.steps_readouttrain
-        elif phase == 'test':
+        elif phase is 'test':
             N = self.params.aux.steps_readouttest
 
         # Simulation loop
@@ -133,7 +135,4 @@ class Sorn(object):
 
             # command line progress message
             if self.params.aux.display:
-                if (N > 100) and ((n % ((N-1)//100) == 0) or (n == N-1)):
-                    sys.stdout.write('\rSimulation: %3d%%'
-                                     % ((int)(n/(N-1.)*100)))
-                sys.stdout.flush()
+                print('Simulation: {}%\r'.format((int)(n/(N-1.)*100)), end='')
