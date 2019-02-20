@@ -6,11 +6,11 @@ A SORN repository for general purposes, containing a few experiments and example
 
 The scripts for each experiment are stored in different folders with the experiments' respective name. Each folder contain a minimum of three scripts: the experiment parameters (`param.py`), instructions (`experiment.py`), and the input details (`source.py`). The parameters in these scripts can be modified at will to reproduce various results. Additionally, each folder contains the relevant plot scripts, for visualizing the results.
 
-To simulate a single experiment, run `python common/run_single.py <ExperimentName>` from the main folder.
+To simulate a single experiment, run `python common/run_single.py <EXPERIMENT_NAME>` from the main folder.
 
 Currently implemented experiments: 
 
-* CountingTask (from Lazar et al. 2009)
+* CountingTask (from [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full))
 * RandomSequenceTask
 * NeuronalAvalanches (from Del Papa et al. 2017, Del Papa et al. 2018)
 * LanguageTask (in progress...)
@@ -64,15 +64,15 @@ Fork a copy of this repository onto your own GitHub account and `clone` your for
 
 #### Setting up the environment
 
-Install [Python 2.7](https://www.python.org/download/releases/2.7/) and the [conda package manager](https://conda.io/miniconda.html) (use miniconda, not anaconda). Navigate to the project directory inside a terminal and create a virtual environment (replace <ENVIRONMENT_NAME>, for example, with "sorn_env") and install the [required packages](https://github.com/delpapa/sorn/blob/master/requirements.txt):
+Install [Python 3.7](https://www.python.org/downloads/release/python-371/) and the [conda package manager](https://conda.io/miniconda.html) (use miniconda). Navigate to the project directory inside a terminal and create a virtual environment (replace <ENVIRONMENT_NAME>, for example, with `sorn_env`) and install the [required packages](https://github.com/delpapa/SORN_V2/blob/master/requirements.txt):
 
-`conda create -n <ENVIRONMENT_NAME> --file requirements.txt python=2.7`
+`conda create -n <ENVIRONMENT_NAME> --file requirements.txt python=3.7`
 
 Activate the virtual environment:
 
 `source activate <ENVIRONMENT_NAME>`
 
-By installing these packages in a virtual environment, you avoid dependency clashes with other packages that may already be installed elsewhere on your computer. Importantly, this SORN repository does not yet support python 3.
+By installing these packages in a virtual environment, you avoid dependency clashes with other packages that may already be installed elsewhere on your computer.
 
 ## Experiments
 
