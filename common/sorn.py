@@ -91,8 +91,6 @@ class Sorn:
         self.x = x_new
         self.y = y_new
 
-        import ipdb; ipdb.set_trace()
-
     def ip(self, x):
         """
         Apply one step of intrinsic plasticity (IP).
