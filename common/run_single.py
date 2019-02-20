@@ -1,28 +1,30 @@
 """This script runs a single sorn simulation for the experiment given as an
 argument with the specified parameters and experiment instructions"""
 
-import sys
-sys.path.insert(0, '')
+import sys; sys.path.append('.')
 from importlib import import_module
 
 from common.sorn import Sorn
 from common.stats import Stats
 from utils import backup_pickle
 
-
 ################################################################################
 #                              SORN simulation                                 #
 ################################################################################
 
 # 1. load param file
-exp_dir = import_module(sys.argv[1])
+try:
+    exp_dir = import_module(sys.argv[1])
+except:
+    raise ValueError('Please specify a valid experiment name\
+                                          as first argument.')
 params = exp_dir.param
 
 # 2. add experiment specific parameters
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = 'CHILDES_big' # must start with '_' (change X to experiment name)
+params.aux.experiment_tag = sys.argv[2]
 
 # 3. initialize experiment, sorn, and stats objects
 #    the experiment class keeps a copy of the initial sorn main parameters

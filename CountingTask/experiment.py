@@ -8,9 +8,9 @@ import copy
 
 from sklearn import linear_model
 
-from source import CountingSource
+from .source import CountingSource
 
-class Experiment(object):
+class Experiment:
     """
     Experiment for the SORN: contains the source, the simulation procedure and
     the performance calculation
@@ -39,7 +39,7 @@ class Experiment(object):
         self.files_tosave = [
             'params',
             'stats',
-            # 'scripts',
+            'scripts',
         ]
 
         # load input source
@@ -60,12 +60,12 @@ class Experiment(object):
 
         # 1. input with plasticity
         if display:
-            print 'Plasticity phase:'
+            print('Plasticity phase:')
         sorn.simulation(stats, phase='plastic')
 
         # 2. input without plasticity - train (STDP and IP off)
         if display:
-            print '\nReadout training phase:'
+            print('\nReadout training phase:')
 
         sorn.params.par.eta_stdp = 'off'
         sorn.params.par.eta_ip = 'off'
@@ -73,13 +73,13 @@ class Experiment(object):
 
         # 3. input without plasticity - test performance (STDP and IP off)
         if display:
-            print '\nReadout testing phase:'
+            print('\nReadout testing phase:')
 
         sorn.simulation(stats, phase='test')
 
         # 4. calculate performance
         if display:
-            print '\nCalculating performance using Logistic Regression...',
+            print('\nCalculating performance using Logistic Regression...')
 
         # load stats to calculate the performance
         t_train = sorn.params.aux.steps_readouttrain
@@ -93,14 +93,14 @@ class Experiment(object):
         # y_test = (stats.input_readout[t_train+1:t_train+t_test].T).astype(int)
         y_test_ind = (stats.input_index_readout[t_train+1:t_train+t_test].T).astype(int)
 
+        import ipdb; ipdb.set_trace()
         # Logistic Regression
         readout = linear_model.LogisticRegression()
         output_weights = readout.fit(X_train.T, y_train_ind)
         performance = output_weights.score(X_test.T, y_test_ind)
 
         # #### Readout training using PI matrix
-        #
-        # trasform labels in one-hot array
+        # # trasform labels in one-hot array
         # onehot_values = np.max(y_train) + 1
         # y_train_onehot = np.eye(onehot_values)[y_train_ind]
         # y_test_onehot = np.eye(onehot_values)[y_test_ind]
@@ -118,4 +118,4 @@ class Experiment(object):
         stats.performance = performance
 
         if display:
-            print 'done'
+            print('done')

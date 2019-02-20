@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 import os
 import sys
 sys.path.insert(1, '.')
@@ -13,7 +13,7 @@ from utils import Bunch
 
 # parameters to include in the plot
 N_values = np.array([200])              # network sizes
-experiment_tag = '_X'                   # experiment tag (change properly)
+experiment_tag = '_test'                   # experiment tag (change properly)
 
 ################################################################################
 #                            Plot performance                                  #
@@ -23,7 +23,7 @@ experiment_tag = '_X'                   # experiment tag (change properly)
 fig = plt.figure(1, figsize=(7, 7))
 
 # 1. load performances and sequence lengths
-print '\nCalculating performance for the Counting Task...'
+print('\nCalculating performance for the Counting Task...')
 experiment_folder = 'CountingTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 
@@ -34,7 +34,7 @@ for experiment in os.listdir(experiment_path):
     # read data files and load performances
     N, L, _ = [s[1:] for s in experiment.split('_')]
     if int(N) in N_values:
-        print 'experiment', experiment, '...',
+        print('experiment', experiment, '...', end='')
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
         stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
@@ -42,7 +42,7 @@ for experiment in os.listdir(experiment_path):
 
         final_performance.append(perf)
         final_L.append(int(L))
-        print 'Performance - LR:', '%.2f' % perf
+        print('Performance - LR:', '%.2f' % perf)
 final_L = np.array(final_L)
 final_performance = np.array(final_performance)
 

@@ -5,7 +5,7 @@ import sys
 import numpy as np
 import time
 
-from synapses import FullSynapticMatrix, SparseSynapticMatrix
+from .synapses import FullSynapticMatrix, SparseSynapticMatrix
 
 
 class Sorn(object):
@@ -122,7 +122,7 @@ class Sorn(object):
             N = self.params.aux.steps_readouttest
 
         # Simulation loop
-        for n in xrange(N):
+        for n in range(N):
 
             # Simulation step
             u = source.next()

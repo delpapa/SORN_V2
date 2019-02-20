@@ -28,7 +28,7 @@ class CountingSource(object):
         # build sequences
         word1 = 'A'
         word2 = 'D'
-        for _ in xrange(self.n):
+        for _ in range(self.n):
             word1 += 'B'
             word2 += 'E'
         word1 += 'C'

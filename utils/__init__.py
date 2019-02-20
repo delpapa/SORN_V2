@@ -1,3 +1,3 @@
-from bunch import *
+from .bunch import *
 
-from backup import backup_pickle
+from .backup import backup_pickle

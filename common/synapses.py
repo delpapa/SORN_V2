@@ -10,7 +10,7 @@ import scipy.sparse as sp
 import time
 
 
-class FullSynapticMatrix(object):
+class FullSynapticMatrix:
     """
     Dense connection matrix class for I-E, E-I and E-U synapses.
 
@@ -70,7 +70,7 @@ class FullSynapticMatrix(object):
         return self.W.dot(x)
 
 
-class SparseSynapticMatrix(object):
+class SparseSynapticMatrix:
     """
     Sparse connection matrix class for SORN E-E synapses.
 
@@ -182,7 +182,7 @@ class SparseSynapticMatrix(object):
                 W_dok[i, j] = self.sp_init
                 self.W = W_dok.tocsc()
             else:
-                print '\nCould not find a new connection\n'
+                print('\nCould not find a new connection\n')
 
     def prune(self):
         """
