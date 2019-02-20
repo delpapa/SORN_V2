@@ -11,9 +11,9 @@ import utils
 par = utils.Bunch()
 aux = utils.Bunch()
 
-################################################################################
-#                           SORN main parameters                               #
-################################################################################
+# ####################
+# SORN main parameters
+# ####################
 def get_par():
     """ Get main sorn parameters.
 
@@ -40,18 +40,18 @@ def get_par():
     par.T_i_max = 0.5                              # max initial threshold for I
     par.T_i_min = 0                                # min initial threshold for I
 
-################################################################################
-#                           Experiment parameters                              #
-################################################################################
+# #####################
+# Experiment parameters
+# #####################
     par.L = 1000000                                # sequence size, must be bigger than par.steps_plastic for a "true" random sequence input
     par.A = 40                                      # alphabet size
 
     par.steps_plastic = 30000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
 
-################################################################################
-#                    Additional derivative SORN parameters                     #
-################################################################################
+# #####################################
+# Additional derivative SORN parameters
+# #####################################
 def get_aux():
     """ Get auxiliary sorn parameters.
 

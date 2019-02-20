@@ -9,9 +9,9 @@ import copy
 import numpy as np
 from sklearn import linear_model
 
-from source import RandomSequenceSource
+from .source import RandomSequenceSource
 
-class Experiment(object):
+class Experiment:
     """Experiment class.
 
     It contains the source, the simulation procedure and back up instructions.
@@ -49,7 +49,7 @@ class Experiment(object):
         self.files_tosave = [
             'params',
             'stats',
-            # 'scripts',
+            'scripts',
         ]
 
         # load input source
@@ -70,13 +70,13 @@ class Experiment(object):
 
         # 1. input with plasticity
         if display:
-            print 'Plasticity phase:'
+            print('Plasticity phase:')
 
         sorn.simulation(stats, phase='plastic')
 
         # 2. input without plasticity - train (STDP and IP off)
         if display:
-            print '\nReadout training phase:'
+            print('\nReadout training phase:')
 
         sorn.params.par.eta_stdp = 'off'
         sorn.params.par.eta_ip = 'off'
@@ -84,13 +84,13 @@ class Experiment(object):
 
         # 3. input without plasticity - test performance (STDP and IP off)
         if display:
-            print '\nReadout testing phase:'
+            print('\nReadout testing phase:')
 
         sorn.simulation(stats, phase='test')
 
         # 4. calculate performance
         if display:
-            print '\nCalculating performance using Logistic Regression...',
+            print('\nCalculating performance using Logistic Regression...', end='')
 
         # load stats to calculate the performance
         t_train = sorn.params.aux.steps_readouttrain
@@ -127,4 +127,4 @@ class Experiment(object):
                 stats.performance[t_past] = output_weights.score(X_test, y_test)
 
         if display:
-            print 'done'
+            print('done')

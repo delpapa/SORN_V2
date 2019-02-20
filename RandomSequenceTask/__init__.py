@@ -1,2 +1,2 @@
-import param
-import experiment
+from . import param
+from . import experiment
