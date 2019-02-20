@@ -79,7 +79,7 @@ class Experiment:
 
         # 4. calculate performance
         if display:
-            print('\nCalculating performance using Logistic Regression...')
+            print('\nCalculating performance... ', end='')
 
         # load stats to calculate the performance
         t_train = sorn.params.aux.steps_readouttrain
@@ -93,7 +93,6 @@ class Experiment:
         # y_test = (stats.input_readout[t_train+1:t_train+t_test].T).astype(int)
         y_test_ind = (stats.input_index_readout[t_train+1:t_train+t_test].T).astype(int)
 
-        import ipdb; ipdb.set_trace()
         # Logistic Regression
         readout = linear_model.LogisticRegression()
         output_weights = readout.fit(X_train.T, y_train_ind)

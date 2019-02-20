@@ -1,7 +1,6 @@
 import pickle
 import os
-import sys
-sys.path.insert(1, '.')
+import sys; sys.path.insert(1, '.')
 from tempfile import TemporaryFile
 
 import numpy as np
@@ -13,7 +12,6 @@ from utils import Bunch
 
 # parameters to include in the plot
 N_values = np.array([200])              # network sizes
-experiment_tag = '_test'                   # experiment tag (change properly)
 
 ################################################################################
 #                            Plot performance                                  #
@@ -23,9 +21,14 @@ experiment_tag = '_test'                   # experiment tag (change properly)
 fig = plt.figure(1, figsize=(7, 7))
 
 # 1. load performances and sequence lengths
+try:
+    experiment_tag = sys.argv[1]
+except:
+    raise ValueError('Please specify a valid experiment tag.')
+
 print('\nCalculating performance for the Counting Task...')
-experiment_folder = 'CountingTask' + experiment_tag
-experiment_path = 'backup/' + experiment_folder + '/'
+experiment_folder = 'CountingTask_{}'.format(experiment_tag)
+experiment_path = 'backup/{}/'.format(experiment_folder)
 
 final_performance = []
 final_L = []
@@ -34,7 +37,7 @@ for experiment in os.listdir(experiment_path):
     # read data files and load performances
     N, L, _ = [s[1:] for s in experiment.split('_')]
     if int(N) in N_values:
-        print('experiment', experiment, '...', end='')
+        print('experiment', experiment, '... ', end='')
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
         stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
@@ -57,15 +60,15 @@ for l in np.unique(final_L):
     plt.errorbar(l, mean_L, yerr=std_L, color='g')
 
 # 3. edit figure features
-fig_lettersize = 12
+fig_lettersize = 15
 
-plt.title('Counting Task')
+plt.title('Counting Task', fontsize=fig_lettersize)
 plt.xlabel('L', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
 plt.ylim([0.4, 1.1])
 
 # 4. save figures
-plots_dir = 'plots/'+experiment_folder+'/'
+plots_dir = 'plots/{}/'.format(experiment_folder)
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
 plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')

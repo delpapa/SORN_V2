@@ -3,7 +3,7 @@
 This script contains the parameters for the Counting Task experiment.
 Parameters are divided in two subgroups:
     'par' contains the main model parameters
-    'aux' contains auxiliary parameters, that usually do not need to be changed
+    'aux' contains auxiliary parameters, which usually do not need to be changed
 """
 
 import os
@@ -14,42 +14,42 @@ import utils
 par = utils.Bunch()
 aux = utils.Bunch()
 
-################################################################################
-#                           SORN main parameters                               #
-################################################################################
+# ####################
+# SORN main parameters
+# ####################
 def get_par():
     """ Get main sorn parameters.
 
     For each sorn simulation, change these parameters manually.
     """
-    par.N_e = 200                                  # excitatory neurons
-    par.N_u = 10                                   # neurons in each input pool
+    par.N_e = 200                # excitatory neurons
+    par.N_u = 10                 # neurons in each input pool
 
-    par.eta_stdp = 0.001                           # STDP learning rate
-    par.prune_stdp = True                          # prune very small weights
-    par.eta_ip = 0.001                             # IP learning rate
-    par.h_ip = 0.1                                 # target firing rate
+    par.eta_stdp = 0.001         # STDP learning rate
+    par.prune_stdp = True        # prune very small weights
+    par.eta_ip = 0.001           # IP learning rate
+    par.h_ip = 0.1               # target firing rate
 
-    par.input_gain = 1                             # input gain factor
+    par.input_gain = 1           # input gain factor
 
-    par.lamb = 10                                  # number of out connections
+    par.lamb = 10                # number of out connections
 
-    par.T_e_max = 0.5                              # max initial threshold for E
-    par.T_e_min = 0                                # min initial threshold for E
-    par.T_i_max = 0.5                              # max initial threshold for I
-    par.T_i_min = 0                                # min initial threshold for I
+    par.T_e_max = 0.5            # max initial threshold for E
+    par.T_e_min = 0              # min initial threshold for E
+    par.T_i_max = 0.5            # max initial threshold for I
+    par.T_i_min = 0              # min initial threshold for I
 
-################################################################################
-#                           Experiment parameters                              #
-################################################################################
-    par.L = 20                                      # sequence size
+# #######################
+# CountingTask parameters
+# #######################
+    par.L = 200  # sequence size
 
-    par.steps_plastic = 50000                      # sorn training time steps
-    par.steps_readout = 5000                       # readout train and test steps
+    par.steps_plastic = 50000   # sorn training time steps
+    par.steps_readout = 5000    # readout train and test steps
 
-################################################################################
-#                    Additional derivative SORN parameters                     #
-################################################################################
+# #####################################
+# Additional derivative SORN parameters
+# #####################################
 def get_aux():
     """ Get auxiliary sorn parameters.
 
