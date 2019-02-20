@@ -1,6 +1,6 @@
 # The Self-Organizing Recurrent Neural Network (SORN_V2)
 
-![alt text](https://github.com/delpapa/SORN_V2/blob/master/imgs/sorn.png)
+![](https://github.com/delpapa/SORN_V2/blob/master/imgs/sorn.png =100x100)
 
 
 A SORN repository for general purposes, containing a few experiments and examples. This repository is based on the original [SORN repository](https://github.com/chrhartm/SORN) by Christoph Hartmann combined with adaptations to new experiments. It is also an update of my [old SORN repository](https://github.com/delpapa/SORN) to python 3, combined with a few other optimizations and better software maintenance practices. 
