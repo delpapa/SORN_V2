@@ -1,17 +1,15 @@
-import pickle
 import os
+import pickle
 import sys; sys.path.insert(1, '.')
-from tempfile import TemporaryFile
 
 import numpy as np
 import matplotlib.pylab as plt
-import sklearn
-from sklearn import linear_model
 
 from utils import Bunch
 
 # parameters to include in the plot
-N_values = np.array([200])              # network sizes
+N_VALUES = np.array([200])              # network sizes
+SAVE_PLOT = True
 
 ################################################################################
 #                            Plot performance                                  #
@@ -36,7 +34,7 @@ for experiment in os.listdir(experiment_path):
 
     # read data files and load performances
     N, L, _ = [s[1:] for s in experiment.split('_')]
-    if int(N) in N_values:
+    if int(N) in N_VALUES:
         print('experiment', experiment, '... ', end='')
 
         exp_number = [int(s) for s in experiment.split('_') if s.isdigit()]
@@ -45,7 +43,7 @@ for experiment in os.listdir(experiment_path):
 
         final_performance.append(perf)
         final_L.append(int(L))
-        print('Performance - LR:', '%.2f' % perf)
+        print('Performance - LR: {:.2f}'.format(perf))
 final_L = np.array(final_L)
 final_performance = np.array(final_performance)
 
@@ -61,15 +59,17 @@ for l in np.unique(final_L):
 
 # 3. edit figure features
 fig_lettersize = 15
-
 plt.title('Counting Task', fontsize=fig_lettersize)
 plt.xlabel('L', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
+plt.xticks(fontsize=fig_lettersize)
+plt.yticks(fontsize=fig_lettersize)
 plt.ylim([0.4, 1.1])
 
 # 4. save figures
-plots_dir = 'plots/{}/'.format(experiment_folder)
-if not os.path.exists(plots_dir):
-    os.makedirs(plots_dir)
-plt.savefig(plots_dir+'performance_x_L_N'+str(N_values[0])+'.pdf', format='pdf')
+if SAVE_PLOT:
+    plots_dir = 'plots/{}/'.format(experiment_folder)
+    if not os.path.exists(plots_dir):
+        os.makedirs(plots_dir)
+    plt.savefig('{}performance.pdf'.format(plots_dir), format='pdf')
 plt.show()
