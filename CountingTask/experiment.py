@@ -94,7 +94,8 @@ class Experiment:
         y_test_ind = (stats.input_index_readout[t_train+1:t_train+t_test].T).astype(int)
 
         # Logistic Regression
-        readout = linear_model.LogisticRegression()
+        readout = linear_model.LogisticRegression(multi_class='multinomial',
+                                                  solver='lbfgs')
         output_weights = readout.fit(X_train.T, y_train_ind)
         performance = output_weights.score(X_test.T, y_test_ind)
 
