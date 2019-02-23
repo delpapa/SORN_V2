@@ -43,10 +43,11 @@ def get_par():
 # #####################
 # Experiment parameters
 # #####################
-    par.L = 1000000                                # sequence size, must be bigger than par.steps_plastic for a "true" random sequence input
-    par.A = 40                                      # alphabet size
+    par.L = 10000                                # sequence size, must be bigger than par.steps_plastic for a "true" random sequence input
+    par.A = 40                                     # alphabet size
+    par.task_type = 'LearningCapacity'                 # type of task (FadingMemory or LearningCapacity)
 
-    par.steps_plastic = 30000                      # sorn training time steps
+    par.steps_plastic = 300000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
 
 # #####################################

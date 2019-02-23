@@ -29,12 +29,12 @@ class Experiment:
         self.init_params = copy.deepcopy(params.par)
 
         # results directory name
-        self.results_dir = (params.aux.experiment_name
-                            + params.aux.experiment_tag
-                            + '/N' + str(params.par.N_e)
-                            + '_L' + str(params.par.L)
-                            + '_A' + str(params.par.A)
-                            + '_T' + str(params.par.steps_plastic))
+        self.results_dir = '{}{}/N{}_L{}_A{}_T{}'.format(params.aux.experiment_name,
+                                                         params.aux.experiment_tag,
+                                                         params.par.N_e,
+                                                         params.par.L,
+                                                         params.par.A,
+                                                         params.par.steps_plastic)
 
         # define which stats to store during the simulation
         self.stats_cache = [
@@ -96,7 +96,7 @@ class Experiment:
         t_train = sorn.params.aux.steps_readouttrain
         t_test = sorn.params.aux.steps_readouttest
 
-        if 'LC' in sorn.params.aux.experiment_tag:
+        if sorn.params.par.task_type is 'LearningCapacity':
             # performance is calculated using the previous time step activity
             X_train = stats.raster_readout[:t_train-1].T
             y_train_ind = stats.input_index_readout[1:t_train].T
@@ -104,17 +104,17 @@ class Experiment:
             X_test = stats.raster_readout[t_train:t_train+t_test-1].T
             y_test_ind = stats.input_index_readout[1+t_train:t_train+t_test].T
 
-            readout = linear_model.LogisticRegression()
+            readout = linear_model.LogisticRegression(multi_class='auto', solver='lbfgs')
             output_weights = readout.fit(X_train.T, y_train_ind)
             performance = output_weights.score(X_test.T, y_test_ind)
             stats.performance = performance
 
-        if 'FM' in sorn.params.aux.experiment_tag:
+        if sorn.params.par.task_type is 'FadingMemory':
 
             t_past_max = 20
             stats.t_past = np.arange(t_past_max)
             stats.performance = np.zeros(t_past_max)
-            for t_past in xrange(t_past_max):
+            for t_past in range(t_past_max):
 
                 X_train = stats.raster_readout[t_past:t_train]
                 y_train = stats.input_readout[:t_train-t_past].T.astype(int)
@@ -122,7 +122,7 @@ class Experiment:
                 X_test = stats.raster_readout[t_train+t_past:t_train+t_test]
                 y_test = stats.input_readout[t_train:t_train+t_test-t_past].T.astype(int)
 
-                readout = linear_model.LogisticRegression()
+                readout = linear_model.LogisticRegression(multi_class='auto', solver='lbfgs')
                 output_weights = readout.fit(X_train, y_train)
                 stats.performance[t_past] = output_weights.score(X_test, y_test)
 
