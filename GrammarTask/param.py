@@ -19,8 +19,8 @@ def get_par():
 
     For each sorn simulation, change these parameters manually.
     """
-    par.N_e = 6500                                  # excitatory neurons
-    par.N_u = int(par.N_e/60) #int(par.N_e/40)                 # neurons in each input pool
+    par.N_e = 1600                                  # excitatory neurons
+    par.N_u = int(par.N_e/60)                       # neurons in each input pool
 
     par.eta_stdp = 0.005                           # STDP learning rate
     par.prune_stdp = False                         # prune very small weights
@@ -39,14 +39,12 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.dictionary = 'corpus' # ('FDT', 'eFDT', 'SP', or 'corpus')
-    #par.n_removed_sentences = 0  # options are in np.arange(8, 64, 8) for FDT
-    par.file_path = r'../data/M72_raw/corpus_simple.txt'
+    par.dictionary = 'FDT' # ('FDT', 'eFDT', 'SP')
+    par.n_removed_sentences = 8  # options are in np.arange(8, 64, 8), only for FDT
 
     par.steps_plastic = 1000000                      # sorn training time steps
     par.steps_readout = 100000                       # readout train and test steps
     par.steps_spont = 100000                         # steps of spontaneous generation
-
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #

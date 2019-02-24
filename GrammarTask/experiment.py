@@ -10,10 +10,9 @@ from collections import Counter
 import numpy as np
 from sklearn import linear_model
 
-from source import FDT_GrammarSource as experiment_source
+from .source import FDT_GrammarSource as experiment_source
 
-
-class Experiment(object):
+class Experiment:
     """Experiment class.
 
     It contains the source, the simulation procedure and back-up instructions.
@@ -71,13 +70,13 @@ class Experiment(object):
 
         # Step 1. Input with plasticity
         if display:
-            print 'Plasticity phase:'
+            print('Plasticity phase:')
 
         sorn.simulation(stats, phase='plastic')
 
         # Step 2. Input without plasticity: train (with STDP and IP off)
         if display:
-            print '\nReadout training phase:'
+            print('\nReadout training phase:')
 
         sorn.params.par.eta_stdp = 'off'
         # sorn.params.par.eta_ip = 'off'
@@ -85,24 +84,23 @@ class Experiment(object):
 
         # Step 3. Train readout layer with logistic regression
         if display:
-            print '\nTraining readout layer...'
+            print('\nTraining readout layer...')
         t_train = sorn.params.aux.steps_readouttrain
         X_train = stats.raster_readout[:t_train-1]
         y_train = stats.input_readout[1:t_train].T.astype(int)
         n_symbols = sorn.source.A
         lg = linear_model.LogisticRegression()
         readout_layer = lg.fit(X_train, y_train)
-        readout_layer = lg.fit(X_train, y_train)
 
         # Step 4. Input without plasticity: test (with STDP and IP off)
         if display:
-            print '\nReadout testing phase:'
+            print('\nReadout testing phase:')
 
         sorn.simulation(stats, phase='test')
 
         # Step 5. Estimate SORN performance
         if display:
-            print '\nTesting readout layer...'
+            print('\nTesting readout layer...')
         t_test = sorn.params.aux.steps_readouttest
         X_test = stats.raster_readout[t_train:t_train+t_test-1]
         y_test = stats.input_readout[1+t_train:t_train+t_test].T.astype(int)
@@ -117,7 +115,7 @@ class Experiment(object):
 
         # Step 6. Generative SORN with spont_activity (retro feed input)
         if display:
-            print '\nSpontaneous phase:'
+            print('\nSpontaneous phase:')
 
         # begin with the prediction from the last step
         symbol = readout_layer.predict(X_test[-1].reshape(1,-1))
@@ -126,7 +124,7 @@ class Experiment(object):
 
         # update sorn and predict next input
         spont_output = ''
-        for _ in xrange(sorn.params.par.steps_spont):
+        for _ in range(sorn.params.par.steps_spont):
             sorn.step(u)
             symbol = int(readout_layer.predict(sorn.x.reshape(1,-1)))
             spont_output += sorn.source.index_to_symbol(symbol)
@@ -137,45 +135,44 @@ class Experiment(object):
         # and separate sentences by '.'. Also, remove extra spaces.
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
 
-        if sorn.source.dict == 'corpus':
+        # if sorn.source.dict == 'corpus':
+        #
+        #     stats.output = ''.join(output_sentences)
+        #     stats.W_ee = sorn.W_ee.W
+        #     stats.W_ei = sorn.W_ei.W
+        #     stats.W_ie = sorn.W_ie.W
+        #     stats.W_eu = sorn.W_eu.W
+        #     stats.T_e = sorn.T_e
+        #     stats.T_e = sorn.T_e
 
-            stats.output = ''.join(output_sentences)
-            stats.W_ee = sorn.W_ee.W
-            stats.W_ei = sorn.W_ei.W
-            stats.W_ie = sorn.W_ie.W
-            stats.W_eu = sorn.W_eu.W
-            stats.T_e = sorn.T_e
-            stats.T_e = sorn.T_e
+        # all output sentences
+        output_dict = Counter(output_sentences)
+        stats.n_output = len(output_sentences)
 
-        else:
-            # all output sentences
-            output_dict = Counter(output_sentences)
-            stats.n_output = len(output_sentences)
+        # new output sentences
+        new_dict = Counter([s for s in output_sentences \
+                           if s in sorn.source.removed_sentences])
+        stats.n_new = sum(new_dict.values())
 
-            # new output sentences
-            new_dict = Counter([s for s in output_sentences \
-                               if s in sorn.source.removed_sentences])
-            stats.n_new = sum(new_dict.values())
+        # wrong output sentences
+        wrong_dict = Counter([s for s in output_sentences \
+                               if s not in sorn.source.all_sentences])
+        stats.n_wrong = sum(wrong_dict.values())
 
-            # wrong output sentences
-            wrong_dict = Counter([s for s in output_sentences \
-                                   if s not in sorn.source.all_sentences])
-            stats.n_wrong = sum(wrong_dict.values())
+        if sorn.source.dict == 'SP':
+            gram_dict = Counter([s for s in output_sentences \
+                                  if s in sorn.source.grammatical_errors])
+            stats.n_gram = sum(gram_dict.values())
 
-            if sorn.source.dict == 'SP':
-                gram_dict = Counter([s for s in output_sentences \
-                                      if s in sorn.source.grammatical_errors])
-                stats.n_gram = sum(gram_dict.values())
+            sema_dict = Counter([s for s in output_sentences \
+                                  if s in sorn.source.semantic_errors])
+            stats.n_sema = sum(sema_dict.values())
 
-                sema_dict = Counter([s for s in output_sentences \
-                                      if s in sorn.source.semantic_errors])
-                stats.n_sema = sum(sema_dict.values())
-
-                others_dict = Counter([s for s in output_sentences \
-                                      if s not in sorn.source.all_sentences \
-                                      if s not in sorn.source.grammatical_errors \
-                                      if s not in sorn.source.semantic_errors])
-                stats.n_others = sum(others_dict.values())
+            others_dict = Counter([s for s in output_sentences \
+                                  if s not in sorn.source.all_sentences \
+                                  if s not in sorn.source.grammatical_errors \
+                                  if s not in sorn.source.semantic_errors])
+            stats.n_others = sum(others_dict.values())
 
         # save some storage space by deleting some parameters.
         if hasattr(stats, 'aux'):
@@ -185,4 +182,4 @@ class Experiment(object):
         # stats.spec_perf = spec_perf
 
         if display:
-            print '\ndone!'
+            print('\ndone!')

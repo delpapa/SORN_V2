@@ -41,8 +41,6 @@ with open(r'../data/M72_raw/corpus_simple.txt', "rt") as fin:
 words_input = Counter()
 words_input.update(corpus.split())
 
-words_output = Counter()
-words_output.update(output[1].split())
 import ipdb; ipdb.set_trace()
 
 if SAVE_PLOT:

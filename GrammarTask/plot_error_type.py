@@ -3,15 +3,11 @@ Plot relative number of errors and new sentences as a function of the SORN size
 """
 
 import os
-import sys
-sys.path.insert(0, '')
+import sys; sys.path.append('.')
 
-import cPickle as pickle
+import pickle
 import numpy as np
 import matplotlib.pylab as plt
-
-import common.stats
-
 
 # parameters to include in the plot
 SAVE_PLOT = True
@@ -24,7 +20,7 @@ SAVE_PLOT = True
 fig = plt.figure(1, figsize=(7, 6))
 
 # 1. load performances and experiment parameters
-print '\nCalculating percent of error types... '
+print('\nCalculating percent of error types... ')
 
 experiment_tag = 'sp'
 experiment_folder = 'LanguageTask_' + experiment_tag

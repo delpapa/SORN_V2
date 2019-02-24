@@ -57,7 +57,7 @@ class FDT_GrammarSource(object):
 
             # create a huge list with all input sentences
             partial_input_string = []
-            for _ in xrange(self.steps_plastic):
+            for _ in range(self.steps_plastic):
                 # create a lot of sentences!
                 sub = random.choice(self.subjects)
                 ver = random.choice(self.verbs)
@@ -75,8 +75,8 @@ class FDT_GrammarSource(object):
             np.random.shuffle(shuffled_unique_sentences)
 
             # TODO: make sure all words appear at least once
-            # TODO: sentences must be removed at random!
-
+            # TODO: sentences must be removed at random, but this was done in
+            # the original work
             if params.n_removed_sentences >= 8:
                 self.removed_sentences = ['woman drinks milk.',
                                           'fox drinks tea.',
@@ -273,14 +273,11 @@ class FDT_GrammarSource(object):
             self.used_sentences = np.unique(input_string)
             self.removed_sentences = []
 
-        if self.dict == 'corpus':
-            with open(params.file_path, "rt") as fin:
-                 self.corpus = fin.read().replace('\n', '')
-        else:
-            # input is a huge string
-            self.corpus = ' '.join(input_string)
+        # if self.dict == 'corpus':
+        #     with open(params.file_path, "rt") as fin:
+        #          self.corpus = fin.read().replace('\n', '')
 
-        # only use lowercase
+        self.corpus = ' '.join(input_string)
         self.corpus = self.corpus.lower()
 
         self.alphabet = ''.join(sorted(set(self.corpus)))
@@ -309,7 +306,7 @@ class FDT_GrammarSource(object):
         for a in range(self.A):
             temp = random.sample(available, self.N_u)
             W[temp, a] = 1
-            available = np.array([n for n in available if n not in temp])
+            available = set([n for n in available if n not in temp])
             assert len(available) > 0,\
                    'Input alphabet too big for non-overlapping neurons'
 
