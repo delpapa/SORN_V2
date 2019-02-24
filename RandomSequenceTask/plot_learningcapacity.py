@@ -31,8 +31,8 @@ n_list = np.zeros(experiment_n, dtype=np.int)
 
 for exp, exp_name in enumerate(os.listdir(experiment_path)):
     exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
-    stats = pickle.load(open('{}/stats.p'.format(experiment_path+exp_name), 'rb'), encoding='latin1')
-    params = pickle.load(open('{}/init_params.p'.format(experiment_path+exp_name), 'rb'), encoding='latin1')
+    stats = pickle.load(open('{}/stats.p'.format(experiment_path+exp_name), 'rb'))
+    params = pickle.load(open('{}/init_params.p'.format(experiment_path+exp_name), 'rb'))
     performance[exp] = stats.performance
     l_list[exp] = int(params.L)
     n_list[exp] = int(params.N_e)

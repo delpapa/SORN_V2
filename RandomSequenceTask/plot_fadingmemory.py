@@ -33,8 +33,8 @@ a_list = []
 for exp, exp_name in enumerate(os.listdir(experiment_path)):
 
     exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
-    perf = pickle.load(open('{}/stats.p'.format(experiment_path+exp_name), 'rb'), encoding='latin1')
-    params = pickle.load(open('{}/init_params.p'.format(experiment_path+exp_name), 'rb'), encoding='latin1')
+    perf = pickle.load(open('{}/stats.p'.format(experiment_path+exp_name), 'rb'))
+    params = pickle.load(open('{}/init_params.p'.format(experiment_path+exp_name), 'rb'))
     if params.N_e == NETWORK_SIZE:
         performance_list.append(perf.performance)
         a_list.append(params.A)
