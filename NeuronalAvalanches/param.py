@@ -44,7 +44,7 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.steps_plastic = 2000000                    # sorn training time steps
+    par.steps_plastic = 6000000                    # sorn training time steps
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #

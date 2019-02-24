@@ -4,22 +4,16 @@ The plot work by thresholding the activity, given the parameter THETA (see
 Del Papa et al. 2017 for details of the thresholding procedure)
 """
 
-import cPickle as pickle
+import pickle
 import os
-import sys
-sys.path.insert(1, '.')
+import sys; sys.path.append('.')
 from tempfile import TemporaryFile
 
 import numpy as np
 import matplotlib.pylab as plt
-import sklearn
-from sklearn import linear_model
-from scipy.optimize import curve_fit
-from scipy.interpolate import interp1d
 import powerlaw as pl
 
 # parameters to include in the plot
-experiment_tag = '_test2'                           # experiment tag
 NUMBER_OF_FILES = 50
 
 ################################################################################
@@ -49,7 +43,7 @@ def avalanche_distributions(activity, theta = 'half_mean'):
 
     duration = 0
     size = 0
-    for i in xrange(length_act):
+    for i in range(length_act):
 
         # add one time step to the current avalanche
         if thresholded_activity[i] > 0:
@@ -71,15 +65,15 @@ if __name__ == "__main__":
     fig = plt.figure(1, figsize=(12, 5))
 
     # 1. read files
-    print '\nPlotting Neuronal Avalanche duration and size distributions...'
-    experiment_folder = 'NeuronalAvalanches' + experiment_tag
-    experiment_path = 'backup/' + experiment_folder + '/'
+    print('\nPlotting Neuronal Avalanche duration and size distributions...')
+    experiment_folder = 'NeuronalAvalanches_{}'.format(sys.argv[1])
+    experiment_path = 'backup/{}/'.format(experiment_folder)
     experiment = os.listdir(experiment_path)[0]
     N, sigma, _ = [s[1:] for s in experiment.split('_')]
-    print 'experiment', experiment, '...'
+    print('experiment', experiment, '...')
 
     # 2. load stats
-    stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
+    stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'), encoding='latin1')
 
     # 3. calculate neuronal avalanches
     T_data, S_data = avalanche_distributions(stats.activity)
@@ -131,7 +125,7 @@ if __name__ == "__main__":
     plt.yscale('log')
 
     # 6. save figures
-    plots_dir = 'plots/'+experiment_folder+'/'
+    plots_dir = 'plots/{}/'.format(experiment_folder)
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
         plt.savefig(plots_dir+'NAdistributions.pdf', format='pdf')

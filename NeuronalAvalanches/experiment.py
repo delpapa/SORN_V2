@@ -6,7 +6,7 @@ experiment.
 
 import copy
 
-from source import NoSource
+from .source import NoSource
 
 class Experiment(object):
     """Experiment class.
@@ -32,7 +32,7 @@ class Experiment(object):
                             + '_sigma' + str(params.par.sigma))
 
         # define which stats to store during the simulation
-        self.stats_tostore = [
+        self.stats_cache = [
             'ActivityStat',
             'ConnectionFractionStat',
         ]
@@ -63,7 +63,5 @@ class Experiment(object):
 
         # 1. input with plasticity
         if display:
-            print 'Plasticity phase:'
+            print('Plasticity phase:')
         sorn.simulation(stats, phase='plastic')
-        if display:
-            print '... done'

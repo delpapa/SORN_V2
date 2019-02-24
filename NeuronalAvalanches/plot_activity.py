@@ -1,20 +1,12 @@
 """Plot a sample of the sorn activity (last 1000 time steps)"""
 
-import cPickle as pickle
+import pickle
 import os
-import sys
-sys.path.insert(1, '.')
+import sys; sys.path.append('.')
 from tempfile import TemporaryFile
 
 import numpy as np
 import matplotlib.pylab as plt
-import sklearn
-from sklearn import linear_model
-from scipy.optimize import curve_fit
-from scipy.interpolate import interp1d
-
-# parameters to include in the plot
-experiment_tag = '_test'                             # experiment tag
 
 ################################################################################
 #                            Plot performance                                  #
@@ -24,12 +16,12 @@ experiment_tag = '_test'                             # experiment tag
 fig = plt.figure(1, figsize=(6, 5))
 
 # 1. read files
-print '\nPlotting ConnectionFraction...'
-experiment_folder = 'NeuronalAvalanches' + experiment_tag
-experiment_path = 'backup/' + experiment_folder + '/'
+print('\nPlotting ConnectionFraction...')
+experiment_folder = 'NeuronalAvalanches_{}'.format(sys.argv[1])
+experiment_path = 'backup/{}/'.format(experiment_folder)
 experiment = os.listdir(experiment_path)[0]
 N, sigma, _ = [s[1:] for s in experiment.split('_')]
-print 'experiment', experiment, '...'
+print('experiment', experiment, '...')
 
 # 2. load stats
 stats = pickle.load(open(experiment_path+experiment+'/stats.p', 'rb'))
@@ -46,7 +38,7 @@ plt.xlabel(r'time step', fontsize=fig_lettersize)
 plt.ylabel(r'Activity', fontsize=fig_lettersize)
 
 # 4. save figures
-plots_dir = 'plots/'+experiment_folder+'/'
+plots_dir = 'plots/{}/'.format(experiment_folder)
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
 plt.savefig(plots_dir+'activity.pdf', format='pdf')
