@@ -11,7 +11,7 @@ from common.stats import Stats
 
 # parameters to include in the plot
 NETWORK_SIZE = 1600
-A_PAR = np.array([4, 10, 20, 30, 40, 50])    # input alphabet sizes
+A_PAR = np.array([10, 20, 100, 200])    # input alphabet sizes
 SAVE_PLOT = True
 
 ################################################################################
@@ -43,18 +43,21 @@ performance = np.array(performance_list)
 for a in np.unique(a_list):
     if a in A_PAR:
         _perf = performance[np.where(a_list == a)]
-        plt.errorbar(np.arange(20), _perf.mean(0),
-                        yerr=[performance.std(0), performance.std(0)],
+        plt.errorbar(np.arange(20), 1 -_perf.mean(0),
+                        # yerr=[performance.std(0), performance.std(0)],
                         fmt='--o',
                         label=a)
 
 # 4. adjust figure parameters and save
-fig_lettersize = 15
-plt.legend(loc='best')
+fig_lettersize = 17
+plt.legend(loc='best', frameon=False, title='Alphabet size', fontsize=fig_lettersize, title_fontsize=fig_lettersize)
 plt.xlabel(r'$t_{p}$', fontsize=fig_lettersize)
-plt.ylabel('Performance', fontsize=fig_lettersize)
+plt.ylabel('Error', fontsize=fig_lettersize)
 plt.xlim([0, 20])
-plt.xticks([0, 5, 10, 15, 20])
+plt.ylim([0, 1])
+plt.xticks([0, 5, 10, 15, 20], fontsize=fig_lettersize-2)
+plt.yticks([0, 0.5, 1], ['$0\%$', '$50\%$', '$100\%$'], fontsize=fig_lettersize-2)
+plt.tight_layout()
 
 if SAVE_PLOT:
     plots_dir = 'plots/RandomSequenceTask/'
