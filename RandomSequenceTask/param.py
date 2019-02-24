@@ -27,9 +27,8 @@ def get_par():
     par.eta_ip = 0.001                             # IP learning rate
     par.h_ip = 0.1                                 # target firing rate
 
-    # lognormal weights (from Lukas Koehls thesis)
-    # par.h_ip = np.random.lognormal(mean=np.log(0.1), sigma=0.1962,
-    #                                size=par.N_e)
+    # lognormal weights
+    # par.h_ip = np.random.lognormal(mean=np.log(0.1), sigma=0.1962, size=par.N_e)
 
     par.input_gain = 1                             # input gain factor
 
@@ -43,11 +42,11 @@ def get_par():
 # #####################
 # Experiment parameters
 # #####################
-    par.L = 10000                                # sequence size, must be bigger than par.steps_plastic for a "true" random sequence input
-    par.A = 40                                     # alphabet size
-    par.task_type = 'LearningCapacity'                 # type of task (FadingMemory or LearningCapacity)
+    par.L = 1000000                                # sequence size, must be bigger than par.steps_plastic for a "true" random sequence input
+    par.A = 10                                     # alphabet size
+    par.task_type = 'FadingMemory'                 # type of task (FadingMemory or LearningCapacity)
 
-    par.steps_plastic = 300000                      # sorn training time steps
+    par.steps_plastic = 100000                      # sorn training time steps
     par.steps_readout = 5000                       # readout train and test steps
 
 # #####################################

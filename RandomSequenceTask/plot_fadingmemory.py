@@ -1,18 +1,17 @@
 """ Performance vs. past time step"""
 
 import os
-import sys
-sys.path.insert(0, '')
+import sys; sys.path.append('.')
+import  pickle
 
-import cPickle as pickle
 import numpy as np
 import matplotlib.pylab as plt
 
 from common.stats import Stats
 
 # parameters to include in the plot
-N_PAR = 200                                    # network size
-# A_PAR = np.array([4, 10, 20, 30, 40, 50])    # input alphabet sizes
+NETWORK_SIZE = 1600
+A_PAR = np.array([4, 10, 20, 30, 40, 50])    # input alphabet sizes
 SAVE_PLOT = True
 
 ################################################################################
@@ -23,40 +22,44 @@ SAVE_PLOT = True
 fig = plt.figure(1, figsize=(6, 5))
 
 # 1. load performances and experiment parameters
-print '\nCalculating memory for the Random Sequence Task...'
+print('\nCalculating memory for the Random Sequence Task...')
 
-for experiment_tag in ['readout10', 'readout2', 'readout5', 'readout1']:
-    experiment_folder = 'RandomSequenceTask_' + experiment_tag
-    experiment_path = 'backup/' + experiment_folder + '/'
-    experiment_n = len(os.listdir(experiment_path))
+experiment_folder = 'RandomSequenceTask_FM/'
+experiment_path = 'backup/{}/'.format(experiment_folder)
+experiment_n = len(os.listdir(experiment_path))
 
-    performance_list = []
-    for exp, exp_name in enumerate(os.listdir(experiment_path)):
+performance_list = []
+a_list = []
+for exp, exp_name in enumerate(os.listdir(experiment_path)):
 
-        exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
-        perf = pickle.load(open(experiment_path+exp_name+'/stats.p', 'rb'))
+    exp_n = [int(s) for s in exp_name.split('_') if s.isdigit()]
+    perf = pickle.load(open('{}/stats.p'.format(experiment_path+exp_name), 'rb'), encoding='latin1')
+    params = pickle.load(open('{}/init_params.p'.format(experiment_path+exp_name), 'rb'), encoding='latin1')
+    if params.N_e == NETWORK_SIZE:
         performance_list.append(perf.performance)
+        a_list.append(params.A)
+performance = np.array(performance_list)
 
-    performance = np.array(performance_list)
-
-    plt.errorbar(np.arange(20), performance.mean(0),
-                     yerr=[performance.std(0), performance.std(0)],
-                     fmt='--o',
-                     label=experiment_tag)
+for a in np.unique(a_list):
+    if a in A_PAR:
+        _perf = performance[np.where(a_list == a)]
+        plt.errorbar(np.arange(20), _perf.mean(0),
+                        yerr=[performance.std(0), performance.std(0)],
+                        fmt='--o',
+                        label=a)
 
 # 4. adjust figure parameters and save
-fig_lettersize = 12
-plt.title('Random Sequence Task - Fading Memory')
+fig_lettersize = 15
 plt.legend(loc='best')
-plt.xlabel(r'$t_{\rm past}$', fontsize=fig_lettersize)
+plt.xlabel(r'$t_{p}$', fontsize=fig_lettersize)
 plt.ylabel('Performance', fontsize=fig_lettersize)
 plt.xlim([0, 20])
 plt.xticks([0, 5, 10, 15, 20])
 
 if SAVE_PLOT:
-    plots_dir = 'plots/RandomSequenceTask_FadingMemory/'
+    plots_dir = 'plots/RandomSequenceTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-    plt.savefig(plots_dir+'fadingmemory.pdf',
+    plt.savefig('{}FM_N{}.pdf'.format(plots_dir, NETWORK_SIZE),
                      format='pdf')
 plt.show()
