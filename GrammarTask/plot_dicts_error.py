@@ -23,7 +23,7 @@ fig = plt.figure(1, figsize=(7, 6))
 print('\nCalculating percent of wrong sentences... ')
 
 for experiment_tag in ['error_and_new', 'eFDT', 'sp']:
-    experiment_folder = 'LanguageTask_' + experiment_tag
+    experiment_folder = 'GrammarTask_' + experiment_tag
     experiment_path = 'backup/' + experiment_folder + '/'
     experiment_n = len(os.listdir(experiment_path))
     percent_error = np.zeros(experiment_n)
@@ -88,11 +88,11 @@ plt.xticks(
 plt.yticks(
     [0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
     ['$0$', '$10$', '$20$', '$30$', '$40$', '$50$', '$60$'],
-    size=fig_lettersize,
+    size=fig_lettersize-2,
     )
 
 if SAVE_PLOT:
-    plots_dir = 'plots/' + experiment_folder + '/'
+    plots_dir = 'plots/GrammarTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
     plt.savefig(plots_dir+'dicts_error.pdf', format='pdf')

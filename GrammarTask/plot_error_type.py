@@ -23,7 +23,7 @@ fig = plt.figure(1, figsize=(7, 6))
 print('\nCalculating percent of error types... ')
 
 experiment_tag = 'sp'
-experiment_folder = 'LanguageTask_' + experiment_tag
+experiment_folder = 'GrammarTask_' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
 gram_error = np.zeros(experiment_n)
@@ -115,7 +115,7 @@ plt.yticks(
     )
 
 if SAVE_PLOT:
-    plots_dir = 'plots/' + experiment_folder + '/'
+    plots_dir = 'plots/GrammarTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
     plt.savefig(plots_dir+'error_types.pdf', format='pdf')

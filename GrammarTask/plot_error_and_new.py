@@ -3,7 +3,7 @@ Plot relative number of errors and new sentences as a function of the SORN size
 """
 
 import os
-import sys; sys.path.insert('.')
+import sys; sys.path.append('.')
 
 import pickle
 import numpy as np
@@ -23,7 +23,7 @@ fig = plt.figure(1, figsize=(7, 6))
 print('\nCalculating percent of wrong and new sentences... ')
 
 experiment_tag = '_error_and_new'
-experiment_folder = 'LanguageTask' + experiment_tag
+experiment_folder = 'GrammarTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
 percent_new = np.zeros(experiment_n)
@@ -98,7 +98,7 @@ plt.yticks(
     )
 
 if SAVE_PLOT:
-    plots_dir = 'plots/' + experiment_folder + '/'
+    plots_dir = 'plots/GrammarTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
     plt.savefig(plots_dir+'error_and_new.pdf', format='pdf')

@@ -23,7 +23,7 @@ fig = plt.figure(1, figsize=(7, 6))
 print('\nCalculating percent of wrong and new sentences... ')
 
 experiment_tag = '_remove'
-experiment_folder = 'LanguageTask' + experiment_tag
+experiment_folder = 'GrammarTask' + experiment_tag
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
 percent_new = np.zeros(experiment_n)
@@ -93,7 +93,7 @@ plt.ylim([0., 0.5])
 plt.xticks(
     [16, 32, 48, 64],
     ['$25$', '$50$', '$75$', '$100$'],
-    size=fig_lettersize,
+    size=fig_lettersize-2,
 )
 plt.yticks(
     [0., 0.1, 0.2, 0.3, 0.4, 0.5],
@@ -103,7 +103,7 @@ plt.yticks(
 
 
 if SAVE_PLOT:
-    plots_dir = 'plots/' + experiment_folder + '/'
+    plots_dir = 'plots/GrammarTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
     plt.savefig(plots_dir+'removed_sentences.pdf', format='pdf')
