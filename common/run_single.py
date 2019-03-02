@@ -23,12 +23,16 @@ params = exp_dir.param
 params.get_par()
 params.get_aux()
 params.aux.display = True
-params.aux.experiment_tag = '_{}'.format(sys.argv[2])
+try:
+    tag = sys.argv[2]
+except:
+    raise ValueError('Please specify a valid experiment tag.')
+params.aux.experiment_tag = '_{}'.format(tag)
 
 # 3. initialize experiment, sorn, and stats objects
 #    the experiment class keeps a copy of the initial sorn main parameters
 experiment = exp_dir.experiment.Experiment(params)
-experiment.files_tosave = ['params', 'stats']
+experiment.files_tosave = ['params', 'stats', 'scripts']
 sorn = Sorn(params, experiment.inputsource)
 stats = Stats(experiment.stats_cache, params)
 
