@@ -20,10 +20,13 @@ SAVE_PLOT = True
 fig = plt.figure(1, figsize=(7, 6))
 
 # 1. load performances and experiment parameters
+try:
+    experiment_tag = sys.argv[1]
+except:
+    raise ValueError('Please specify a valid experiment tag.')
 print('\nCalculating percent of wrong and new sentences... ')
 
-experiment_tag = '_remove'
-experiment_folder = 'GrammarTask' + experiment_tag
+experiment_folder = 'GrammarTask_{}'.format(experiment_tag)
 experiment_path = 'backup/' + experiment_folder + '/'
 experiment_n = len(os.listdir(experiment_path))
 percent_new = np.zeros(experiment_n)
@@ -106,5 +109,5 @@ if SAVE_PLOT:
     plots_dir = 'plots/GrammarTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-    plt.savefig(plots_dir+'removed_sentences.pdf', format='pdf')
+    plt.savefig('{}removed_sentences.pdf'.format(plots_dir), format='pdf')
 plt.show()

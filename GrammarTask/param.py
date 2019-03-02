@@ -42,9 +42,9 @@ def get_par():
     par.dictionary = 'FDT' # ('FDT', 'eFDT', 'SP')
     par.n_removed_sentences = 8  # options are in np.arange(8, 64, 8), only for FDT
 
-    par.steps_plastic = 1000000                      # sorn training time steps
-    par.steps_readout = 100000                       # readout train and test steps
-    par.steps_spont = 100000                         # steps of spontaneous generation
+    par.steps_plastic = 100000                      # sorn training time steps
+    par.steps_readout = 10000                       # readout train and test steps
+    par.steps_spont = 1000000                         # steps of spontaneous generation
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #

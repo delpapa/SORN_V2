@@ -77,15 +77,16 @@ class FDT_GrammarSource(object):
             # TODO: make sure all words appear at least once
             # TODO: sentences must be removed at random, but this was done in
             # the original work
+            self.removed_sentences = []
             if params.n_removed_sentences >= 8:
-                self.removed_sentences = ['woman drinks milk.',
+                self.removed_sentences.extend(['woman drinks milk.',
                                           'fox drinks tea.',
                                           'cat eats vegetables.',
                                           'girl eats meat.',
                                           'child eats fish.',
                                           'boy drinks juice.',
                                           'man drinks water.',
-                                          'dog eats bread.']
+                                          'dog eats bread.'])
             if params.n_removed_sentences >= 16:
                 self.removed_sentences.extend(['woman eats meat.',
                                               'fox eats bread.',
@@ -272,10 +273,6 @@ class FDT_GrammarSource(object):
             input_string = [x for x in partial_input_string]
             self.used_sentences = np.unique(input_string)
             self.removed_sentences = []
-
-        # if self.dict == 'corpus':
-        #     with open(params.file_path, "rt") as fin:
-        #          self.corpus = fin.read().replace('\n', '')
 
         self.corpus = ' '.join(input_string)
         self.corpus = self.corpus.lower()

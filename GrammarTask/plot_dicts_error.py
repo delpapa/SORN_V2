@@ -20,8 +20,6 @@ SAVE_PLOT = True
 fig = plt.figure(1, figsize=(7, 6))
 
 # 1. load performances and experiment parameters
-print('\nCalculating percent of wrong sentences... ')
-
 for experiment_tag in ['error_and_new', 'eFDT', 'sp']:
     experiment_folder = 'GrammarTask_' + experiment_tag
     experiment_path = 'backup/' + experiment_folder + '/'
@@ -57,7 +55,7 @@ for experiment_tag in ['error_and_new', 'eFDT', 'sp']:
         plot_color = 'r'
         plot_style = '--'
     elif experiment_tag == 'sp':
-        plot_label = 'Sing./Plur.'
+        plot_label = 'SinPlu'
         plot_color = 'orange'
         plot_style = '-'
 
@@ -95,5 +93,5 @@ if SAVE_PLOT:
     plots_dir = 'plots/GrammarTask/'
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-    plt.savefig(plots_dir+'dicts_error.pdf', format='pdf')
+    plt.savefig('{}dicts_error.pdf'.format(plots_dir), format='pdf')
 plt.show()

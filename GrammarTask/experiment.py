@@ -51,7 +51,7 @@ class Experiment:
         self.files_tosave = [
             'params',
             'stats',
-            # 'scripts',
+            'scripts',
         ]
 
         # create and load input source
@@ -135,19 +135,10 @@ class Experiment:
         # and separate sentences by '.'. Also, remove extra spaces.
         output_sentences = [s[1:]+'.' for s in spont_output.split('.')][1:-1]
 
-        # if sorn.source.dict == 'corpus':
-        #
-        #     stats.output = ''.join(output_sentences)
-        #     stats.W_ee = sorn.W_ee.W
-        #     stats.W_ei = sorn.W_ei.W
-        #     stats.W_ie = sorn.W_ie.W
-        #     stats.W_eu = sorn.W_eu.W
-        #     stats.T_e = sorn.T_e
-        #     stats.T_e = sorn.T_e
-
         # all output sentences
         output_dict = Counter(output_sentences)
         stats.n_output = len(output_sentences)
+        stats.unique, stats.counts = np.unique(output_sentences, return_counts=True)
 
         # new output sentences
         new_dict = Counter([s for s in output_sentences \
