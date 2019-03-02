@@ -1,6 +1,6 @@
 import os
 import pickle
-import sys; sys.path.insert(1, '.')
+import sys; sys.path.append('.')
 
 import numpy as np
 import matplotlib.pylab as plt
