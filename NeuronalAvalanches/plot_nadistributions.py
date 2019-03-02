@@ -65,8 +65,12 @@ if __name__ == "__main__":
     fig = plt.figure(1, figsize=(12, 5))
 
     # 1. read files
+    try:
+        experiment_tag = sys.argv[1]
+    except:
+        raise ValueError('Please specify a valid experiment tag.')
     print('\nPlotting Neuronal Avalanche duration and size distributions...')
-    experiment_folder = 'NeuronalAvalanches_{}'.format(sys.argv[1])
+    experiment_folder = 'NeuronalAvalanches_{}'.format(experiment_tag)
     experiment_path = 'backup/{}/'.format(experiment_folder)
     experiment = os.listdir(experiment_path)[0]
     N, sigma, _ = [s[1:] for s in experiment.split('_')]
@@ -128,6 +132,6 @@ if __name__ == "__main__":
     plots_dir = 'plots/{}/'.format(experiment_folder)
     if not os.path.exists(plots_dir):
         os.makedirs(plots_dir)
-        plt.savefig(plots_dir+'NAdistributions.pdf', format='pdf')
+        plt.savefig('NAdistributions.pdf'.format(plots_dir), format='pdf')
 
     plt.show()

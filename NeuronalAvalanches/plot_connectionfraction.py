@@ -16,8 +16,12 @@ import matplotlib.pylab as plt
 fig = plt.figure(1, figsize=(6, 5))
 
 # 1. read files
+try:
+    experiment_tag = sys.argv[1]
+except:
+    raise ValueError('Please specify a valid experiment tag.')
 print('\nPlotting ConnectionFraction...')
-experiment_folder = 'NeuronalAvalanches_{}'.format(sys.argv[1])
+experiment_folder = 'NeuronalAvalanches_{}'.format(experiment_tag)
 experiment_path = 'backup/{}/'.format(experiment_folder)
 experiment = os.listdir(experiment_path)[0]
 N, sigma, _ = [s[1:] for s in experiment.split('_')]
