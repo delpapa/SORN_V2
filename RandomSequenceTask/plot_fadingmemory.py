@@ -22,9 +22,14 @@ SAVE_PLOT = True
 fig = plt.figure(1, figsize=(6, 5))
 
 # 1. load performances and experiment parameters
+try:
+    experiment_tag = sys.argv[1]
+except:
+    raise ValueError('Please specify a valid experiment tag.')
+
 print('\nCalculating memory for the Random Sequence Task...')
 
-experiment_folder = 'RandomSequenceTask_FM/'
+experiment_folder = 'RandomSequenceTask_{}'.format(experiment_tag)
 experiment_path = 'backup/{}/'.format(experiment_folder)
 experiment_n = len(os.listdir(experiment_path))
 
