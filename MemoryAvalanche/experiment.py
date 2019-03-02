@@ -51,7 +51,7 @@ class Experiment(object):
         self.files_tosave = [
             'params',
             'stats',
-            # scripts'
+            'scripts'
         ]
 
         # load input source
