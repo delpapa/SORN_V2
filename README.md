@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://github.com/delpapa/SORN_V2/blob/master/imgs/sorn.png" width="400">
 
-A SORN repository for general purposes, containing a few experiments and examples. This repository is based on the original [SORN repository](https://github.com/chrhartm/SORN) by Christoph Hartmann combined with adaptations to new experiments I did for my PhD thesis. It is also an update of my [old SORN repository](https://github.com/delpapa/SORN) to python 3, combined with a few other optimizations and better software maintenance practices.
+A SORN repository for general purposes, containing a few experiments and examples. This repository is based on the original [SORN repository](https://github.com/chrhartm/SORN) by Christoph Hartmann combined with adaptations to new experiments I did for my PhD thesis. It is also an update of my [old SORN repository](https://github.com/delpapa/SORN) to python 3, combined with a few other optimizations and (slightly) better software maintenance practices.
 
 ## Getting started with the repository
 
@@ -14,9 +14,9 @@ To simulate a single experiment, run `python3 common/run_single.py <EXPERIMENT_N
 Currently implemented experiments:
 
 * CountingTask (from [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full))
-* RandomSequenceTask (from Del Papa et al. 2018)
-* NeuronalAvalanches (from [Del Papa et al. 2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0178683), Del Papa et al. 2018)
-* MemoryAvalanches (from Del Papa et al. 2018)
+* RandomSequenceTask (from Del Papa et al. 2019)
+* NeuronalAvalanches (from [Del Papa et al. 2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0178683), Del Papa et al. 2019)
+* MemoryAvalanches (from Del Papa et al. 2019)
 * GrammarTask (for artificially built dictionaries)
 * TextTask (for general language encoding and generation with SORNs)
 
@@ -79,26 +79,31 @@ By installing these packages in a virtual environment, you avoid dependency clas
 
 ## Experiments
 
-Each different experiment has it's own project folder (for example, `CountingTask`), which contains it's parameters, experiment instructions, sources and plot files. If you plan to extend the repository with new experiments, please keep this structure to avoid unecessary conflicts.
+Each different experiment has it's own project folder (for example, `CountingTask`), which contains it's parameters, experiment instructions, sources and plot files. If you plan to extend the repository with new experiments, please keep this structure to avoid unnecessary conflicts. For details on the implementation of each experiment, please have a look at my thesis ~~here~~ (link to be added as soon as it is made available).
 
 ### CountingTask
 
-This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full). The task consist of randomly alternating sequences of the form 'ABB..BBC' and 'DEE..EEF', with size L = n+2.
+This task is the reimplementation of the counting task from the original SORN paper by [Lazar et al. 2009](http://journal.frontiersin.org/article/10.3389/neuro.10.023.2009/full). The task consist of randomly alternating sequences of the form 'ABB..BBC' and 'DEE..EEF', with size L = n+2, that are repeatedly presented to the network as input. The model evolves due to plasticity action (STDP, IP, and SN), and a readout layer is trained to evaluate its performance.
 
 ### GrammarTask
 
-bla
+This task evaluates the SORNs performance on predefined artificial dictionaries (see the source script for details). It also simulates the models in an autonomous phase, in which it generates sentences via a retro-feedback loop, without external inputs.
 
 ### MemoryAvalanches
 
+This task is a variation of NeuronalAvalanches, in which the fading memory was calculated for different dynamical regimes, driven by the level of neuronal membrane noise. Spoilers: fading memory is improved at the noise level that also results in power-law distributed neuronal avalanches.
+
 ### NeuronalAvalanches
 
+This task is the implementation of the neuronal avalanche analysis in SORNs from [Del Papa et al. 2017](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0178683). It simulates the model with additional plasticity mechanisms (STDP, IP, SN, iSTDP, and SP) and measures the distributions of avalanches in its spontaneous or evokes activity, depending on the source.
 
 ### RandomSequenceTask
 
-This task implements a random sequence input, which is used to estimate the SORN's fading memory. The random sequence input consists of a sequence of A symbols, and the fading memory capacity is the SORN's capacity of recovering past inputs with it's linear readout layer.
+This task implements a random sequence input, which was used to estimate the SORN's fading memory. The random sequence input consists of a sequence of A symbols, and the fading memory capacity is the SORN's capacity of recovering past inputs with its linear readout layer.
 
-### LanguageTask
+### TextTask
+
+This task uses the SORN as a generative model for texts: it trains the model on a given text file and generates autonomous inputs after the input is cut-off (i.e., the network receives its own output as input). 
 
 ## License
 
