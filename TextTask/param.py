@@ -19,8 +19,8 @@ def get_par():
 
     For each sorn simulation, change these parameters manually.
     """
-    par.N_e = 20000                                  # excitatory neurons
-    par.N_u = int(par.N_e/60)                       # neurons in each input pool
+    par.N_e = 10000                                  # excitatory neurons
+    par.N_u = int(par.N_e/50)                       # neurons in each input pool
 
     par.eta_stdp = 0.005                           # STDP learning rate
     par.prune_stdp = False                         # prune very small weights
@@ -39,12 +39,12 @@ def get_par():
 ################################################################################
 #                           Experiment parameters                              #
 ################################################################################
-    par.path_to_text = ''    # change this to the path for your text corpus!
-    par.max_corpus_size = 1200000
+    par.path_to_text = '' # insert path to text here
+    # par.max_corpus_size = 50000
 
-    par.steps_plastic = 1000000                      # sorn training time steps
-    par.steps_readout = 10000                       # readout train and test steps
-    par.steps_spont = 100000                        # steps of spontaneous generation
+    par.steps_plastic = 100000                      # sorn training time steps
+    par.steps_readout = 30000                    # readout train and test steps
+    par.steps_spont = 50000                       # steps of spontaneous generation
 
 ################################################################################
 #                    Additional derivative SORN parameters                     #
